@@ -10,7 +10,6 @@ module crystal.shared.config {
     requires org.jetbrains.annotations;
     requires org.spongepowered.configurate;
     requires org.spongepowered.configurate.yaml;
-    requires org.spongepowered.configurate.gson;
 
     exports me.denarydev.crystal.config;
 }

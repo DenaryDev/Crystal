@@ -13,7 +13,6 @@ import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.ConfigurationOptions;
-import org.spongepowered.configurate.gson.GsonConfigurationLoader;
 import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
 import org.spongepowered.configurate.loader.ConfigurationLoader;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -113,50 +112,6 @@ public final class CrystalConfigs {
             .defaultOptions(options)
             .path(path)
             .nodeStyle(NodeStyle.BLOCK)
-            .indent(2)
-            .build();
-    }
-
-    /**
-     * Returns json configuration loader.
-     *
-     * @param path Path to configuration file
-     * @return {@link GsonConfigurationLoader}
-     */
-    public static GsonConfigurationLoader gsonLoader(@NotNull final Path path) {
-        return gsonLoader(path, TypeSerializerCollection.defaults());
-    }
-
-    /**
-     * Returns json configuration loader with custom serializers.
-     *
-     * @param path        Path to configuration file
-     * @param serializers custom serializers
-     * @return {@link GsonConfigurationLoader}
-     */
-    public static GsonConfigurationLoader gsonLoader(@NotNull final Path path, @Nullable TypeSerializerCollection serializers) {
-        final var builder = GsonConfigurationLoader.builder()
-            .path(path)
-            .indent(2);
-
-        if (serializers != null) {
-            return builder.defaultOptions(options -> options.serializers(b -> b.registerAll(serializers))).build();
-        } else {
-            return builder.build();
-        }
-    }
-
-    /**
-     * Returns json configuration loader with custom serializers.
-     *
-     * @param path    Path to configuration file
-     * @param options Configuration options
-     * @return {@link GsonConfigurationLoader}
-     */
-    public static GsonConfigurationLoader gsonLoader(@NotNull final Path path, @NotNull ConfigurationOptions options) {
-        return GsonConfigurationLoader.builder()
-            .defaultOptions(options)
-            .path(path)
             .indent(2)
             .build();
     }
