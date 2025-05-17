@@ -1,15 +1,33 @@
 plugins {
-    `java-library`
-    `maven-publish`
+    id("java-library")
+    id("maven-publish")
     id("com.gradleup.shadow")
-    id("crystal.formatting")
     id("org.gradlex.extra-java-module-info")
+    id("com.diffplug.spotless")
+}
+
+java {
+    withSourcesJar()
 }
 
 extraJavaModuleInfo {
-    failOnMissingModuleInfo.set(false)
+    failOnMissingModuleInfo = false
+    skipLocalJars = true
+
     automaticModule("io.leangen.geantyref:geantyref", "io.leangen.geantyref")
     automaticModule("com.mysql:mysql-connector-j", "com.mysql")
+}
+
+spotless {
+    java {
+        target("**/me/denarydev/crystal/**")
+
+        licenseHeaderFile(rootProject.file("HEADER"))
+
+        endWithNewline()
+        trimTrailingWhitespace()
+        leadingTabsToSpaces(4)
+    }
 }
 
 tasks {
@@ -23,7 +41,7 @@ tasks {
 
     compileJava {
         options.encoding = Charsets.UTF_8.name()
-        options.release.set(17)
+        options.release = 17
         options.compilerArgs.addAll(
             listOf(
                 "-parameters",
@@ -36,26 +54,18 @@ tasks {
         options.isFork = true
     }
 
-    javadoc {
-        options.encoding = Charsets.UTF_8.name()
-        (options as StandardJavadocDocletOptions).addStringOption("Xdoclint:none", "-quiet")
-    }
-
     build {
         dependsOn(shadowJar)
     }
 
     shadowJar {
-        archiveClassifier.set("")
+        archiveClassifier = ""
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
 }
 
 java {
-    toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
-        vendor = JvmVendorSpec.AMAZON
-    }
+    toolchain.languageVersion = JavaLanguageVersion.of(17)
 }
 
 val repo = if (rootProject.version.toString().endsWith("-SNAPSHOT")) "snapshots" else "releases"

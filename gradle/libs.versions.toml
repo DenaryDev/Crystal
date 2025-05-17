@@ -1,6 +1,7 @@
 [versions]
 # Platforms
 paper = "1.18.2-R0.1-SNAPSHOT"
+velocity = "3.4.0-SNAPSHOT"
 
 # Configs
 configurate = "4.1.2"
@@ -26,6 +27,7 @@ mockbukkit = "2.85.2"
 [libraries]
 # Platforms
 paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
+velocity = { module = "com.velocitypowered:velocity-api", version.ref = "velocity" }
 
 # Configs
 configurate-core = { module = "org.spongepowered:configurate-core", version.ref = "configurate" }
@@ -51,5 +53,5 @@ junit-bom = { module = "org.junit:junit-bom", version.ref = "junit-bom" }
 mockbukkit = { module = "com.github.seeseemelk:MockBukkit-v1.18", version.ref = "mockbukkit" }
 
 [bundles]
-sql = ["hikaricp", "driver-sqlite", "driver-h2", "driver-mysql", "driver-mariadb", "driver-postgresql"]
+sql-drivers = ["driver-sqlite", "driver-h2", "driver-mysql", "driver-mariadb", "driver-postgresql"]
 configurate = ["configurate-hocon", "configurate-yaml"]

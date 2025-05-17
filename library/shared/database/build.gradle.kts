@@ -1,11 +1,14 @@
+plugins {
+    id("crystal.module")
+}
+
 crystalModule {
-    name.set("Database Connector")
-    moduleName.set("database")
-    description.set("Library for SQL-based databases")
-    library.set("shared")
+    name = "database"
+    library = "shared"
 }
 
 dependencies {
     compileOnlyApi(libs.annotations)
-    api(libs.bundles.sql)
+    api(libs.hikaricp)
+    api(libs.bundles.sql.drivers)
 }

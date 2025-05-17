@@ -1,8 +1,10 @@
+plugins {
+    id("crystal.module")
+}
+
 crystalModule {
-    name.set("Paper Utils")
-    moduleName.set("utils")
-    description.set("Some utils for paper plugins")
-    library.set("paper")
+    name = "utils"
+    library = "paper"
 }
 
 dependencies {

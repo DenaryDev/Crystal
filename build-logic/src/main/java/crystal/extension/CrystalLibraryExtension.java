@@ -14,16 +14,16 @@ import org.gradle.api.provider.Property;
 import javax.inject.Inject;
 
 public class CrystalLibraryExtension extends CrystalExtension {
-    private final Property<String> libraryName;
+    private final Property<String> name;
 
     @Inject
     public CrystalLibraryExtension(ObjectFactory factory, Project project) {
         super(project);
-        this.libraryName = factory.property(String.class);
-        this.libraryName.finalizeValueOnRead();
+        this.name = factory.property(String.class);
+        this.name.finalizeValueOnRead();
     }
 
-    public Property<String> getLibraryName() {
-        return this.libraryName;
+    public Property<String> getName() {
+        return this.name;
     }
 }

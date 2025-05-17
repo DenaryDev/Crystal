@@ -1,8 +1,10 @@
+plugins {
+    id("crystal.module")
+}
+
 crystalModule {
-    name.set("Crystal Paper GUI")
-    moduleName.set("gui")
-    description.set("Simple GUI library for plugins development")
-    library.set("paper")
+    name = "gui"
+    library = "paper"
 }
 
 dependencies {

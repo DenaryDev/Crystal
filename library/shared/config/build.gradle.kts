@@ -1,8 +1,10 @@
+plugins {
+    id("crystal.module")
+}
+
 crystalModule {
-    name.set("Crystal Shared Config")
-    moduleName.set("config")
-    description.set("Configurate-based configuration loaders")
-    library.set("shared")
+    name = "config"
+    library = "shared"
 }
 
 dependencies {

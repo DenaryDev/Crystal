@@ -1,8 +1,10 @@
+plugins {
+    id("crystal.module")
+}
+
 crystalModule {
-    name.set("Configurate Serializers")
-    moduleName.set("serializers")
-    description.set("Configurate serializers for some bukkit objects like ItemStack, Location")
-    library.set("paper")
+    name = "serializers"
+    library = "paper"
 }
 
 dependencies {

@@ -3,5 +3,5 @@ plugins {
 }
 
 crystalLibrary {
-    libraryName.set("shared")
+    name = "shared"
 }

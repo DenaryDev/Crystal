@@ -3,7 +3,7 @@
 import java.nio.file.Files
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.10.0"
 }
 
 dependencyResolutionManagement {
@@ -14,10 +14,17 @@ dependencyResolutionManagement {
     }
 }
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "crystal"
+
+includeBuild("build-logic")
 
 library("paper")
 library("shared")
+
+platform("paper")
+platform("velocity")
 
 fun library(library: String) {
     include(library)
@@ -38,4 +45,11 @@ fun library(library: String) {
             }
         }
     }
+}
+
+fun platform(platform: String) {
+    include(platform)
+
+    val platformProject = project(":$platform")
+    platformProject.projectDir = file("platform/$platform")
 }
