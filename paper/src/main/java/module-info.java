@@ -12,6 +12,9 @@ module crystal.paper {
     requires org.spongepowered.configurate;
     requires net.kyori.examination.api;
     requires com.google.gson;
+    requires configlib.core;
+    requires configlib.yaml;
+    requires org.spongepowered.configurate.yaml;
 
     exports me.denarydev.crystal.paper.configurate;
     exports me.denarydev.crystal.paper.configurate.serializers;

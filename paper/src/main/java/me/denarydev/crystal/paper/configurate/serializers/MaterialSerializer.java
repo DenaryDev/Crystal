@@ -28,7 +28,7 @@ public final class MaterialSerializer extends ScalarSerializer<Material> {
     }
 
     @Override
-    public @NotNull Material deserialize(final Type type, @Nullable final Object obj) throws SerializationException {
+    public @NotNull Material deserialize(@NotNull final Type type, @Nullable final Object obj) throws SerializationException {
         if (obj instanceof String s) {
             final var material = Material.matchMaterial(s);
             if (material == null) {
@@ -42,10 +42,8 @@ public final class MaterialSerializer extends ScalarSerializer<Material> {
     }
 
     @Override
-    @Nullable
-    protected Object serialize(@Nullable final Material item, final Predicate<Class<?>> typeSupported) {
-        if (item == null) return null;
-
+    @NotNull
+    protected Object serialize(@NotNull final Material item, @NotNull final Predicate<Class<?>> typeSupported) {
         return item.name();
     }
 }

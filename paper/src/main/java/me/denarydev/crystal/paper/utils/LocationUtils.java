@@ -7,6 +7,7 @@
  */
 package me.denarydev.crystal.paper.utils;
 
+import com.google.common.base.Preconditions;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.jetbrains.annotations.ApiStatus;
@@ -89,5 +90,24 @@ public final class LocationUtils {
             }
         }
         return closest;
+    }
+
+    public static String locationToString(Location location) {
+        Preconditions.checkNotNull(location, "location cannot be null");
+
+        final StringBuilder builder = new StringBuilder();
+
+        if (location.isWorldLoaded()) builder.append(location.getWorld().getName()).append(";"); // World
+
+        builder.append(location.getX()).append(";"); // X
+        builder.append(location.getY()).append(";"); // Y
+        builder.append(location.getZ()); // Z
+
+        if (location.getYaw() > 0 || location.getPitch() > 0) {
+            builder.append(";").append(location.getYaw()); // Yaw
+            builder.append(";").append(location.getPitch()); // Pitch
+        }
+
+        return builder.toString();
     }
 }

@@ -7,9 +7,8 @@
  */
 package me.denarydev.crystal.paper.configurate.serializers;
 
-import com.destroystokyo.paper.profile.ProfileProperty;
+import me.denarydev.crystal.paper.utils.HeadUtils;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -25,10 +24,8 @@ import org.spongepowered.configurate.serialize.TypeSerializer;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.Objects;
-import java.util.UUID;
 
 public final class ItemStackSerializer implements TypeSerializer<ItemStack> {
 
@@ -41,7 +38,7 @@ public final class ItemStackSerializer implements TypeSerializer<ItemStack> {
         if (amount < 1 || amount > 64) throw new SerializationException("Invalid ItemStack amount");
 
         final var item = node.hasChild("texture") ?
-            createHead(node.node("texture").getString(), amount)
+            HeadUtils.createHead(node.node("texture").getString(), amount)
             : new ItemStack(material, amount);
         final var meta = item.getItemMeta();
 
@@ -72,9 +69,10 @@ public final class ItemStackSerializer implements TypeSerializer<ItemStack> {
                 .forEach(meta::addItemFlags);
         }
 
-        if (node.hasChild("custom-model-data")) {
-            meta.setCustomModelData(node.node("custom-model-data").getInt(0));
-        }
+        //TODO: Update this to 1.21.5+ component api
+        //if (node.hasChild("custom-model-data")) {
+        //    meta.setCustomModelData(node.node("custom-model-data").getInt(0));
+        //}
 
         if (meta instanceof Damageable damageable) {
             damageable.setDamage(node.node("damage").getInt(0));
@@ -92,26 +90,6 @@ public final class ItemStackSerializer implements TypeSerializer<ItemStack> {
         item.setItemMeta(meta);
 
         return item;
-    }
-
-    private ItemStack createHead(final String texture, final int amount) {
-        final var head = new ItemStack(Material.PLAYER_HEAD, Math.max(Math.min(amount, 64), 1));
-        if (texture == null)
-            return head;
-
-        final var skullMeta = (SkullMeta) head.getItemMeta();
-        final var profile = Bukkit.createProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "CustomHead");
-
-        if (texture.endsWith("=")) {
-            profile.setProperty(new ProfileProperty("textures", texture.replaceAll("=", "")));
-        } else {
-            final byte[] encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"https://textures.minecraft.net/texture/%s\"}}}", texture).getBytes());
-            profile.setProperty(new ProfileProperty("textures", new String(encodedData)));
-        }
-
-        skullMeta.setPlayerProfile(profile);
-        head.setItemMeta(skullMeta);
-        return head;
     }
 
     @Override
@@ -142,7 +120,8 @@ public final class ItemStackSerializer implements TypeSerializer<ItemStack> {
                 }
 
                 if (meta.isUnbreakable()) node.node("unbreakable").set(true);
-                if (meta.hasCustomModelData()) node.node("custom-model-data").set(meta.getCustomModelData());
+                //TODO: Update this to 1.21.5+ component api
+                //if (meta.hasCustomModelData()) node.node("custom-model-data").set(meta.getCustomModelData());
 
                 final var flags = new ArrayList<>(meta.getItemFlags());
                 if (!flags.isEmpty()) node.node("flags").setList(ItemFlag.class, flags);

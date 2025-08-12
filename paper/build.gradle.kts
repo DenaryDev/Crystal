@@ -10,6 +10,7 @@ base {
 dependencies {
     compileOnly(libs.paper)
     compileOnlyApi(libs.configurate.core)
+    compileOnlyApi(libs.configlib)
 
     api(project(":crystal-common"))
 
@@ -27,6 +28,12 @@ paper {
     main = "me.denarydev.crystal.paper.PaperPlugin"
 
     apiVersion = "1.21"
+
+    serverDependencies {
+        register("ConfigLib") {
+            required = false
+        }
+    }
 }
 
 tasks {

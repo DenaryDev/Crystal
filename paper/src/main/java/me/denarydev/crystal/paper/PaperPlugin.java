@@ -17,7 +17,14 @@ import org.jetbrains.annotations.ApiStatus;
 @ApiStatus.Internal
 public final class PaperPlugin extends JavaPlugin {
 
+    private static PaperPlugin instance;
+
+    public static PaperPlugin getInstance() {
+        return instance;
+    }
+
     @Override
     public void onEnable() {
+        instance = this;
     }
 }

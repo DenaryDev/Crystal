@@ -5,6 +5,7 @@ velocity = "3.4.0-SNAPSHOT"
 
 # Configs
 configurate = "4.2.0"
+configlib = "4.6.1"
 
 # SQL
 hikari = "6.3.0"
@@ -33,6 +34,7 @@ velocity = { module = "com.velocitypowered:velocity-api", version.ref = "velocit
 configurate-core = { module = "org.spongepowered:configurate-core", version.ref = "configurate" }
 configurate-hocon = { module = "org.spongepowered:configurate-hocon", version.ref = "configurate" }
 configurate-yaml = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate" }
+configlib = { module = "de.exlll:configlib-yaml", version.ref = "configlib" }
 
 # SQL
 hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
