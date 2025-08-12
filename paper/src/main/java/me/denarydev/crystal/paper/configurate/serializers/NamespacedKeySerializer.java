@@ -9,6 +9,7 @@ package me.denarydev.crystal.paper.configurate.serializers;
 
 import org.bukkit.NamespacedKey;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.serialize.ScalarSerializer;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -27,7 +28,7 @@ public final class NamespacedKeySerializer extends ScalarSerializer<NamespacedKe
     }
 
     @Override
-    public NamespacedKey deserialize(final Type type, @Nullable final Object obj) throws SerializationException {
+    public NamespacedKey deserialize(@NotNull final Type type, @Nullable final Object obj) throws SerializationException {
         if (obj instanceof String s) {
             final var key = NamespacedKey.fromString(s);
             if (key == null) {
@@ -41,9 +42,8 @@ public final class NamespacedKeySerializer extends ScalarSerializer<NamespacedKe
     }
 
     @Override
-    protected Object serialize(@Nullable final NamespacedKey item, final Predicate<Class<?>> typeSupported) {
-        if (item == null) return null;
-
+    @NotNull
+    protected Object serialize(@NotNull final NamespacedKey item, @NotNull final Predicate<Class<?>> typeSupported) {
         return item.toString();
     }
 }

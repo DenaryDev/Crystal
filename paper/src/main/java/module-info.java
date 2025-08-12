@@ -11,11 +11,11 @@ module crystal.paper {
     requires com.google.common;
     requires org.spongepowered.configurate;
     requires net.kyori.examination.api;
-    requires io.leangen.geantyref;
+    requires com.google.gson;
 
     exports me.denarydev.crystal.paper.configurate;
     exports me.denarydev.crystal.paper.configurate.serializers;
     exports me.denarydev.crystal.paper.gui;
+    exports me.denarydev.crystal.paper.item;
     exports me.denarydev.crystal.paper.utils;
-    exports me.denarydev.crystal.paper.utils.item;
 }

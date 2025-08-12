@@ -10,7 +10,6 @@ extraJavaModuleInfo {
     failOnMissingModuleInfo = false
     skipLocalJars = true
 
-    automaticModule("io.leangen.geantyref:geantyref", "io.leangen.geantyref")
     automaticModule("com.mysql:mysql-connector-j", "com.mysql")
 }
 

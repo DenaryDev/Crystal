@@ -10,9 +10,9 @@ repositories {
 }
 
 dependencies {
-    implementation("com.gradleup.shadow:shadow-gradle-plugin:8.3.6")
-    implementation("com.diffplug.spotless:spotless-plugin-gradle:7.0.3")
-    implementation("org.gradlex:extra-java-module-info:1.12")
+    implementation("com.gradleup.shadow:shadow-gradle-plugin:9.0.0-rc2")
+    implementation("com.diffplug.spotless:spotless-plugin-gradle:7.2.1")
+    implementation("org.gradlex:extra-java-module-info:1.13")
 }
 
 java {

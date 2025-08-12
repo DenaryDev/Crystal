@@ -4,21 +4,21 @@ paper = "1.18.2-R0.1-SNAPSHOT"
 velocity = "3.4.0-SNAPSHOT"
 
 # Configs
-configurate = "4.1.2"
+configurate = "4.2.0"
 
 # SQL
-hikari = "6.2.1"
+hikari = "6.3.0"
 ## Local
-sqlite = "3.47.1.0"
+sqlite = "3.50.3.0"
 h2 = "2.3.232"
 ## Remote
-mysql = "9.1.0"
-mariadb = "3.5.1"
-postgresql = "42.7.4"
+mysql = "9.3.0"
+mariadb = "3.5.4"
+postgresql = "42.7.7"
 
 # Shared
-slf4j = "2.0.16"
-annotations = "26.0.1"
+slf4j = "2.0.17"
+annotations = "26.0.2"
 
 # Tests
 junit-bom = "5.11.3"

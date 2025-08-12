@@ -8,7 +8,6 @@
 package me.denarydev.crystal.paper.configurate.serializers;
 
 import com.destroystokyo.paper.profile.ProfileProperty;
-import io.leangen.geantyref.TypeToken;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -18,6 +17,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -31,10 +31,9 @@ import java.util.Objects;
 import java.util.UUID;
 
 public final class ItemStackSerializer implements TypeSerializer<ItemStack> {
-    public static final TypeToken<ItemStack> TYPE = TypeToken.get(ItemStack.class);
 
     @Override
-    public ItemStack deserialize(Type type, ConfigurationNode node) throws SerializationException {
+    public ItemStack deserialize(@NotNull Type type, ConfigurationNode node) throws SerializationException {
         final var material = node.node("material").get(Material.class);
         if (material == null) throw new SerializationException("Invalid ItemStack material");
 
@@ -116,7 +115,7 @@ public final class ItemStackSerializer implements TypeSerializer<ItemStack> {
     }
 
     @Override
-    public void serialize(Type type, @Nullable ItemStack item, ConfigurationNode node) throws SerializationException {
+    public void serialize(@NotNull Type type, @Nullable ItemStack item, @NotNull ConfigurationNode node) throws SerializationException {
         if (item != null) {
             node.node("material").set(item.getType());
             if (item.getAmount() > 1) node.node("amount").set(item.getAmount());

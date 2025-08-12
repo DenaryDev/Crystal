@@ -9,8 +9,10 @@ package me.denarydev.crystal.paper.configurate.serializers;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.serialize.ScalarSerializer;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
@@ -24,19 +26,17 @@ public class ComponentSerializer extends ScalarSerializer<Component> {
 
     @Override
     @Nullable
-    public Component deserialize(final Type type, @Nullable final Object obj) {
+    public Component deserialize(@NotNull final Type type, @Nullable final Object obj) throws SerializationException {
         if (obj instanceof String s) {
             return MINI_MESSAGE.deserialize(s);
+        } else {
+            throw new SerializationException("Component serializer only supports String types");
         }
-
-        return null;
     }
 
     @Override
-    @Nullable
-    protected Object serialize(@Nullable final Component item, final Predicate<Class<?>> typeSupported) {
-        if (item == null) return null;
-
+    @NotNull
+    protected Object serialize(@NotNull final Component item, @NotNull final Predicate<Class<?>> typeSupported) {
         return MINI_MESSAGE.serialize(item);
     }
 }

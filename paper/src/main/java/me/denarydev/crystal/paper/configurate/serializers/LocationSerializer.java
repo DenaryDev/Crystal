@@ -7,9 +7,9 @@
  */
 package me.denarydev.crystal.paper.configurate.serializers;
 
-import io.leangen.geantyref.TypeToken;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
@@ -18,10 +18,9 @@ import org.spongepowered.configurate.serialize.TypeSerializer;
 import java.lang.reflect.Type;
 
 public final class LocationSerializer implements TypeSerializer<Location> {
-    public static final TypeToken<Location> TYPE = TypeToken.get(Location.class);
 
     @Override
-    public Location deserialize(Type type, ConfigurationNode node) throws SerializationException {
+    public Location deserialize(@NotNull Type type, ConfigurationNode node) throws SerializationException {
         final var s = node.getString();
         if (s != null) {
             final String[] loc = s.split(";");
@@ -69,7 +68,7 @@ public final class LocationSerializer implements TypeSerializer<Location> {
     }
 
     @Override
-    public void serialize(Type type, @Nullable Location loc, ConfigurationNode node) throws SerializationException {
+    public void serialize(@NotNull Type type, @Nullable Location loc, @NotNull ConfigurationNode node) throws SerializationException {
         if (loc != null) {
             final var builder = new StringBuilder();
 

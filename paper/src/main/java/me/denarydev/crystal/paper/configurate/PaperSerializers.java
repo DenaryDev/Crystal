@@ -12,6 +12,8 @@ import me.denarydev.crystal.paper.configurate.serializers.ItemStackSerializer;
 import me.denarydev.crystal.paper.configurate.serializers.LocationSerializer;
 import me.denarydev.crystal.paper.configurate.serializers.MaterialSerializer;
 import me.denarydev.crystal.paper.configurate.serializers.NamespacedKeySerializer;
+import org.bukkit.Location;
+import org.bukkit.inventory.ItemStack;
 import org.spongepowered.configurate.serialize.TypeSerializerCollection;
 
 public final class PaperSerializers {
@@ -24,8 +26,8 @@ public final class PaperSerializers {
     public static TypeSerializerCollection get() {
         return TypeSerializerCollection.builder()
             .registerAll(TypeSerializerCollection.defaults())
-            .register(ItemStackSerializer.TYPE, new ItemStackSerializer())
-            .register(LocationSerializer.TYPE, new LocationSerializer())
+            .register(ItemStack.class, new ItemStackSerializer())
+            .register(Location.class, new LocationSerializer())
             .register(new ComponentSerializer())
             .register(new NamespacedKeySerializer())
             .register(new MaterialSerializer())
@@ -39,8 +41,8 @@ public final class PaperSerializers {
      */
     public static void apply(TypeSerializerCollection.Builder builder) {
         builder
-            .register(ItemStackSerializer.TYPE, new ItemStackSerializer())
-            .register(LocationSerializer.TYPE, new LocationSerializer())
+            .register(ItemStack.class, new ItemStackSerializer())
+            .register(Location.class, new LocationSerializer())
             .register(new ComponentSerializer())
             .register(new NamespacedKeySerializer())
             .register(new MaterialSerializer());
