@@ -10,27 +10,27 @@ repositories {
 }
 
 dependencies {
-    implementation("com.gradleup.shadow:shadow-gradle-plugin:9.0.0-rc2")
+    implementation("com.gradleup.shadow:shadow-gradle-plugin:9.0.1")
     implementation("com.diffplug.spotless:spotless-plugin-gradle:7.2.1")
     implementation("org.gradlex:extra-java-module-info:1.13")
 }
 
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(17)
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 }
 
 tasks {
     withType<JavaCompile>().configureEach {
-        options.release.set(17)
+        options.release = 21
     }
 
     withType<KotlinCompile>().configureEach {
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_17
+            jvmTarget = JvmTarget.JVM_21
         }
     }
 }

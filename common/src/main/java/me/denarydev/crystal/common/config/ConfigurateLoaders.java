@@ -219,7 +219,7 @@ public final class ConfigurateLoaders {
      * @return Configuration class instance with values
      * @throws ConfigurateException if configuration loading failed
      */
-    public static <T> T loadConfig(@NotNull final ConfigurationLoader<? extends ConfigurationNode> loader,
+    public static <T> T loadConfig(@NotNull final ConfigurationLoader<? extends @NotNull ConfigurationNode> loader,
                                    @NotNull final Class<T> clazz, final boolean refreshNode) throws ConfigurateException {
         return loadConfig(loader, clazz, refreshNode, null);
     }
@@ -234,7 +234,7 @@ public final class ConfigurateLoaders {
      * @return Configuration class instance with values
      * @throws ConfigurateException if configuration loading failed
      */
-    public static <T> T loadConfig(@NotNull final ConfigurationLoader<? extends ConfigurationNode> loader,
+    public static <T> T loadConfig(@NotNull final ConfigurationLoader<? extends @NotNull ConfigurationNode> loader,
                                    @NotNull final Class<T> clazz, final boolean refreshNode,
                                    @Nullable final ConfigurationTransformation.Versioned transformation) throws ConfigurateException {
         final var creator = creator(clazz, refreshNode);
@@ -259,7 +259,7 @@ public final class ConfigurateLoaders {
     }
 
     @NotNull
-    private static <T> CheckedFunction<ConfigurationNode, T, SerializationException> creator(@NotNull Class<T> type, boolean refreshNode) {
+    private static <T> CheckedFunction<ConfigurationNode, T, @NotNull SerializationException> creator(@NotNull Class<T> type, boolean refreshNode) {
         return node -> {
             T instance = node.require(type);
             if (refreshNode) {

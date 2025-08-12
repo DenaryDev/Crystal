@@ -5,20 +5,20 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package me.denarydev.crystal.common.config;
+package me.denarydev.crystal.paper.configurate.serializers;
 
-import be.seeseemelk.mockbukkit.MockBukkit;
-import me.denarydev.crystal.paper.configurate.serializers.LocationSerializer;
-import me.denarydev.crystal.paper.configurate.serializers.NamespacedKeySerializer;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockbukkit.mockbukkit.MockBukkit;
 import org.spongepowered.configurate.BasicConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
+import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -44,14 +44,14 @@ public class SerializersTest {
 
     @Test
     public void testLocationSerializer() throws SerializationException {
-        final var serializer = new LocationSerializer();
-        final var world = server.createWorld(WorldCreator.name("world"));
+        final LocationSerializer serializer = new LocationSerializer();
+        final World world = server.createWorld(WorldCreator.name("world"));
 
-        final var x_y_z_loc = new Location(null, 15.27, 65.12, 76.21);
-        final var world_x_y_z_loc = new Location(world, 15.27, 65.12, 76.21);
-        final var world_x_y_z_yaw_pitch_loc = new Location(world, 15.27, 65.12, 76.21, 45, 180);
+        final Location x_y_z_loc = new Location(null, 15.27, 65.12, 76.21);
+        final Location world_x_y_z_loc = new Location(world, 15.27, 65.12, 76.21);
+        final Location world_x_y_z_yaw_pitch_loc = new Location(world, 15.27, 65.12, 76.21, 45, 180);
 
-        final var node = BasicConfigurationNode.root();
+        final ConfigurationNode node = BasicConfigurationNode.root();
         node.node("x_y_z_val").set("15.27;65.12;76.21");
         node.node("world_x_y_z_val").set("world;15.27;65.12;76.21");
         node.node("world_x_y_z_yaw_pitch_val").set("world;15.27;65.12;76.21;45;180.0");
@@ -65,12 +65,12 @@ public class SerializersTest {
 
     @Test
     public void testNamespacedKeySerializer() throws ConfigurateException {
-        final var serializer = new NamespacedKeySerializer();
+        final NamespacedKeySerializer serializer = new NamespacedKeySerializer();
 
-        final var mcNamespace = NamespacedKey.fromString("test");
-        final var customNamespace = NamespacedKey.fromString("customnamespace:test");
+        final NamespacedKey mcNamespace = NamespacedKey.fromString("test");
+        final NamespacedKey customNamespace = NamespacedKey.fromString("customnamespace:test");
 
-        final var node = BasicConfigurationNode.root();
+        final ConfigurationNode node = BasicConfigurationNode.root();
         node.node("val_with_mc_namespace").set("test");
         node.node("val_with_custom_namespace").set("customnamespace:test");
         node.node("invalid_val").set("InVaLiD:iNvAlId");

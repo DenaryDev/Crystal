@@ -1,6 +1,6 @@
 [versions]
 # Platforms
-paper = "1.18.2-R0.1-SNAPSHOT"
+paper = "1.21.8-R0.1-SNAPSHOT"
 velocity = "3.4.0-SNAPSHOT"
 
 # Configs
@@ -21,8 +21,8 @@ slf4j = "2.0.17"
 annotations = "26.0.2"
 
 # Tests
-junit-bom = "5.11.3"
-mockbukkit = "2.85.2"
+junit = "5.13.4"
+mockbukkit = "4.72.6"
 
 [libraries]
 # Platforms
@@ -49,8 +49,9 @@ slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
 
 # Tests
-junit-bom = { module = "org.junit:junit-bom", version.ref = "junit-bom" }
-mockbukkit = { module = "com.github.seeseemelk:MockBukkit-v1.18", version.ref = "mockbukkit" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+mockbukkit = { module = "org.mockbukkit.mockbukkit:mockbukkit-v1.21", version.ref = "mockbukkit" }
 
 [bundles]
 sql-drivers = ["driver-sqlite", "driver-h2", "driver-mysql", "driver-mariadb", "driver-postgresql"]

@@ -1,6 +1,10 @@
 plugins {
     id("crystal.common")
-    id("de.eldoria.plugin-yml.bukkit") version "0.7.1"
+    id("de.eldoria.plugin-yml.paper") version "0.7.1"
+}
+
+base {
+    archivesName = "Crystal-Paper"
 }
 
 dependencies {
@@ -8,20 +12,21 @@ dependencies {
     compileOnlyApi(libs.configurate.core)
 
     api(project(":crystal-common"))
+
+    testImplementation(libs.mockbukkit)
+    testImplementation(libs.junit.jupiter)
+    testImplementation(platform(libs.junit.bom))
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.12.2")
 }
 
-bukkit {
+paper {
     name = "Crystal"
     description = "Набор библиотек для плагинов на платформе Paper"
     author = "DenaryDev"
 
-    main = "me.denarydev.crystal.platform.paper.PaperPlugin"
+    main = "me.denarydev.crystal.paper.PaperPlugin"
 
-    apiVersion = "1.18"
-}
-
-base {
-    archivesName = "Crystal-Paper"
+    apiVersion = "1.21"
 }
 
 tasks {

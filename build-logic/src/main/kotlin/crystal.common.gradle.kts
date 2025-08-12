@@ -6,6 +6,12 @@ plugins {
     id("com.diffplug.spotless")
 }
 
+repositories {
+    mavenCentral()
+    maven("https://repo.papermc.io/repository/maven-public/") { name = "PaperMC" }
+    maven("https://repo.prostocraft.ru/public/") { name = "prostocraft" }
+}
+
 extraJavaModuleInfo {
     failOnMissingModuleInfo = false
     skipLocalJars = true
@@ -34,7 +40,7 @@ tasks {
         dependsOn(spotlessApply)
 
         options.encoding = Charsets.UTF_8.name()
-        options.release = 17
+        options.release = 21
         options.compilerArgs.addAll(
             listOf(
                 "-parameters",
@@ -62,10 +68,10 @@ tasks {
 }
 
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(17)
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
 
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 
     withSourcesJar()
 }
@@ -74,8 +80,8 @@ val repo = if (rootProject.version.toString().endsWith("-SNAPSHOT")) "snapshots"
 
 publishing {
     repositories {
-        maven("https://repo.activmine.ru/$repo/") {
-            name = "activmine"
+        maven("https://repo.prostocraft.ru/$repo/") {
+            name = "prostocraft"
             credentials(PasswordCredentials::class)
         }
     }
