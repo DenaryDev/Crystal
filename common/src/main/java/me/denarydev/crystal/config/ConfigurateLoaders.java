@@ -5,7 +5,7 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package me.denarydev.crystal.common.config;
+package me.denarydev.crystal.config;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

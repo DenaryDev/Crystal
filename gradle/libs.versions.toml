@@ -7,6 +7,9 @@ velocity = "3.4.0-SNAPSHOT"
 configurate = "4.2.0"
 configlib = "4.6.1"
 
+# Plugins
+skinsrestorer = "15.7.7"
+
 # SQL
 hikari = "6.3.0"
 ## Local
@@ -34,7 +37,11 @@ velocity = { module = "com.velocitypowered:velocity-api", version.ref = "velocit
 configurate-core = { module = "org.spongepowered:configurate-core", version.ref = "configurate" }
 configurate-hocon = { module = "org.spongepowered:configurate-hocon", version.ref = "configurate" }
 configurate-yaml = { module = "org.spongepowered:configurate-yaml", version.ref = "configurate" }
-configlib = { module = "de.exlll:configlib-yaml", version.ref = "configlib" }
+configlib-core = { module = "de.exlll:configlib-core", version.ref = "configlib" }
+configlib-yaml = { module = "de.exlll:configlib-yaml", version.ref = "configlib" }
+
+# Plugins
+skinsrestorer = { module = "net.skinsrestorer:skinsrestorer-api", version.ref = "skinsrestorer" }
 
 # SQL
 hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }

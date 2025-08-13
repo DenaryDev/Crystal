@@ -5,11 +5,11 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package me.denarydev.crystal.common.database.connection;
+package me.denarydev.crystal.database.connection;
 
-import me.denarydev.crystal.common.database.DatabaseType;
-import me.denarydev.crystal.common.database.connection.file.FlatfileConnectionFactory;
-import me.denarydev.crystal.common.database.connection.hikari.HikariConnectionFactory;
+import me.denarydev.crystal.database.DatabaseType;
+import me.denarydev.crystal.database.connection.file.FlatfileConnectionFactory;
+import me.denarydev.crystal.database.connection.hikari.HikariConnectionFactory;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;

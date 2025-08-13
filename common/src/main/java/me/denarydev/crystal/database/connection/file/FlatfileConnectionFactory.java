@@ -5,9 +5,9 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package me.denarydev.crystal.common.database.connection.file;
+package me.denarydev.crystal.database.connection.file;
 
-import me.denarydev.crystal.common.database.connection.ConnectionFactory;
+import me.denarydev.crystal.database.connection.ConnectionFactory;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;

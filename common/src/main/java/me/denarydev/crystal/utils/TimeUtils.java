@@ -5,7 +5,7 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package me.denarydev.crystal.common.utils;
+package me.denarydev.crystal.utils;
 
 import java.util.concurrent.TimeUnit;
 

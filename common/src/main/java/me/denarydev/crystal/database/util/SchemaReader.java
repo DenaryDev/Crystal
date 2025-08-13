@@ -5,7 +5,7 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package me.denarydev.crystal.common.database.util;
+package me.denarydev.crystal.database.util;
 
 import org.jetbrains.annotations.ApiStatus;
 

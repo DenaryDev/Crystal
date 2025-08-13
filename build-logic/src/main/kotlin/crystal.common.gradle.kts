@@ -9,6 +9,7 @@ plugins {
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/") { name = "PaperMC" }
+    maven("https://repo.codemc.org/repository/maven-public/") { name = "CodeMC" }
     maven("https://repo.prostocraft.ru/public/") { name = "prostocraft" }
 }
 
@@ -17,6 +18,7 @@ extraJavaModuleInfo {
     skipLocalJars = true
 
     automaticModule("com.mysql:mysql-connector-j", "com.mysql")
+    automaticModule("net.skinsrestorer:skinsrestorer-api", "skinsrestorer.api")
 }
 
 spotless {

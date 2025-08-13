@@ -15,12 +15,15 @@ module crystal.common {
     requires com.mysql;
     requires org.mariadb.jdbc;
     requires org.postgresql.jdbc;
+    requires skinsrestorer.api;
 
-    exports me.denarydev.crystal.common.config;
-    exports me.denarydev.crystal.common.database;
-    exports me.denarydev.crystal.common.database.connection;
-    exports me.denarydev.crystal.common.database.connection.file;
-    exports me.denarydev.crystal.common.database.connection.hikari;
-    exports me.denarydev.crystal.common.database.util;
-    exports me.denarydev.crystal.common.utils;
+    exports me.denarydev.crystal.config;
+    exports me.denarydev.crystal.database;
+    exports me.denarydev.crystal.database.connection;
+    exports me.denarydev.crystal.database.connection.file;
+    exports me.denarydev.crystal.database.connection.hikari;
+    exports me.denarydev.crystal.database.util;
+    exports me.denarydev.crystal.skin;
+    exports me.denarydev.crystal.skin.provider;
+    exports me.denarydev.crystal.utils;
 }

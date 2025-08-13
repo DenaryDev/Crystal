@@ -7,4 +7,6 @@ dependencies {
     api(libs.bundles.configurate)
     api(libs.hikaricp)
     api(libs.bundles.sql.drivers)
+
+    compileOnly(libs.skinsrestorer)
 }

@@ -8,8 +8,13 @@
 package me.denarydev.crystal.velocity;
 
 import com.google.inject.Inject;
+import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
+import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
+import me.denarydev.crystal.skin.SkinProviders;
+import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 
 /**
@@ -21,11 +26,23 @@ import org.slf4j.Logger;
     name = "Crystal",
     version = BuildConfig.VERSION,
     description = "Набор библиотек для плагинов на платформе Velocity",
-    authors = "DenaryDev"
+    authors = "DenaryDev",
+    dependencies = {
+        @Dependency(id = "skinsrestorer", optional = true)
+    }
 )
+@ApiStatus.Internal
 public final class VelocityPlugin {
+
+    private final Logger logger;
 
     @Inject
     public VelocityPlugin(ProxyServer proxy, Logger logger) {
+        this.logger = logger;
+    }
+
+    @Subscribe
+    private void onProxyInitialization(ProxyInitializeEvent event) {
+        SkinProviders.initialize(logger);
     }
 }

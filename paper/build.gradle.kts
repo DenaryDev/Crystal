@@ -10,7 +10,11 @@ base {
 dependencies {
     compileOnly(libs.paper)
     compileOnlyApi(libs.configurate.core)
-    compileOnlyApi(libs.configlib)
+
+    api(libs.configlib.core)
+    api(libs.configlib.yaml) {
+        isTransitive = false
+    }
 
     api(project(":crystal-common"))
 
@@ -30,9 +34,15 @@ paper {
     apiVersion = "1.21"
 
     serverDependencies {
-        register("ConfigLib") {
+        register("SkinsRestorer") {
             required = false
         }
+    }
+}
+
+extraJavaModuleInfo {
+    automaticModule("de.exlll:configlib-core", "configlib") {
+        mergeJar("de.exlll:configlib-yaml")
     }
 }
 
@@ -42,6 +52,7 @@ tasks {
     }
 
     shadowJar {
+        archiveClassifier = ""
         destinationDirectory = rootProject.layout.buildDirectory.dir("libs")
     }
 }

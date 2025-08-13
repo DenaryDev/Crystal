@@ -5,7 +5,7 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package me.denarydev.crystal.common.database.connection.hikari;
+package me.denarydev.crystal.database.connection.hikari;
 
 import com.zaxxer.hikari.HikariConfig;
 import org.jetbrains.annotations.ApiStatus;
