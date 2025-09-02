@@ -25,7 +25,6 @@ tasks {
     }
 
     shadowJar {
-        archiveClassifier = ""
         destinationDirectory = rootProject.layout.buildDirectory.dir("libs")
     }
 }
