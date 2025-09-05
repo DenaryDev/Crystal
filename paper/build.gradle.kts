@@ -1,3 +1,5 @@
+import net.minecrell.pluginyml.paper.PaperPluginDescription
+
 plugins {
     id("crystal.common")
     id("de.eldoria.plugin-yml.paper") version "0.7.1"
@@ -35,6 +37,7 @@ paper {
 
     serverDependencies {
         register("SkinsRestorer") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = false
         }
     }

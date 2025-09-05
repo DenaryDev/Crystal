@@ -11,8 +11,8 @@ import me.denarydev.crystal.skin.provider.SkinsRestorerProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * @author DenaryDev
@@ -20,8 +20,8 @@ import java.util.function.Function;
  */
 public final class SkinProviders {
 
-    private static final Map<String, Function<Logger, SkinProvider>> providers = Map.of(
-        "net.skinsrestorer.api.SkinsRestorerProvider", SkinsRestorerProvider::new
+    private static final Map<String, Class<? extends SkinProvider>> providers = Map.of(
+        "net.skinsrestorer.api.SkinsRestorerProvider", SkinsRestorerProvider.class
     );
     private static SkinProvider currentSkinProvider;
 
@@ -44,9 +44,13 @@ public final class SkinProviders {
         for (final var entry : providers.entrySet()) {
             try {
                 Class.forName(entry.getKey());
-                currentSkinProvider = entry.getValue().apply(logger);
+
+                entry.getValue().getDeclaredConstructor(Logger.class).newInstance(logger);
+
                 break;
-            } catch (ClassNotFoundException ignored) {
+            } catch (ClassNotFoundException | NoSuchMethodException ignored) {
+            } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
+                logger.error("Failed to initialize SkinProvider of {}", entry.getKey(), e);
             }
         }
 
