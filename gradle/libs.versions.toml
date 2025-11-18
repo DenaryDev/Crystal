@@ -1,6 +1,6 @@
 [versions]
 # Platforms
-paper = "1.21.8-R0.1-SNAPSHOT"
+paper = "1.21.10-R0.1-SNAPSHOT"
 velocity = "3.4.0-SNAPSHOT"
 
 # Configs
@@ -13,7 +13,7 @@ skinsrestorer = "15.7.7"
 # SQL
 hikari = "7.0.2"
 ## Local
-sqlite = "3.50.3.0"
+sqlite = "3.51.0.0"
 h2 = "2.4.240"
 ## Remote
 mysql = "9.5.0"
@@ -25,8 +25,8 @@ slf4j = "2.0.17"
 annotations = "26.0.2-1"
 
 # Tests
-junit = "6.0.0"
-mockbukkit = "4.89.0"
+junit = "6.0.1"
+mockbukkit = "4.98.0"
 
 [libraries]
 # Platforms

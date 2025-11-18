@@ -1,6 +1,6 @@
 plugins {
     id("crystal.common")
-    id("com.github.gmazzo.buildconfig") version("5.7.0")
+    id("com.github.gmazzo.buildconfig") version("5.7.1")
 }
 
 dependencies {
