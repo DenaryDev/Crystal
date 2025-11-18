@@ -8,10 +8,7 @@
 package me.denarydev.crystal.database.connection.hikari;
 
 import me.denarydev.crystal.database.DatabaseType;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.ApiStatus.AvailableSince;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -20,12 +17,11 @@ import java.util.function.Function;
  * @author DenaryDev
  * @since 0:09 24.11.2023
  */
-@AvailableSince("2.1.0")
-public final class MariaDBConnectionFactory extends DriverBasedHikariConnectionFactory {
+public final class MariaDBConnectionPool extends DriverBasedHikariConnectionPool {
 
-    public MariaDBConnectionFactory(String poolPrefix, Logger logger, String address, String port, String database, String username, String password,
-                                    int maxPoolSize, int minimumIdle, int maxLifetime, int keepaliveTime, int connectionTimeout, Map<String, String> properties) {
-        super(poolPrefix, logger, address, port, database, username, password, maxPoolSize, minimumIdle, maxLifetime, keepaliveTime, connectionTimeout, properties);
+    public MariaDBConnectionPool(String poolPrefix, String address, String port, String database, String username, String password,
+                                 int maxPoolSize, int minimumIdle, int maxLifetime, int keepaliveTime, int connectionTimeout, Map<String, String> properties) {
+        super(poolPrefix, address, port, database, username, password, maxPoolSize, minimumIdle, maxLifetime, keepaliveTime, connectionTimeout, properties);
     }
 
     @Override
@@ -53,13 +49,12 @@ public final class MariaDBConnectionFactory extends DriverBasedHikariConnectionF
         return s -> s.replace('\'', '`'); // use backticks for quotes
     }
 
-    @ApiStatus.AvailableSince("3.0.0")
-    public static final class Builder extends HikariConnectionFactory.Builder<MariaDBConnectionFactory> {
+    public static final class Builder extends HikariConnectionPool.Builder<MariaDBConnectionPool> {
         @Override
-        public MariaDBConnectionFactory build() {
+        public MariaDBConnectionPool build() {
             verify();
 
-            return new MariaDBConnectionFactory(this.poolPrefix, this.logger, this.address, this.port, this.database, this.username, this.password,
+            return new MariaDBConnectionPool(this.poolPrefix, this.address, this.port, this.database, this.username, this.password,
                 this.maxPoolSize, this.minimumIdle, this.maxLifetime, this.keepAliveTime, this.connectionTimeout, this.properties);
         }
     }

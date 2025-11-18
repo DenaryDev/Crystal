@@ -8,7 +8,6 @@
 package me.denarydev.crystal.paper.configurate.serializers;
 
 import org.bukkit.Material;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.serialize.ScalarSerializer;
@@ -21,7 +20,6 @@ import java.util.function.Predicate;
  * @author DenaryDev
  * @since 14:31 28.04.2024
  */
-@ApiStatus.AvailableSince("2.2.0")
 public final class MaterialSerializer extends ScalarSerializer<Material> {
     public MaterialSerializer() {
         super(Material.class);

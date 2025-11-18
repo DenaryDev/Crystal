@@ -10,12 +10,16 @@ package me.denarydev.crystal.velocity;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
+import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
-import me.denarydev.crystal.skin.SkinProviders;
+import me.denarydev.crystal.Crystal;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
+
+import java.nio.file.Path;
 
 /**
  * @author DenaryDev
@@ -28,21 +32,48 @@ import org.slf4j.Logger;
     description = "Набор библиотек для плагинов на платформе Velocity",
     authors = "DenaryDev",
     dependencies = {
-        @Dependency(id = "skinsrestorer", optional = true)
+        @Dependency(
+            id = "skinsrestorer",
+            optional = true
+        )
     }
 )
 @ApiStatus.Internal
-public final class VelocityPlugin {
+public final class VelocityPlugin extends Crystal {
 
+    private final ProxyServer proxy;
     private final Logger logger;
+    private final Path directory;
 
     @Inject
-    public VelocityPlugin(ProxyServer proxy, Logger logger) {
+    public VelocityPlugin(ProxyServer proxy, Logger logger, @DataDirectory Path directory) {
+        this.proxy = proxy;
         this.logger = logger;
+        this.directory = directory;
     }
 
     @Subscribe
     private void onProxyInitialization(ProxyInitializeEvent event) {
-        SkinProviders.initialize(logger);
+        enable();
+    }
+
+    @Subscribe
+    private void onProxyShutdown(ProxyShutdownEvent event) {
+        disable();
+    }
+
+    @Override
+    public Logger logger() {
+        return this.logger;
+    }
+
+    @Override
+    public Path dataFolder() {
+        return this.directory;
+    }
+
+    @Override
+    public void runAsync(Runnable task) {
+        proxy.getScheduler().buildTask(this, task).schedule();
     }
 }

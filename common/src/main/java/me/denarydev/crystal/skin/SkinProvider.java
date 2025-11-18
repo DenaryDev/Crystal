@@ -8,7 +8,6 @@
 package me.denarydev.crystal.skin;
 
 import me.denarydev.crystal.skin.provider.SkinsRestorerProvider;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -18,7 +17,6 @@ import java.util.UUID;
  * @author DenaryDev
  * @since 20:04 13.08.2025
  */
-@ApiStatus.AvailableSince("3.0.0")
 public sealed interface SkinProvider permits SkinsRestorerProvider {
 
     /**

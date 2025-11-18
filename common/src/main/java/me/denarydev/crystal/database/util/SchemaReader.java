@@ -7,8 +7,6 @@
  */
 package me.denarydev.crystal.database.util;
 
-import org.jetbrains.annotations.ApiStatus;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +21,6 @@ import java.util.List;
  * @author DenaryDev
  * @since 13:33 23.12.2023
  */
-@ApiStatus.AvailableSince("2.1.0")
 public final class SchemaReader {
     private SchemaReader() {
     }

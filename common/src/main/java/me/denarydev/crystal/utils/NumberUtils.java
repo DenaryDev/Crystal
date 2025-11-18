@@ -7,7 +7,6 @@
  */
 package me.denarydev.crystal.utils;
 
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
@@ -18,7 +17,6 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * Различные методы для работы с числами.
  */
-@ApiStatus.AvailableSince("1.0.0")
 public final class NumberUtils {
     private static final String NUMBER_REGEX = "[-+]?\\d*\\.?\\d+";
 
@@ -100,7 +98,6 @@ public final class NumberUtils {
      * @return случайное значение
      */
     @NotNull
-    @ApiStatus.AvailableSince("2.2.0")
     public static <T> T randomValue(@NotNull final Map<Integer, T> map) {
         final var list = new ArrayList<T>();
 
@@ -123,7 +120,6 @@ public final class NumberUtils {
      * @param places до какого знака после запятой округлять
      * @return округлённое значение
      */
-    @ApiStatus.AvailableSince("2.2.0")
     public static double roundAvoid(final double value, final int places) {
         final double scale = Math.pow(10, places);
 

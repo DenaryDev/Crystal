@@ -8,9 +8,7 @@
 package me.denarydev.crystal.database.connection.hikari;
 
 import me.denarydev.crystal.database.DatabaseType;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -19,12 +17,11 @@ import java.util.function.Function;
  * @author DenaryDev
  * @since 0:50 24.11.2023
  */
-@ApiStatus.AvailableSince("2.1.0")
-public final class PostgresConnectionFactory extends DriverBasedHikariConnectionFactory {
+public final class PostgresConnectionPool extends DriverBasedHikariConnectionPool {
 
-    public PostgresConnectionFactory(String poolPrefix, Logger logger, String address, String port, String database, String username, String password,
-                                     int maxPoolSize, int minimumIdle, int maxLifetime, int keepaliveTime, int connectionTimeout, Map<String, String> properties) {
-        super(poolPrefix, logger, address, port, database, username, password, maxPoolSize, minimumIdle, maxLifetime, keepaliveTime, connectionTimeout, properties);
+    public PostgresConnectionPool(String poolPrefix, String address, String port, String database, String username, String password,
+                                  int maxPoolSize, int minimumIdle, int maxLifetime, int keepaliveTime, int connectionTimeout, Map<String, String> properties) {
+        super(poolPrefix, address, port, database, username, password, maxPoolSize, minimumIdle, maxLifetime, keepaliveTime, connectionTimeout, properties);
     }
 
     @Override
@@ -61,13 +58,12 @@ public final class PostgresConnectionFactory extends DriverBasedHikariConnection
         return s -> s.replace('\'', '"');
     }
 
-    @ApiStatus.AvailableSince("3.0.0")
-    public static final class Builder extends HikariConnectionFactory.Builder<PostgresConnectionFactory> {
+    public static final class Builder extends HikariConnectionPool.Builder<PostgresConnectionPool> {
         @Override
-        public PostgresConnectionFactory build() {
+        public PostgresConnectionPool build() {
             verify();
 
-            return new PostgresConnectionFactory(this.poolPrefix, this.logger, this.address, this.port, this.database, this.username, this.password,
+            return new PostgresConnectionPool(this.poolPrefix, this.address, this.port, this.database, this.username, this.password,
                 this.maxPoolSize, this.minimumIdle, this.maxLifetime, this.keepAliveTime, this.connectionTimeout, this.properties);
         }
     }

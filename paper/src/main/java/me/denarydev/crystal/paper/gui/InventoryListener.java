@@ -20,6 +20,7 @@ import java.util.WeakHashMap;
 
 /**
  * Вы должны зарегистрировать этот слушатель в методе onEnable() вашего плагина.
+ *
  * @see org.bukkit.plugin.PluginManager#registerEvents
  */
 public final class InventoryListener implements Listener {

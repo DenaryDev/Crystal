@@ -7,6 +7,7 @@
  */
 package me.denarydev.crystal.skin;
 
+import me.denarydev.crystal.Crystal;
 import me.denarydev.crystal.skin.provider.SkinsRestorerProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
@@ -40,24 +41,24 @@ public final class SkinProviders {
     }
 
     @ApiStatus.Internal
-    public static void initialize(Logger logger) {
+    public static void initialize() {
         for (final var entry : providers.entrySet()) {
             try {
                 Class.forName(entry.getKey());
 
-                entry.getValue().getDeclaredConstructor(Logger.class).newInstance(logger);
+                entry.getValue().getDeclaredConstructor(Logger.class).newInstance();
 
                 break;
             } catch (ClassNotFoundException | NoSuchMethodException ignored) {
             } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
-                logger.error("Failed to initialize SkinProvider of {}", entry.getKey(), e);
+                Crystal.instance().logger().error("Failed to initialize SkinProvider of {}", entry.getKey(), e);
             }
         }
 
         if (currentSkinProvider != null) {
-            logger.info("SkinProvider has been initialized! ({})", currentSkinProvider.getClass().getSimpleName());
+            Crystal.instance().logger().info("SkinProvider has been initialized! ({})", currentSkinProvider.getClass().getSimpleName());
         } else {
-            logger.error("SkinProvider has not been initialized because compatible skin plugin not found!");
+            Crystal.instance().logger().error("SkinProvider has not been initialized because compatible skin plugin not found!");
         }
     }
 }

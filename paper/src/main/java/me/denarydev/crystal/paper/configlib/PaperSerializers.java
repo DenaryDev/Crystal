@@ -7,8 +7,8 @@
  */
 package me.denarydev.crystal.paper.configlib;
 
-import de.exlll.configlib.NameFormatters;
 import de.exlll.configlib.YamlConfigurationProperties;
+import me.denarydev.crystal.config.ConfigLibLoader;
 import me.denarydev.crystal.paper.configlib.serializers.ComponentSerializer;
 import me.denarydev.crystal.paper.configlib.serializers.LocationSerializer;
 import me.denarydev.crystal.paper.configlib.serializers.MaterialSerializer;
@@ -44,7 +44,7 @@ public final class PaperSerializers {
      * @return свойства в виде {@link YamlConfigurationProperties}
      */
     public static YamlConfigurationProperties getProperties() {
-       return getProperties(null);
+        return getProperties(null);
     }
 
     /**
@@ -54,11 +54,10 @@ public final class PaperSerializers {
      * @return свойства в виде {@link YamlConfigurationProperties}
      */
     public static YamlConfigurationProperties getProperties(@Nullable String header) {
-        final YamlConfigurationProperties.Builder<?> builder = YamlConfigurationProperties.newBuilder()
-            .setNameFormatter(NameFormatters.LOWER_KEBAB_CASE)
-            .header(header);
+        final YamlConfigurationProperties.Builder<?> builder = ConfigLibLoader.properties();
+
         applyTo(builder);
 
-        return builder.build();
+        return builder.header(header).build();
     }
 }

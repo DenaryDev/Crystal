@@ -10,7 +10,6 @@ package me.denarydev.crystal.paper.utils;
 import com.google.common.base.Preconditions;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
  * @author DenaryDev
  * @since 13:56 25.11.2023
  */
-@ApiStatus.AvailableSince("2.1.0")
 public final class LocationUtils {
 
     /**
@@ -52,7 +50,6 @@ public final class LocationUtils {
      * @return центральная позиция от этой точки
      */
     @NotNull
-    @ApiStatus.AvailableSince("2.2.0")
     public static Location centerLocation(@NotNull final Location location) {
         final var centerLoc = location.clone();
         centerLoc.setX(location.getBlockX() + 0.5);
@@ -72,7 +69,6 @@ public final class LocationUtils {
      * @return Позиция ближайшего к точке блока, или null, если таковой не найден
      */
     @Nullable
-    @ApiStatus.AvailableSince("2.2.0")
     public static Location findClosestBlock(@NotNull final Location loc, @NotNull final Material type, final int radius) {
         if (loc.getBlock().getType().equals(type)) return loc;
 

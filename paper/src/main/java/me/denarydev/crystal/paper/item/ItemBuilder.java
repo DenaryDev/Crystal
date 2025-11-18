@@ -28,7 +28,6 @@ import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,7 +40,6 @@ import java.util.stream.Collectors;
 /**
  * Класс для создания ItemStack'ов.
  */
-@ApiStatus.AvailableSince("2.2.0")
 public final class ItemBuilder {
     @NotNull
     private final ItemStack itemStack;

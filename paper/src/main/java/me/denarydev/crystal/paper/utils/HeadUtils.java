@@ -81,7 +81,7 @@ public final class HeadUtils {
     /**
      * Устанавливает текстуру головы.
      *
-     * @param meta      метаданные предмета головы
+     * @param meta    метаданные предмета головы
      * @param texture текстура головы
      */
     public static void setTexture(@NotNull final SkullMeta meta, @NotNull final String texture) {

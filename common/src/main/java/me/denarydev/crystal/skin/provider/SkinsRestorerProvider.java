@@ -22,7 +22,6 @@ import java.util.UUID;
  * @author DenaryDev
  * @since 20:03 13.08.2025
  */
-@ApiStatus.AvailableSince("3.0.0")
 public final class SkinsRestorerProvider implements SkinProvider {
 
     private final Logger logger;

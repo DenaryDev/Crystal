@@ -7,7 +7,6 @@
  */
 package me.denarydev.crystal.utils;
 
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -19,7 +18,6 @@ import java.util.List;
  * @author DenaryDev
  * @since 13:47 25.11.2023
  */
-@ApiStatus.AvailableSince("2.1.0")
 public final class TextUtils {
 
     /**

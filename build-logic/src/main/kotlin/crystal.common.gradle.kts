@@ -16,9 +16,6 @@ repositories {
 extraJavaModuleInfo {
     failOnMissingModuleInfo = false
     skipLocalJars = true
-
-    automaticModule("com.mysql:mysql-connector-j", "com.mysql")
-    automaticModule("net.skinsrestorer:skinsrestorer-api", "skinsrestorer.api")
 }
 
 spotless {
@@ -66,6 +63,10 @@ tasks {
 
     test {
         useJUnitPlatform()
+
+        testLogging {
+            events("passed", "skipped", "failed")
+        }
     }
 }
 

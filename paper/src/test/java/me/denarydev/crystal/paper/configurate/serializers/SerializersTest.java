@@ -9,13 +9,12 @@ package me.denarydev.crystal.paper.configurate.serializers;
 
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Server;
 import org.bukkit.World;
-import org.bukkit.WorldCreator;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
 import org.spongepowered.configurate.BasicConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -30,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 public class SerializersTest {
 
-    private Server server;
+    private ServerMock server;
 
     @BeforeEach
     public void setUp() {
@@ -45,7 +44,7 @@ public class SerializersTest {
     @Test
     public void testLocationSerializer() throws SerializationException {
         final LocationSerializer serializer = new LocationSerializer();
-        final World world = server.createWorld(WorldCreator.name("world"));
+        final World world = server.addSimpleWorld("world");
 
         final Location x_y_z_loc = new Location(null, 15.27, 65.12, 76.21);
         final Location world_x_y_z_loc = new Location(world, 15.27, 65.12, 76.21);

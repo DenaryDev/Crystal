@@ -2,7 +2,7 @@ import net.minecrell.pluginyml.paper.PaperPluginDescription
 
 plugins {
     id("crystal.common")
-    id("de.eldoria.plugin-yml.paper") version "0.7.1"
+    id("de.eldoria.plugin-yml.paper") version "0.8.0"
 }
 
 base {
@@ -13,17 +13,13 @@ dependencies {
     compileOnly(libs.paper)
     compileOnlyApi(libs.configurate.core)
 
-    api(libs.configlib.core)
-    api(libs.configlib.yaml) {
-        isTransitive = false
-    }
-
     api(project(":crystal-common"))
 
+    testImplementation(libs.paper)
     testImplementation(libs.mockbukkit)
-    testImplementation(libs.junit.jupiter)
+    testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation(platform(libs.junit.bom))
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:1.12.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 paper {
@@ -34,6 +30,9 @@ paper {
     main = "me.denarydev.crystal.paper.PaperPlugin"
 
     apiVersion = "1.21"
+
+    // ConfigLib является частью Crystal
+    provides = listOf("ConfigLib")
 
     serverDependencies {
         register("SkinsRestorer") {

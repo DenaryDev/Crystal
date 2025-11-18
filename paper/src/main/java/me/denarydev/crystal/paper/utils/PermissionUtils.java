@@ -17,7 +17,7 @@ public final class PermissionUtils {
     /**
      * Получает число из пермишена игрока.
      *
-     * @param player игрок
+     * @param player     игрок
      * @param permission пермишен
      * @return число из пермишена
      */

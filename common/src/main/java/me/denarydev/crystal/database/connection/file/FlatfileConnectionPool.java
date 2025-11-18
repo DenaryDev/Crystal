@@ -7,47 +7,33 @@
  */
 package me.denarydev.crystal.database.connection.file;
 
-import me.denarydev.crystal.database.connection.ConnectionFactory;
+import me.denarydev.crystal.database.connection.ConnectionPool;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
+import javax.sql.DataSource;
 import java.nio.file.Path;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 /**
  * @author DenaryDev
  * @since 16:40 23.11.2023
  */
 @ApiStatus.Internal
-@ApiStatus.AvailableSince("2.1.0")
-public sealed abstract class FlatfileConnectionFactory extends ConnectionFactory permits H2ConnectionFactory, SQLiteConnectionFactory {
-    private final Path file;
-    private NonClosableConnection connection;
+public sealed abstract class FlatfileConnectionPool extends ConnectionPool permits H2ConnectionPool, SQLiteConnectionPool {
+    protected final Path file;
+    protected DataSource dataSource;
 
-    FlatfileConnectionFactory(Logger logger, Path file) {
-        super(logger);
+    FlatfileConnectionPool(Path file) {
         this.file = file;
     }
 
-    protected abstract Connection createConnection(Path file) throws SQLException;
-
     @Override
-    public @NotNull Connection connection() throws SQLException {
-        NonClosableConnection connection = this.connection;
-        if (connection == null || connection.isClosed()) {
-            connection = new NonClosableConnection(createConnection(this.file));
-            this.connection = connection;
-        }
-        return connection;
+    public final @NotNull DataSource dataSource() {
+        return this.dataSource;
     }
 
     @Override
-    public void shutdown() throws SQLException {
-        if (this.connection != null) {
-            this.connection.shutdown();
-        }
+    public void shutdown() {
     }
 
     @Deprecated
@@ -60,7 +46,7 @@ public sealed abstract class FlatfileConnectionFactory extends ConnectionFactory
         }
     }
 
-    public static sealed abstract class Builder<T extends FlatfileConnectionFactory> extends ConnectionFactory.Builder<T> permits H2ConnectionFactory.Builder, SQLiteConnectionFactory.Builder {
+    public static sealed abstract class Builder<T extends FlatfileConnectionPool> extends ConnectionPool.Builder<T> permits H2ConnectionPool.Builder, SQLiteConnectionPool.Builder {
         protected Path file;
 
         /**

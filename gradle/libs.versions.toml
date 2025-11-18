@@ -5,28 +5,28 @@ velocity = "3.4.0-SNAPSHOT"
 
 # Configs
 configurate = "4.2.0"
-configlib = "4.6.1"
+configlib = "4.6.3"
 
 # Plugins
 skinsrestorer = "15.7.7"
 
 # SQL
-hikari = "6.3.0"
+hikari = "7.0.2"
 ## Local
 sqlite = "3.50.3.0"
-h2 = "2.3.232"
+h2 = "2.4.240"
 ## Remote
-mysql = "9.3.0"
-mariadb = "3.5.4"
-postgresql = "42.7.7"
+mysql = "9.5.0"
+mariadb = "3.5.6"
+postgresql = "42.7.8"
 
 # Shared
 slf4j = "2.0.17"
-annotations = "26.0.2"
+annotations = "26.0.2-1"
 
 # Tests
-junit = "5.13.4"
-mockbukkit = "4.72.6"
+junit = "6.0.0"
+mockbukkit = "4.89.0"
 
 [libraries]
 # Platforms
@@ -58,7 +58,6 @@ slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
 
 # Tests
-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 mockbukkit = { module = "org.mockbukkit.mockbukkit:mockbukkit-v1.21", version.ref = "mockbukkit" }
 

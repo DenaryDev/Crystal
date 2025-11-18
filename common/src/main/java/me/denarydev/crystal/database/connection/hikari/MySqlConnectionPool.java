@@ -8,9 +8,7 @@
 package me.denarydev.crystal.database.connection.hikari;
 
 import me.denarydev.crystal.database.DatabaseType;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -19,12 +17,11 @@ import java.util.function.Function;
  * @author DenaryDev
  * @since 0:09 24.11.2023
  */
-@ApiStatus.AvailableSince("2.1.0")
-public final class MySqlConnectionFactory extends DriverBasedHikariConnectionFactory {
+public final class MySqlConnectionPool extends DriverBasedHikariConnectionPool {
 
-    public MySqlConnectionFactory(String poolPrefix, Logger logger, String address, String port, String database, String username, String password,
-                                  int maxPoolSize, int minimumIdle, int maxLifetime, int keepaliveTime, int connectionTimeout, Map<String, String> properties) {
-        super(poolPrefix, logger, address, port, database, username, password, maxPoolSize, minimumIdle, maxLifetime, keepaliveTime, connectionTimeout, properties);
+    public MySqlConnectionPool(String poolPrefix, String address, String port, String database, String username, String password,
+                               int maxPoolSize, int minimumIdle, int maxLifetime, int keepaliveTime, int connectionTimeout, Map<String, String> properties) {
+        super(poolPrefix, address, port, database, username, password, maxPoolSize, minimumIdle, maxLifetime, keepaliveTime, connectionTimeout, properties);
     }
 
     @Override
@@ -62,10 +59,6 @@ public final class MySqlConnectionFactory extends DriverBasedHikariConnectionFac
         properties.putIfAbsent("maintainTimeStats", "false");
         properties.putIfAbsent("alwaysSendSetIsolation", "false");
         properties.putIfAbsent("cacheCallableStmts", "true");
-
-        // https://stackoverflow.com/a/54256150
-        // It's not super important which timezone we pick, because we don't use time-based
-        // data types in any of our schemas/queries.
         properties.putIfAbsent("serverTimezone", "UTC");
 
         super.overrideProperties(properties);
@@ -76,13 +69,12 @@ public final class MySqlConnectionFactory extends DriverBasedHikariConnectionFac
         return s -> s.replace('\'', '`'); // use backticks for quotes
     }
 
-    @ApiStatus.AvailableSince("3.0.0")
-    public static final class Builder extends HikariConnectionFactory.Builder<MySqlConnectionFactory> {
+    public static final class Builder extends HikariConnectionPool.Builder<MySqlConnectionPool> {
         @Override
-        public MySqlConnectionFactory build() {
+        public MySqlConnectionPool build() {
             verify();
 
-            return new MySqlConnectionFactory(this.poolPrefix, this.logger, this.address, this.port, this.database, this.username, this.password,
+            return new MySqlConnectionPool(this.poolPrefix, this.address, this.port, this.database, this.username, this.password,
                 this.maxPoolSize, this.minimumIdle, this.maxLifetime, this.keepAliveTime, this.connectionTimeout, this.properties);
         }
     }

@@ -16,6 +16,7 @@ module crystal.common {
     requires org.mariadb.jdbc;
     requires org.postgresql.jdbc;
     requires skinsrestorer.api;
+    requires configlib;
 
     exports me.denarydev.crystal.config;
     exports me.denarydev.crystal.database;
@@ -26,4 +27,5 @@ module crystal.common {
     exports me.denarydev.crystal.skin;
     exports me.denarydev.crystal.skin.provider;
     exports me.denarydev.crystal.utils;
+    exports me.denarydev.crystal;
 }

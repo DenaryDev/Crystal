@@ -7,7 +7,6 @@
  */
 package me.denarydev.crystal.paper;
 
-import me.denarydev.crystal.skin.SkinProviders;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -18,15 +17,15 @@ import org.jetbrains.annotations.ApiStatus;
 @ApiStatus.Internal
 public final class PaperPlugin extends JavaPlugin {
 
-    private static PaperPlugin instance;
-
-    public static PaperPlugin getInstance() {
-        return instance;
-    }
+    private final CrystalPaper platform = new CrystalPaper(this);
 
     @Override
     public void onEnable() {
-        instance = this;
-        SkinProviders.initialize(getSLF4JLogger());
+        platform.enable();
+    }
+
+    @Override
+    public void onDisable() {
+        platform.disable();
     }
 }

@@ -12,13 +12,11 @@ import me.denarydev.crystal.paper.utils.LocationUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.jetbrains.annotations.ApiStatus;
 
 /**
  * @author DenaryDev
  * @since 22:24 12.08.2025
  */
-@ApiStatus.AvailableSince("3.0.0")
 public final class LocationSerializer implements Serializer<Location, String> {
     @Override
     public String serialize(Location element) {

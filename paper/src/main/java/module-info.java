@@ -16,6 +16,7 @@ module crystal.paper {
     requires org.spongepowered.configurate.yaml;
     requires configlib;
     requires crystal.common;
+    requires org.slf4j;
 
     exports me.denarydev.crystal.paper.configurate;
     exports me.denarydev.crystal.paper.configurate.serializers;

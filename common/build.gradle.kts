@@ -8,5 +8,16 @@ dependencies {
     api(libs.hikaricp)
     api(libs.bundles.sql.drivers)
 
+    api(libs.configlib.yaml)
+
     compileOnly(libs.skinsrestorer)
+}
+
+extraJavaModuleInfo {
+    automaticModule("com.mysql:mysql-connector-j", "com.mysql")
+    automaticModule("net.skinsrestorer:skinsrestorer-api", "skinsrestorer.api")
+
+    automaticModule("de.exlll:configlib-core", "configlib") {
+        mergeJar("de.exlll:configlib-yaml")
+    }
 }

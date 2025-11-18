@@ -7,25 +7,22 @@
  */
 package me.denarydev.crystal.database.connection;
 
+import me.denarydev.crystal.Crystal;
 import me.denarydev.crystal.database.DatabaseType;
-import me.denarydev.crystal.database.connection.file.FlatfileConnectionFactory;
-import me.denarydev.crystal.database.connection.hikari.HikariConnectionFactory;
+import me.denarydev.crystal.database.connection.file.FlatfileConnectionPool;
+import me.denarydev.crystal.database.connection.hikari.HikariConnectionPool;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.function.Function;
 
-@ApiStatus.AvailableSince("2.1.0")
-public sealed abstract class ConnectionFactory permits FlatfileConnectionFactory, HikariConnectionFactory {
-    protected final Logger logger;
-
-    @ApiStatus.Internal
-    public ConnectionFactory(final Logger logger) {
-        this.logger = logger;
-    }
+public sealed abstract class ConnectionPool permits FlatfileConnectionPool, HikariConnectionPool {
+    protected final Logger logger = Crystal.instance().logger();
 
     /**
      * Возвращает тип базы данных, которая используется в этой фабрике.
@@ -43,16 +40,35 @@ public sealed abstract class ConnectionFactory permits FlatfileConnectionFactory
     /**
      * Закрывает пул соединений с БД.
      */
-    public abstract void shutdown() throws SQLException;
+    public abstract void shutdown();
 
     /**
-     * Подключается к БД и возвращает инстанс соединения.
+     * Возвращает пул соединений с БД или null, если он не инициализирован.
+     *
+     * @return {@link DataSource} или null, если нет соединения с БД.
+     */
+    @Nullable
+    public abstract DataSource dataSource();
+
+    /**
+     * Подключается к БД и возвращает это подключение.
      *
      * @return {@link Connection}
      * @throws SQLException когда соединение не может быть получено.
      */
     @NotNull
-    public abstract Connection connection() throws SQLException;
+    public final Connection connection() throws SQLException {
+        if (dataSource() == null) {
+            throw new SQLException("Unable to get a connection from the pool. (dataSource is null)");
+        }
+
+        final Connection connection = dataSource().getConnection();
+        if (connection == null) {
+            throw new SQLException("Unable to get a connection from the pool. (getConnection returned null)");
+        }
+
+        return connection;
+    }
 
     /**
      * Выполняет обратный вызов с переданным соединением и автоматически закрывает его по завершении.
@@ -71,10 +87,8 @@ public sealed abstract class ConnectionFactory permits FlatfileConnectionFactory
         void accept(@NotNull final Connection connection) throws SQLException;
     }
 
-    @ApiStatus.AvailableSince("3.0.0")
-    public static abstract sealed class Builder<T extends ConnectionFactory> permits FlatfileConnectionFactory.Builder, HikariConnectionFactory.Builder {
+    public static abstract sealed class Builder<T extends ConnectionPool> permits FlatfileConnectionPool.Builder, HikariConnectionPool.Builder {
         protected String poolPrefix;
-        protected Logger logger;
 
         /**
          * Префикс для имён пулов в hikari.
@@ -85,15 +99,6 @@ public sealed abstract class ConnectionFactory permits FlatfileConnectionFactory
          */
         public final Builder<T> poolPrefix(@NotNull final String pluginName) {
             this.poolPrefix = pluginName;
-
-            return this;
-        }
-
-        /**
-         * Реализация {@link org.slf4j.Logger} из вашего плагина
-         */
-        public final Builder<T> logger(@NotNull final Logger logger) {
-            this.logger = logger;
 
             return this;
         }

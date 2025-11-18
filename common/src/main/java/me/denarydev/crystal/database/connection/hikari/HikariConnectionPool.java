@@ -9,12 +9,12 @@ package me.denarydev.crystal.database.connection.hikari;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import me.denarydev.crystal.database.connection.ConnectionFactory;
+import me.denarydev.crystal.database.connection.ConnectionPool;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.ApiStatus.Internal;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
+import org.jetbrains.annotations.Nullable;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collections;
@@ -27,8 +27,7 @@ import java.util.concurrent.TimeUnit;
  * @since 16:48 23.11.2023
  */
 @ApiStatus.Internal
-@ApiStatus.AvailableSince("2.1.0")
-public abstract sealed class HikariConnectionFactory extends ConnectionFactory permits DriverBasedHikariConnectionFactory {
+public abstract sealed class HikariConnectionPool extends ConnectionPool permits DriverBasedHikariConnectionPool {
     private final String poolPrefix;
 
     private final String address;
@@ -45,12 +44,10 @@ public abstract sealed class HikariConnectionFactory extends ConnectionFactory p
 
     private final Map<String, String> properties;
 
-    private HikariDataSource hikari;
+    private HikariDataSource dataSource;
 
-    public HikariConnectionFactory(String poolPrefix, Logger logger, String address, String port, String database, String username, String password,
-                                   int maxPoolSize, int minimumIdle, int maxLifetime, int keepaliveTime, int connectionTimeout, Map<String, String> properties) {
-        super(logger);
-
+    public HikariConnectionPool(String poolPrefix, String address, String port, String database, String username, String password,
+                                int maxPoolSize, int minimumIdle, int maxLifetime, int keepaliveTime, int connectionTimeout, Map<String, String> properties) {
         this.poolPrefix = poolPrefix;
         this.address = address;
         this.port = port == null ? defaultPort() : port;
@@ -144,30 +141,21 @@ public abstract sealed class HikariConnectionFactory extends ConnectionFactory p
         // to setup the schema anyways
         config.setInitializationFailTimeout(-1);
 
-        this.hikari = new HikariDataSource(config);
+        this.dataSource = new HikariDataSource(config);
 
         postInitialize();
     }
 
     @Override
     public void shutdown() {
-        if (this.hikari != null) {
-            this.hikari.close();
+        if (this.dataSource != null) {
+            this.dataSource.close();
         }
     }
 
     @Override
-    public @NotNull Connection connection() throws SQLException {
-        if (this.hikari == null) {
-            throw new SQLException("Unable to get a connection from the pool. (hikari is null)");
-        }
-
-        Connection connection = this.hikari.getConnection();
-        if (connection == null) {
-            throw new SQLException("Unable to get a connection from the pool. (getConnection returned null)");
-        }
-
-        return connection;
+    public @Nullable DataSource dataSource() {
+        return this.dataSource;
     }
 
     @Override
@@ -179,9 +167,8 @@ public abstract sealed class HikariConnectionFactory extends ConnectionFactory p
         }
     }
 
-    @ApiStatus.AvailableSince("3.0.0")
-    public static abstract sealed class Builder<T extends HikariConnectionFactory> extends ConnectionFactory.Builder<T> permits MariaDBConnectionFactory.Builder,
-        MySqlConnectionFactory.Builder, PostgresConnectionFactory.Builder {
+    public static abstract sealed class Builder<T extends HikariConnectionPool> extends ConnectionPool.Builder<T> permits MariaDBConnectionPool.Builder,
+        MySqlConnectionPool.Builder, PostgresConnectionPool.Builder {
         protected String address;
         protected String port;
         protected String database;
@@ -270,7 +257,7 @@ public abstract sealed class HikariConnectionFactory extends ConnectionFactory p
         /**
          * Количество миллисекунд, в течение которых одно соединение должно оставаться открытым.
          * <p>
-         * По умолчанию: 1800000 (30 minutes)
+         * По умолчанию: 1800000 (30 минут)
          */
         public Builder<T> maxLifetime(int maxLifetime) {
             this.maxLifetime = maxLifetime;
@@ -371,7 +358,7 @@ public abstract sealed class HikariConnectionFactory extends ConnectionFactory p
             return this;
         }
 
-        @Internal
+        @ApiStatus.Internal
         protected void verify() {
             if (this.address == null) {
                 throw new IllegalArgumentException("You must specify an address");
