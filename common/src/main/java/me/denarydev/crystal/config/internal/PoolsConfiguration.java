@@ -35,15 +35,13 @@ public final class PoolsConfiguration {
     private boolean eagerConnect = false;
     @Comment(
         """
-        
-        Настройки, базовые для любого пула.
+        \nНастройки, базовые для любого пула.
         Если в пуле что-то не определено, это будет взято отсюда."""
     )
     private PoolConfig defaultSettings = new PoolConfig(6, 6, 1800000, 0, 5000);
     @Comment(
         """
-        
-        Пулы соединений.
+        \nПулы соединений.
         Основной ID пула - название секции с ним."""
     )
     private Map<String, PoolConfig> pools = Map.of(
@@ -70,17 +68,12 @@ public final class PoolsConfiguration {
 
         @Comment(
             """
-            
-            Файл, в котором будет храниться база данных.
+            \nФайл, в котором будет храниться база данных.
             Для локальных БД указывается ТОЛЬКО этот параметр."""
         )
         private Path file;
 
-        @Comment(
-            """
-            
-            IP или адрес базы данных без порта."""
-        )
+        @Comment("\nIP или адрес базы данных без порта.")
         private String address;
         @Comment(
             """
@@ -97,8 +90,7 @@ public final class PoolsConfiguration {
 
         @Comment(
             """
-            
-            Максимальное количество одновременных подключений.
+            \nМаксимальное количество одновременных подключений.
             Должно быть столько же, сколько у вас ядер.
             По умолчанию: 6."""
         )
@@ -131,11 +123,7 @@ public final class PoolsConfiguration {
         @Comment("Дополнительные свойства соединения.")
         private Map<String, String> properties;
 
-        @Comment(
-            """
-            
-            Дополнительные ID этого пула, по которым плагины могут получать его."""
-        )
+        @Comment("\nДополнительные ID этого пула, по которым плагины могут получать его.")
         private List<String> aliases;
 
         private PoolConfig() {

@@ -79,11 +79,9 @@ java {
     withSourcesJar()
 }
 
-val repo = if (rootProject.version.toString().endsWith("-SNAPSHOT")) "snapshots" else "releases"
-
 publishing {
     repositories {
-        maven("https://repo.prostocraft.ru/$repo/") {
+        maven("https://repo.prostocraft.ru/private/") {
             name = "prostocraft"
             credentials(PasswordCredentials::class)
         }
