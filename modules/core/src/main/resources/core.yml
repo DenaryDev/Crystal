@@ -1,0 +1,4 @@
+name: "Crystal"
+version: "${version}"
+main: "me.denarydev.crystal.core.CorePlugin"
+author: "DenaryDev"

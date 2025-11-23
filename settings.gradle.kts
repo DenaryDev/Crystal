@@ -9,6 +9,7 @@ includeBuild("build-logic")
 submodule("common")
 submodule("paper")
 submodule("velocity")
+submodule("core")
 
 fun submodule(name: String) {
     include(name)

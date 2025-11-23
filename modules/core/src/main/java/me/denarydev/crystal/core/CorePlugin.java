@@ -1,0 +1,31 @@
+/*
+ * Copyright (c) 2025 DenaryDev
+ *
+ * Use of this source code is governed by an MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT.
+ */
+package me.denarydev.crystal.core;
+
+import org.jetbrains.annotations.ApiStatus;
+import ru.prostocraft.core.api.plugin.Plugin;
+
+/**
+ * @author DenaryDev
+ * @since 19:01 23.11.2025
+ */
+@ApiStatus.Internal
+public final class CorePlugin extends Plugin {
+
+    private final CrystalCore platform = new CrystalCore(this);
+
+    @Override
+    public void onEnable() {
+        platform.enable();
+    }
+
+    @Override
+    public void onDisable() {
+        platform.disable();
+    }
+}

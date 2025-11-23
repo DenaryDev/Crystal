@@ -2,6 +2,7 @@
 # Platforms
 paper = "1.21.10-R0.1-SNAPSHOT"
 velocity = "3.4.0-SNAPSHOT"
+core = "1.1.0"
 
 # Configs
 configurate = "4.2.0"
@@ -32,6 +33,7 @@ mockbukkit = "4.98.0"
 # Platforms
 paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
 velocity = { module = "com.velocitypowered:velocity-api", version.ref = "velocity" }
+core = { module = "ru.prostocraft.core:core", version.ref = "core" }
 
 # Configs
 configurate-core = { module = "org.spongepowered:configurate-core", version.ref = "configurate" }
