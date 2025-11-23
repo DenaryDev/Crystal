@@ -31,5 +31,13 @@ tasks {
 
     shadowJar {
         destinationDirectory = rootProject.layout.buildDirectory.dir("libs")
+
+        doLast {
+            if (project.hasProperty("corePluginsDestDir")) {
+                val destDir = file(project.property("corePluginsDestDir").toString())
+                val output = outputs.files.singleFile
+                output.copyTo(destDir.resolve(output.name), overwrite = true)
+            }
+        }
     }
 }
