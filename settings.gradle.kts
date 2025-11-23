@@ -13,6 +13,7 @@ submodule("velocity")
 fun submodule(name: String) {
     include(name)
     project(":$name").apply {
+        this.projectDir = file("modules/$name")
         this.name = "crystal-$name"
     }
 }
