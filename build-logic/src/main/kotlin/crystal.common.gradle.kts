@@ -16,6 +16,12 @@ repositories {
     }
 }
 
+dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation(platform("org.junit:junit-bom:6.0.1"))
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
 extraJavaModuleInfo {
     failOnMissingModuleInfo = false
     skipLocalJars = true
@@ -60,7 +66,6 @@ tasks {
     }
 
     shadowJar {
-        archiveClassifier = "fat"
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
 
@@ -69,6 +74,7 @@ tasks {
 
         testLogging {
             events("passed", "skipped", "failed")
+            showStandardStreams = true
         }
     }
 }

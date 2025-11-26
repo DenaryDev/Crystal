@@ -8,10 +8,12 @@
 package me.denarydev.crystal.paper.gui;
 
 import com.google.common.base.Preconditions;
+import me.denarydev.crystal.paper.gui.actions.ClickAction;
+import me.denarydev.crystal.paper.gui.actions.CloseAction;
+import me.denarydev.crystal.paper.gui.template.SimpleTemplate;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -28,28 +30,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Для создания экземпляра данного класса используйте {@link Builder}
- * через метод {@link Menu#builder()} или {@link Menu#builder(Template)}
+ * Экземпляр меню.
+ * <p>
+ * Используйте {@link Menu#builder()} для создания меню нуля,
+ * или {@link Menu#builder(Template)} для создания меню по шаблону
  */
 public class Menu implements InventoryHolder {
     private final Template template;
     private final Inventory inventory;
+
+    private final Map<Integer, ClickAction> clickActions = new HashMap<>();
     @Nullable
     private final CloseAction closeAction;
-    private final Map<Integer, ClickAction> clickActions = new HashMap<>();
 
+    @Nullable
     private Player viewer;
 
-    //<editor-fold defaultstate="collapsed" desc="Constructor">
     @ApiStatus.Internal
-    Menu(final Template template, final Map<Integer, ClickAction> actions, @Nullable final CloseAction closeAction) {
+    Menu(Template template, Map<Integer, ClickAction> actions, @Nullable CloseAction closeAction) {
         this.template = template;
         this.closeAction = closeAction;
         this.inventory = setupBukkitInventory(template);
+
         template.items().forEach((slot, item) -> addItemInternal(item, slot));
         actions.forEach((slot, action) -> addActionInternal(action, slot));
     }
-    //</editor-fold>
 
     /**
      * Запускает создатель меню без шаблона.
@@ -66,7 +71,7 @@ public class Menu implements InventoryHolder {
      * @param template шаблон для билдера
      * @return {@link Builder} на основе шаблона.
      */
-    public static Builder builder(@NotNull final Template template) {
+    public static Builder builder(@NotNull Template template) {
         return new Builder(template);
     }
 
@@ -100,7 +105,7 @@ public class Menu implements InventoryHolder {
      * @param slot слот для проверки
      * @return true, если в слоте есть предмет, иначе false
      */
-    public boolean hasItem(final int slot) {
+    public boolean hasItem(int slot) {
         return inventory.getItem(slot) != null;
     }
 
@@ -113,7 +118,7 @@ public class Menu implements InventoryHolder {
      * @param item  предмет
      * @param slots слот или несколько слотов
      */
-    public void addItem(@NotNull final ItemStack item, final int... slots) {
+    public void addItem(@NotNull ItemStack item, int... slots) {
         addItemInternal(item, slots);
     }
 
@@ -127,7 +132,7 @@ public class Menu implements InventoryHolder {
      * @param action действие
      * @param slots  слот или несколько слотов
      */
-    public void addItem(@NotNull final ItemStack item, @Nullable final ClickAction action, final int... slots) {
+    public void addItem(@NotNull ItemStack item, @Nullable ClickAction action, int... slots) {
         addItemInternal(item, slots);
         addActionInternal(action, slots);
     }
@@ -140,18 +145,18 @@ public class Menu implements InventoryHolder {
      * @param action действие
      * @param slots  слот или несколько слотов
      */
-    public void addAction(@Nullable final ClickAction action, final int... slots) {
+    public void addAction(@Nullable ClickAction action, int... slots) {
         addActionInternal(action, slots);
     }
 
     /**
-     * Привязывает игрока к этому экземпляру меню и
-     * отображает его.
+     * Открывает это меню для указанного игрока.
      *
      * @param viewer игрок
      */
-    public void show(@NotNull final Player viewer) {
+    public void show(@NotNull Player viewer) {
         this.viewer = viewer;
+
         viewer.openInventory(inventory);
     }
 
@@ -160,14 +165,21 @@ public class Menu implements InventoryHolder {
      */
     public void update() {
         if (viewer == null) return;
+
         viewer.updateInventory();
     }
 
     /**
-     * Возвращает инвентарь этого меню.
-     *
-     * @return инвентарь
-     * @see Inventory
+     * Закрывает меню, если оно открыто игроку.
+     */
+    public void close() {
+        if (viewer == null) return;
+
+        viewer.closeInventory();
+    }
+
+    /**
+     * @see InventoryHolder#getInventory()
      */
     @Override
     @NotNull
@@ -175,21 +187,41 @@ public class Menu implements InventoryHolder {
         return inventory;
     }
 
-    //<editor-fold defaultstate="collapsed" desc="Internal methods">
-    @ApiStatus.Internal
-    private Inventory setupBukkitInventory(final Template template) {
-        final var type = template.type();
-        final var title = template.title();
-        if (type != null) {
-            return title != null ? Bukkit.createInventory(this, type, title) : Bukkit.createInventory(this, type);
+    private Inventory setupBukkitInventory(Template template) {
+        final Component title = template.title();
+
+        final int size = template.size() == 0 ? 54 : template.size();
+
+        if (template instanceof SimpleTemplate simple && simple.type() != null) {
+            return title != null ?
+                Bukkit.createInventory(this, simple.type(), title) :
+                Bukkit.createInventory(this, simple.type());
         } else {
-            return title != null ? Bukkit.createInventory(this, template.size(), title) : Bukkit.createInventory(this, template.size());
+            return title != null ?
+                Bukkit.createInventory(this, size, title) :
+                Bukkit.createInventory(this, size);
+        }
+    }
+
+    private void addItemInternal(ItemStack item, int... slots) {
+        for (int slot : slots) {
+            if (slot < 0 || slot >= template.size()) continue;
+
+            inventory.setItem(slot, item);
+        }
+    }
+
+    private void addActionInternal(ClickAction action, int... slots) {
+        for (int slot : slots) {
+            if (slot < 0 || slot >= template.size()) continue;
+
+            clickActions.put(slot, action);
         }
     }
 
     @ApiStatus.Internal
-    void clickInternal(final InventoryClickEvent event) {
-        final var action = clickActions.get(event.getSlot());
+    public void clickInternal(InventoryClickEvent event) {
+        final ClickAction action = clickActions.get(event.getSlot());
 
         if (action != null) {
             action.click(event);
@@ -197,28 +229,11 @@ public class Menu implements InventoryHolder {
     }
 
     @ApiStatus.Internal
-    void closeInternal(final InventoryCloseEvent event) {
+    public void closeInternal(InventoryCloseEvent event) {
         if (closeAction != null) {
             closeAction.close(event);
         }
     }
-
-    @ApiStatus.Internal
-    private void addItemInternal(final ItemStack item, final int... slots) {
-        for (final int slot : slots) {
-            if (slot < 0 || slot >= template.size()) continue;
-            inventory.setItem(slot, item);
-        }
-    }
-
-    @ApiStatus.Internal
-    private void addActionInternal(final ClickAction action, final int... slots) {
-        for (final int slot : slots) {
-            if (slot < 0 || slot >= template.size()) continue;
-            clickActions.put(slot, action);
-        }
-    }
-    //</editor-fold>
 
     /**
      * Создатель экземпляров класса {@link Menu}.
@@ -234,16 +249,25 @@ public class Menu implements InventoryHolder {
         private long cooldown;
         private CloseAction closeAction;
 
-        //<editor-fold defaultstate="collapsed" desc="Constructor">
-        private Builder(@Nullable final Template template) {
+        private Builder(@Nullable Template template) {
             if (template != null) {
                 this.title = template.title();
                 this.size = template.size();
-                this.type = template.type();
+                this.type = template instanceof SimpleTemplate simple ? simple.type() : null;
+
                 this.items.putAll(template.items());
             }
         }
-        //</editor-fold>
+
+        /**
+         * Возвращает заголовок меню, если установлен.
+         *
+         * @return заголовок меню, или null, если он не установлен.
+         */
+        @Nullable
+        public Component title() {
+            return title;
+        }
 
         /**
          * Устанавливает заголовок меню из компонента MiniMessage.
@@ -251,10 +275,10 @@ public class Menu implements InventoryHolder {
          * Если указать null, заголовок будет сброшен!
          *
          * @param title заголовок
-         * @return текущий {@link Builder} для продолжения создания
          */
-        public Builder title(@Nullable final Component title) {
+        public Builder title(@Nullable Component title) {
             this.title = title;
+
             return this;
         }
 
@@ -264,10 +288,10 @@ public class Menu implements InventoryHolder {
          *
          * @param title     заголовок
          * @param resolvers плейсхолдеры
-         * @return текущий {@link Builder} для продолжения создания
          */
-        public Builder titleRich(@NotNull final String title, @NotNull final TagResolver... resolvers) {
+        public Builder titleRich(@NotNull String title, @NotNull TagResolver... resolvers) {
             this.title = MiniMessage.miniMessage().deserialize(title, resolvers);
+
             return this;
         }
 
@@ -275,38 +299,71 @@ public class Menu implements InventoryHolder {
          * Устанавливает заголовок меню из строки без форматирования.
          *
          * @param title заголовок
-         * @return текущий {@link Builder} для продолжения создания
          */
-        public Builder titlePlain(@NotNull final String title) {
-            this.title = PlainTextComponentSerializer.plainText().deserialize(title);
+        public Builder titlePlain(@NotNull String title) {
+            this.title = Component.text(title);
+
             return this;
+        }
+
+        /**
+         * Возвращает размер меню в количестве слотов.
+         *
+         * @return размер меню, или 0, если не указано
+         */
+        public int size() {
+            return size;
         }
 
         /**
          * Устанавливает размер меню в количестве слотов.
          * <p>
-         * <b><u>Указанное значение должно быть кратно 9 и в диапазоне от 9 до 54!</u></b>
+         * Указанное значение должно быть кратно 9 и в диапазоне от 9 до 54!
+         * <p>
+         * Игнорируется, если указан тип меню через {@link Builder#type(InventoryType)}!
          *
          * @param size кол-во слотов
-         * @return текущий {@link Builder} для продолжения создания
          */
-        public Builder size(final int size) {
+        public Builder size(int size) {
             Preconditions.checkArgument(size % 9 == 0, "Size must be multiple of 9!");
             Preconditions.checkArgument(size >= 9 && size <= 54, "Size must be between 9 and 54!");
+
             this.size = size;
+
             return this;
         }
 
         /**
+         * Возвращает тип инвентаря, если установлен.
+         *
+         * @return тип меню или null, если не установлен
+         */
+        @Nullable
+        public InventoryType type() {
+            return type;
+        }
+
+        /**
          * Устанавливает тип меню.
+         * <p>
+         * Установка типа меню игнорирует указанный методом {@link Builder#size(int)} размер меню.
          *
          * @param type тип меню
-         * @return текущий {@link Builder} для продолжения создания
          * @see InventoryType
          */
-        public Builder type(@NotNull final InventoryType type) {
+        public Builder type(@NotNull InventoryType type) {
             this.type = type;
+
             return this;
+        }
+
+        /**
+         * Возвращает все указанные предметы, привязанные к слотам.
+         *
+         * @return все указанные в этом создателе предметы.
+         */
+        public Map<Integer, ItemStack> items() {
+            return items;
         }
 
         /**
@@ -317,13 +374,14 @@ public class Menu implements InventoryHolder {
          *
          * @param item  предмет
          * @param slots слот или несколько слотов
-         * @return текущий {@link Builder} для продолжения создания
          */
-        public Builder item(@NotNull final ItemStack item, final int... slots) {
+        public Builder item(@NotNull ItemStack item, int... slots) {
             Preconditions.checkArgument(slots.length > 0, "You must specify at least one slot!");
-            for (final int slot : slots) {
+
+            for (int slot : slots) {
                 items.put(slot, item);
             }
+
             return this;
         }
 
@@ -337,15 +395,25 @@ public class Menu implements InventoryHolder {
          * @param item   предмет
          * @param action действие
          * @param slots  слот или несколько слотов
-         * @return текущий {@link Builder} для продолжения создания
          */
-        public Builder item(@NotNull final ItemStack item, @NotNull final ClickAction action, final int... slots) {
+        public Builder item(@NotNull ItemStack item, @NotNull ClickAction action, int... slots) {
             Preconditions.checkArgument(slots.length > 0, "You must specify at least one slot!");
-            for (final int slot : slots) {
+
+            for (int slot : slots) {
                 items.put(slot, item);
                 actions.put(slot, action);
             }
+
             return this;
+        }
+
+        /**
+         * Возвращает все указанные действия при клике по предметам, привязанные к слотам.
+         *
+         * @return все указанные действия
+         */
+        public Map<Integer, ClickAction> actions() {
+            return actions;
         }
 
         /**
@@ -358,35 +426,55 @@ public class Menu implements InventoryHolder {
          *
          * @param action действие
          * @param slots  слот или несколько слотов
-         * @return текущий {@link Builder} для продолжения создания
          */
-        public Builder action(@NotNull final ClickAction action, final int... slots) {
+        public Builder action(@NotNull ClickAction action, int... slots) {
             Preconditions.checkArgument(slots.length > 0, "You must specify at least one slot!");
-            for (final int slot : slots) {
+
+            for (int slot : slots) {
                 actions.put(slot, action);
             }
+
             return this;
+        }
+
+        /**
+         * Возвращает задержку обработки кликов меню.
+         *
+         * @return задержка обработки кликов
+         */
+        public long cooldown() {
+            return cooldown;
         }
 
         /**
          * Устанавливает задержку между обработкой кликов.
          *
          * @param cooldown задержка
-         * @return текущий {@link Builder} для продолжения создания
          */
-        public Builder cooldown(final long cooldown) {
+        public Builder cooldown(long cooldown) {
             this.cooldown = cooldown;
+
             return this;
+        }
+
+        /**
+         * Возвращает действие, выполняемое при закрытии меню.
+         *
+         * @return действие, если установлено, иначе null.
+         */
+        @Nullable
+        public CloseAction closeAction() {
+            return closeAction;
         }
 
         /**
          * Добавляет действие, выполняемое при закрытии меню.
          *
          * @param action действие
-         * @return текущий {@link Builder} для продолжения создания
          */
-        public Builder closeAction(@Nullable final CloseAction action) {
+        public Builder closeAction(@Nullable CloseAction action) {
             this.closeAction = action;
+
             return this;
         }
 
@@ -397,7 +485,14 @@ public class Menu implements InventoryHolder {
          * @return созданный экземпляр меню
          */
         public Menu build() {
-            final var template = new Template(title, size, type, items, cooldown);
+            final SimpleTemplate template = SimpleTemplate.builder()
+                .title(title)
+                .size(size)
+                .type(type)
+                .items(items)
+                .cooldown(cooldown)
+                .build();
+
             return new Menu(template, actions, closeAction);
         }
     }

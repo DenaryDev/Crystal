@@ -7,6 +7,8 @@
  */
 package me.denarydev.crystal.paper;
 
+import me.denarydev.crystal.paper.listener.InventoryListener;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -22,6 +24,9 @@ public final class PaperPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         platform.enable();
+
+        final PluginManager manager = getServer().getPluginManager();
+        manager.registerEvents(new InventoryListener(), this);
     }
 
     @Override

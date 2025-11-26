@@ -9,7 +9,9 @@ package me.denarydev.crystal.utils;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -51,5 +53,44 @@ public final class TextUtils {
     @NotNull
     public static String[] capitalizeAll(@NotNull final String... text) {
         return Arrays.stream(text).map(TextUtils::capitalize).toArray(String[]::new);
+    }
+
+    /**
+     * Переносит слишком длинный текст по словам с учётом указанной длинны строки.
+     *
+     * @param text          исходный текст
+     * @param maxLength максимальная длина строки в символах
+     * @return список строк
+     */
+    @NotNull
+    public static List<String> wrapText(@NotNull String text, int maxLength) {
+        if (text.isEmpty()) return Collections.emptyList();
+
+        final List<String> result = new ArrayList<>();
+
+        final String[] words = text.split("\\s+");
+        StringBuilder currentLine = new StringBuilder();
+
+        for (String word : words) {
+            if (word.isEmpty()) continue;
+
+            if (currentLine.isEmpty() || (currentLine.length() + 1 + word.length()) <= maxLength) {
+                if (!currentLine.isEmpty()) {
+                    currentLine.append(' ');
+                }
+
+                currentLine.append(word);
+            } else {
+                result.add(currentLine.toString());
+
+                currentLine = new StringBuilder(word);
+            }
+        }
+
+        if (!currentLine.isEmpty()) {
+            result.add(currentLine.toString());
+        }
+
+        return result;
     }
 }

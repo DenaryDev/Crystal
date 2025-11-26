@@ -18,9 +18,14 @@ module crystal.paper {
     requires crystal.common;
     requires org.slf4j;
 
+    exports me.denarydev.crystal.paper.configlib;
+    exports me.denarydev.crystal.paper.configlib.common;
+    exports me.denarydev.crystal.paper.configlib.serializers;
     exports me.denarydev.crystal.paper.configurate;
     exports me.denarydev.crystal.paper.configurate.serializers;
     exports me.denarydev.crystal.paper.gui;
+    exports me.denarydev.crystal.paper.gui.actions;
+    exports me.denarydev.crystal.paper.gui.template;
     exports me.denarydev.crystal.paper.item;
     exports me.denarydev.crystal.paper.utils;
 }

@@ -5,7 +5,7 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package me.denarydev.crystal.paper.configlib;
+package me.denarydev.crystal.paper.configlib.common;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.google.common.base.Preconditions;
@@ -26,6 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -37,8 +38,8 @@ import java.util.Set;
  * Этот класс можно использовать для сохранения {@link ItemStack} в конфиг
  * через ConfigLib.
  * <p>
- * По сути эт костыль, т.к., в этой либе нет адекватной возможности
- * сделать Serializer таких сложных вещей,
+ * Причиной создания такого класса является невозможность сделать Serializer
+ * классов с несколькими полями в ConfigLib
  *
  * @author DenaryDev
  * @since 23:09 12.08.2025
@@ -60,11 +61,24 @@ public final class ItemSettings {
     @Ignore
     private ItemStack item;
 
-    public static ItemSettings fromStack(ItemStack stack) {
-        final ItemSettings settings = new ItemSettings();
-        settings.material = stack.getType();
-        settings.amount = stack.getAmount();
+    /**
+     * Создаёт объект ItemSettings со всеми параметрами указанного ItemStack.
+     *
+     * @param stack предмет
+     * @return экземпляр класса {@link ItemSettings} со свойствами ItemStack.
+     */
+    @Contract(
+        value = "_ -> new",
+        pure = true
+    )
+    public static ItemSettings of(@NotNull ItemStack stack) {
+        return new ItemSettings(stack);
+    }
 
+    private ItemSettings() {
+    }
+
+    private ItemSettings(@NotNull ItemStack stack) {
         final ItemMeta meta = stack.getItemMeta();
         if (meta instanceof SkullMeta skull) {
             final PlayerProfile profile = skull.getPlayerProfile();
@@ -72,41 +86,45 @@ public final class ItemSettings {
                 profile.getProperties().stream()
                     .filter(p -> p.getName().equals("textures"))
                     .findFirst()
-                    .ifPresent(property -> settings.texture = property.getValue());
+                    .ifPresent(property -> this.texture = property.getValue());
             }
         }
 
+        if (this.texture == null) {
+            this.material = stack.getType();
+        }
+
+        this.amount = stack.getAmount();
+
         final Component displayName = meta.displayName();
         if (displayName != null) {
-            settings.name = MiniMessage.miniMessage().serialize(displayName);
+            this.name = MiniMessage.miniMessage().serialize(displayName);
         }
 
         final List<Component> lore = meta.lore();
         if (lore != null) {
-            settings.lore = lore.stream()
+            this.lore = lore.stream()
                 .map(MiniMessage.miniMessage()::serialize)
                 .toList();
         }
 
         if (meta.isUnbreakable()) {
-            settings.unbreakable = true;
+            this.unbreakable = true;
         }
 
         final Set<ItemFlag> itemFlags = meta.getItemFlags();
         if (!itemFlags.isEmpty()) {
-            settings.flags = new ArrayList<>(itemFlags);
+            this.flags = new ArrayList<>(itemFlags);
         }
 
-        if (meta instanceof Damageable damageable) {
-            settings.damage = damageable.getDamage();
+        if (meta instanceof Damageable damageable && damageable.hasDamage()) {
+            this.damage = damageable.getDamage();
         }
 
         if (meta.hasEnchants()) {
             meta.getEnchants().forEach((enchantment, level) ->
-                settings.enchants.put(enchantment.getKey().toString(), level));
+                this.enchants.put(enchantment.getKey().toString(), level));
         }
-
-        return settings;
     }
 
     @PostProcess
@@ -169,7 +187,7 @@ public final class ItemSettings {
     }
 
     @NotNull
-    public ItemStack getItem() {
+    public ItemStack itemStack() {
         Preconditions.checkNotNull(item, "ItemSettings not initialized properly");
 
         return item;

@@ -17,9 +17,6 @@ dependencies {
 
     testImplementation(libs.paper)
     testImplementation(libs.mockbukkit)
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation(platform(libs.junit.bom))
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 paper {
@@ -60,7 +57,7 @@ tasks {
             if (project.hasProperty("paperPluginsDestDir")) {
                 val destDir = file(project.property("paperPluginsDestDir").toString())
                 val output = outputs.files.singleFile
-                output.copyTo(destDir.resolve(output.name), overwrite = true)
+                output.copyTo(destDir.resolve(output.name.replace("-all", "")), overwrite = true)
             }
         }
     }

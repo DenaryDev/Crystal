@@ -26,7 +26,6 @@ slf4j = "2.0.17"
 annotations = "26.0.2-1"
 
 # Tests
-junit = "6.0.1"
 mockbukkit = "4.98.0"
 
 [libraries]
@@ -60,7 +59,6 @@ slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
 
 # Tests
-junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 mockbukkit = { module = "org.mockbukkit.mockbukkit:mockbukkit-v1.21", version.ref = "mockbukkit" }
 
 [bundles]

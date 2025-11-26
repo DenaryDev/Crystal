@@ -5,11 +5,11 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package me.denarydev.crystal.paper.gui;
+package me.denarydev.crystal.paper.gui.actions;
 
-import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 @FunctionalInterface
-public interface CloseAction {
-    void close(final InventoryCloseEvent event);
+public interface ClickAction {
+    void click(final InventoryClickEvent event);
 }

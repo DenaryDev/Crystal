@@ -8,42 +8,47 @@
 package me.denarydev.crystal.paper.gui;
 
 import com.google.common.base.Preconditions;
+import me.denarydev.crystal.paper.gui.template.MatrixTemplate;
+import me.denarydev.crystal.paper.gui.template.SimpleTemplate;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Шаблон меню.
- * <p>
- * Для создания шаблона инициализируйте билдер, используя {@link Template#builder()}
- * <p>
- * Шаблоны нужны для того, чтобы можно было хранить
- * параметры меню и не доставать их каждый раз из конфига
- * при отображении меню игроку.
+ * Абстрактный класс шаблона.
+ *
+ * Для создания шаблонов используйте {@link SimpleTemplate#builder()} и {@link MatrixTemplate#builder()}
+ *
+ * @author DenaryDev
+ * @since 16:04 25.11.2025
  */
-public class Template {
-    private final Component title;
-    private final int size;
-    private final InventoryType type;
-    private final Map<Integer, ItemStack> items;
-    private final long cooldown;
+public sealed abstract class Template permits SimpleTemplate, MatrixTemplate {
+    @Nullable
+    protected final Component title;
+    protected final int size;
+    protected final Map<Integer, ItemStack> items;
+    protected final long cooldown;
 
-    @ApiStatus.Internal
-    Template(@Nullable Component title, int size, @Nullable InventoryType type, @NotNull Map<Integer, ItemStack> items, long cooldown) {
+    protected Template(@Nullable Component title, int size, Map<Integer, ItemStack> items, long cooldown) {
         this.title = title;
         this.size = size;
-        this.type = type;
         this.items = items;
         this.cooldown = cooldown;
+    }
+
+    /**
+     * Проверяет, указан-ли в шаблоне заголовок меню.
+     *
+     * @return true, если заголовок указан, иначе false
+     */
+    public boolean hasTitle() {
+        return title != null;
     }
 
     /**
@@ -57,6 +62,15 @@ public class Template {
     }
 
     /**
+     * Проверяет, указан-ли в шаблоне размер меню.
+     *
+     * @return true, если размер указан, иначе false
+     */
+    public boolean hasSize() {
+        return size > 0;
+    }
+
+    /**
      * Возвращает кол-во слотов в меню.
      *
      * @return кол-во слотов в меню
@@ -66,13 +80,12 @@ public class Template {
     }
 
     /**
-     * Возвращает тип инвентаря, если он был указан.
+     * Проверяет, указан ли в шаблоне хотя бы один предмет.
      *
-     * @return тип меню или null, если не указан
+     * @return true, если хотя бы один предмет указан, иначе false
      */
-    @Nullable
-    public InventoryType type() {
-        return type;
+    public boolean hasItems() {
+        return !items.isEmpty();
     }
 
     /**
@@ -93,37 +106,31 @@ public class Template {
         return cooldown;
     }
 
-    /**
-     * Запускает создатель шаблона.
-     *
-     * @return {@link Builder}
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
+    public sealed abstract static class Builder<B extends Builder<B, T>, T extends Template> permits SimpleTemplate.Builder, MatrixTemplate.Builder {
+        protected Component title;
+        protected long cooldown;
 
-    /**
-     * Создатель шаблонов
-     */
-    public static class Builder {
-        private Component title;
-        private int size;
-        private InventoryType type;
-        private final Map<Integer, ItemStack> items = new HashMap<>();
-        private long cooldown;
+        /**
+         * Возвращает заголовок меню, если установлен.
+         *
+         * @return заголовок меню, или null, если он не установлен.
+         */
+        @Nullable
+        public final Component title() {
+            return title;
+        }
 
         /**
          * Устанавливает заголовок меню из компонента MiniMessage.
          * <p>
-         * Если указать null, заголовок будет сброшен!
+         * Если указать null, заголовок будет сброшен до заголовка по умолчанию!
          *
          * @param title заголовок
-         * @return текущий {@link Builder} для продолжения создания
          */
-        public Builder title(@Nullable final Component title) {
+        public final B title(@Nullable final Component title) {
             this.title = title;
 
-            return this;
+            return self();
         }
 
         /**
@@ -132,88 +139,44 @@ public class Template {
          *
          * @param title     заголовок
          * @param resolvers плейсхолдеры
-         * @return текущий {@link Builder} для продолжения создания
          */
-        public Builder titleRich(@NotNull final String title, @NotNull final TagResolver... resolvers) {
+        public final B titleRich(@NotNull String title, @NotNull TagResolver... resolvers) {
             this.title = MiniMessage.miniMessage().deserialize(title, resolvers);
 
-            return this;
+            return self();
         }
 
         /**
          * Устанавливает заголовок меню из строки без форматирования.
          *
          * @param title заголовок
-         * @return текущий {@link Builder} для продолжения создания
          */
-        public Builder titlePlain(@NotNull final String title) {
-            this.title = PlainTextComponentSerializer.plainText().deserialize(title);
+        public final B titlePlain(@NotNull String title) {
+            this.title = Component.text(title);
 
-            return this;
+            return self();
         }
 
         /**
-         * Устанавливает размер меню в количестве слотов.
-         * <p>
-         * <b><u>Указанное значение должно быть кратно 9 и в диапазоне от 9 до 54!</u></b>
+         * Возвращает задержку обработки кликов меню.
          *
-         * @param size кол-во слотов
-         * @return текущий {@link Builder} для продолжения создания
+         * @return задержка обработки кликов
          */
-        public Builder size(final int size) {
-            Preconditions.checkArgument(size % 9 == 0, "Size must be multiple of 9!");
-            Preconditions.checkArgument(size >= 9 && size <= 54, "Size must be between 9 and 54!");
-
-            this.size = size;
-
-            return this;
+        public final long cooldown() {
+            return cooldown;
         }
 
         /**
-         * Устанавливает тип меню.
-         *
-         * @param type тип меню
-         * @return текущий {@link Builder} для продолжения создания
-         * @see InventoryType
-         */
-        public Builder type(@NotNull final InventoryType type) {
-            this.type = type;
-
-            return this;
-        }
-
-        /**
-         * Добавляет предмет в указанные слоты.
-         * <p>
-         * Если в каком-то из указанных слотов уже есть предмет,
-         * перезаписывает его.
-         *
-         * @param item  предмет
-         * @param slots слот или несколько слотов
-         * @return текущий {@link Builder} для продолжения создания
-         */
-        public Builder item(@NotNull final ItemStack item, final int... slots) {
-            Preconditions.checkArgument(slots.length > 0, "You must specify at least one slot!");
-
-            for (final int slot : slots) {
-                items.put(slot, item);
-            }
-
-            return this;
-        }
-
-        /**
-         * Устанавливает задержку между обработкой кликов.
+         * Устанавливает задержку обработки кликов.
          *
          * @param cooldown задержка
-         * @return текущий {@link Builder} для продолжения создания
          */
-        public Builder cooldown(final long cooldown) {
-            Preconditions.checkArgument(cooldown >= 0, "Cooldown must be positive!");
+        public final B cooldown(long cooldown) {
+            Preconditions.checkArgument(cooldown >= 0, "cooldown must be positive");
 
             this.cooldown = cooldown;
 
-            return this;
+            return self();
         }
 
         /**
@@ -222,8 +185,12 @@ public class Template {
          *
          * @return созданный шаблон
          */
-        public Template build() {
-            return new Template(title, size, type, items, cooldown);
-        }
+        public abstract T build();
+
+        /**
+         * Нужно для того, чтобы возвращать имплементацию билдера, а не абстрактный класс
+         */
+        @ApiStatus.Internal
+        protected abstract B self();
     }
 }

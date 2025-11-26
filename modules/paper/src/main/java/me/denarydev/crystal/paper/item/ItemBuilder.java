@@ -24,7 +24,6 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
@@ -356,7 +355,7 @@ public final class ItemBuilder {
     public ItemBuilder potionType(@NotNull final PotionType type) {
         return this.editMeta(meta -> {
             if (meta instanceof PotionMeta potion) {
-                potion.setBasePotionData(new PotionData(type));
+                potion.setBasePotionType(type);
             }
         });
     }

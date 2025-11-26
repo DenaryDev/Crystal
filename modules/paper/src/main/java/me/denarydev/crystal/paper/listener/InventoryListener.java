@@ -5,24 +5,22 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package me.denarydev.crystal.paper.gui;
+package me.denarydev.crystal.paper.listener;
 
+import me.denarydev.crystal.paper.gui.Menu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Map;
 import java.util.UUID;
 import java.util.WeakHashMap;
 
-/**
- * Вы должны зарегистрировать этот слушатель в методе onEnable() вашего плагина.
- *
- * @see org.bukkit.plugin.PluginManager#registerEvents
- */
+@ApiStatus.Internal
 public final class InventoryListener implements Listener {
     private final Map<UUID, Long> activeCooldowns = new WeakHashMap<>();
 

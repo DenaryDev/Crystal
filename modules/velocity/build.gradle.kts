@@ -3,6 +3,10 @@ plugins {
     id("com.github.gmazzo.buildconfig") version("5.7.1")
 }
 
+base {
+    archivesName = "Crystal-Velocity"
+}
+
 dependencies {
     compileOnly(libs.velocity)
     annotationProcessor(libs.velocity)
@@ -13,10 +17,6 @@ dependencies {
 buildConfig {
     packageName("me.denarydev.crystal.velocity")
     buildConfigField("String", "VERSION", "\"${project.version}\"")
-}
-
-base {
-    archivesName = "Crystal-Velocity"
 }
 
 tasks {
@@ -31,7 +31,7 @@ tasks {
             if (project.hasProperty("velocityPluginsDestDir")) {
                 val destDir = file(project.property("velocityPluginsDestDir").toString())
                 val output = outputs.files.singleFile
-                output.copyTo(destDir.resolve(output.name), overwrite = true)
+                output.copyTo(destDir.resolve(output.name.replace("-all", "")), overwrite = true)
             }
         }
     }

@@ -54,6 +54,8 @@ public final class VelocityPlugin extends Crystal {
 
     @Subscribe
     private void onProxyInitialization(ProxyInitializeEvent event) {
+        setInstance(this);
+
         enable();
     }
 

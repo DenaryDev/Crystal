@@ -27,6 +27,15 @@ public final class SkinProviders {
     private static SkinProvider currentSkinProvider;
 
     /**
+     * Проверяет, инициализирован ли провайдер скинов.
+     *
+     * @return true, если провайдер инициализирован, иначе false
+     */
+    public static boolean isInitialized() {
+        return currentSkinProvider != null;
+    }
+
+    /**
      * Возвращает текущий провайдер скинов, если он инициализирован.
      *
      * @return Провайдер скинов
