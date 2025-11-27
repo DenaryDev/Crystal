@@ -20,13 +20,14 @@ tasks {
     }
 
     shadowJar {
+        archiveClassifier = ""
         destinationDirectory = rootProject.layout.buildDirectory.dir("libs")
 
         doLast {
             if (project.hasProperty("universalJarsDestDir")) {
                 val destDir = file(project.property("universalJarsDestDir").toString())
                 val output = outputs.files.singleFile
-                output.copyTo(destDir.resolve(output.name.replace("-all", "")), overwrite = true)
+                output.copyTo(destDir.resolve(output.name), overwrite = true)
             }
         }
     }

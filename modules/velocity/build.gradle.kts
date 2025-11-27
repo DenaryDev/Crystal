@@ -23,16 +23,4 @@ tasks {
     compileJava {
         dependsOn(":crystal-common:shadowJar")
     }
-
-    shadowJar {
-        destinationDirectory = rootProject.layout.buildDirectory.dir("libs")
-
-        doLast {
-            if (project.hasProperty("velocityPluginsDestDir")) {
-                val destDir = file(project.property("velocityPluginsDestDir").toString())
-                val output = outputs.files.singleFile
-                output.copyTo(destDir.resolve(output.name.replace("-all", "")), overwrite = true)
-            }
-        }
-    }
 }
