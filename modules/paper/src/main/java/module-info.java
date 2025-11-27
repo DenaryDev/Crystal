@@ -26,6 +26,8 @@ module crystal.paper {
     exports me.denarydev.crystal.paper.gui;
     exports me.denarydev.crystal.paper.gui.actions;
     exports me.denarydev.crystal.paper.gui.template;
+    exports me.denarydev.crystal.paper.input;
+    exports me.denarydev.crystal.paper.input.actions;
     exports me.denarydev.crystal.paper.item;
     exports me.denarydev.crystal.paper.utils;
 }
