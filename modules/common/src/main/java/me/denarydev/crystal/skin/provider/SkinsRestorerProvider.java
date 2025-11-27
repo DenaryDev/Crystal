@@ -7,13 +7,13 @@
  */
 package me.denarydev.crystal.skin.provider;
 
+import me.denarydev.crystal.Crystal;
 import me.denarydev.crystal.skin.SkinProperty;
 import me.denarydev.crystal.skin.SkinProvider;
 import net.skinsrestorer.api.SkinsRestorer;
 import net.skinsrestorer.api.exception.DataRequestException;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -24,12 +24,10 @@ import java.util.UUID;
  */
 public final class SkinsRestorerProvider implements SkinProvider {
 
-    private final Logger logger;
     private final SkinsRestorer skinsRestorer;
 
     @ApiStatus.Internal
-    public SkinsRestorerProvider(Logger logger) {
-        this.logger = logger;
+    public SkinsRestorerProvider() {
         this.skinsRestorer = net.skinsrestorer.api.SkinsRestorerProvider.get();
     }
 
@@ -51,7 +49,7 @@ public final class SkinsRestorerProvider implements SkinProvider {
             return skinsRestorer.getSkinStorage().getPlayerSkin(nameOrUniqueId, true)
                 .map(srSkin -> new SkinProperty(srSkin.getSkinProperty().getValue(), srSkin.getSkinProperty().getSignature()));
         } catch (DataRequestException e) {
-            logger.error("Failed to get player skin from SkinsRestorer API", e);
+            Crystal.instance().logger().error("Failed to get player skin from SkinsRestorer API", e);
             return Optional.empty();
         }
     }

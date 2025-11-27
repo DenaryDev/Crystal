@@ -7,12 +7,13 @@
  */
 package me.denarydev.crystal.skin;
 
+import me.denarydev.crystal.Crystal;
 import me.denarydev.crystal.skin.provider.SkinsRestorerProvider;
 import org.jetbrains.annotations.ApiStatus;
-import org.slf4j.Logger;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
  * @author DenaryDev
@@ -20,8 +21,8 @@ import java.util.Map;
  */
 public final class SkinProviders {
 
-    private static final Map<String, Class<? extends SkinProvider>> providers = Map.of(
-        "net.skinsrestorer.api.SkinsRestorerProvider", SkinsRestorerProvider.class
+    private static final Map<String, Supplier<SkinProvider>> providers = Map.of(
+        "skinsrestorer", SkinsRestorerProvider::new
     );
     private static SkinProvider currentSkinProvider;
 
@@ -49,26 +50,17 @@ public final class SkinProviders {
     }
 
     @ApiStatus.Internal
-    public static void initialize(Logger logger) {
-        for (Map.Entry<String, Class<? extends SkinProvider>> entry : providers.entrySet()) {
-            try {
-                Class.forName(entry.getKey());
-
-                entry.getValue().getDeclaredConstructor(Logger.class).newInstance(logger);
-
-                break;
-            } catch (ClassNotFoundException | NoSuchMethodException ignored) {
-            } catch (InvocationTargetException | InstantiationException | IllegalAccessException e) {
-                logger.error("Failed to initialize SkinProvider of {}", entry.getKey(), e);
-
-                break;
+    public static void initialize(Predicate<String> isLoaded) {
+        for (Map.Entry<String, Supplier<SkinProvider>> entry : providers.entrySet()) {
+            if (isLoaded.test(entry.getKey())) {
+                currentSkinProvider = entry.getValue().get();
             }
         }
 
         if (currentSkinProvider != null) {
-            logger.info("SkinProvider has been initialized! ({})", currentSkinProvider.getClass().getSimpleName());
+            Crystal.instance().logger().info("SkinProvider has been initialized! ({})", currentSkinProvider.getClass().getSimpleName());
         } else {
-            logger.error("SkinProvider has not been initialized because compatible skin plugin not found!");
+            Crystal.instance().logger().error("SkinProvider has not been initialized because compatible skin plugin not found!");
         }
     }
 }
