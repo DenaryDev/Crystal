@@ -10,6 +10,7 @@ submodule("common")
 submodule("paper")
 submodule("velocity")
 submodule("core")
+submodule("universal")
 
 fun submodule(name: String) {
     include(name)
