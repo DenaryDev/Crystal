@@ -8,9 +8,7 @@
 package me.denarydev.crystal.paper.configlib.common;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
-import com.google.common.base.Preconditions;
 import de.exlll.configlib.Configuration;
-import de.exlll.configlib.Ignore;
 import de.exlll.configlib.PostProcess;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
@@ -28,8 +26,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,9 +37,6 @@ import java.util.Set;
 /**
  * Этот класс можно использовать для сохранения {@link ItemStack} в конфиг
  * через ConfigLib.
- * <p>
- * Причиной создания такого класса является невозможность сделать Serializer
- * классов с несколькими полями в ConfigLib
  *
  * @author DenaryDev
  * @since 23:09 12.08.2025
@@ -58,14 +55,31 @@ public final class ItemSettings {
     private Integer damage = null;
     private Map<String, Integer> enchants = null;
 
-    @Ignore
-    private ItemStack item;
+    /**
+     * Создаёт экземпляр ItemSettings с указанным материалом.
+     *
+     * @param material материал предмета
+     * @return новый экземпляр ItemSettings
+     */
+    public static ItemSettings of(@NotNull Material material) {
+        return of(new ItemStack(material));
+    }
 
     /**
-     * Создаёт объект ItemSettings со всеми параметрами указанного ItemStack.
+     * Создаёт экземпляр ItemSettings с головой с указанной текстурой.
+     *
+     * @param texture текстура головы
+     * @return новый экземпляр ItemSettings
+     */
+    public static ItemSettings of(@NotNull String texture) {
+        return of(HeadUtils.createHead(texture));
+    }
+
+    /**
+     * Создаёт объект ItemSettings, беря параметры из указанного предмета.
      *
      * @param stack предмет
-     * @return экземпляр класса {@link ItemSettings} со свойствами ItemStack.
+     * @return новый экземпляр ItemSettings
      */
     @Contract(
         value = "_ -> new",
@@ -128,14 +142,205 @@ public final class ItemSettings {
     }
 
     @PostProcess
-    private void buildStack() {
-        if (texture != null) {
-            item = HeadUtils.createHead(texture);
-        } else if (material != null) {
-            item = new ItemStack(material);
-        } else {
-            throw new IllegalStateException("You must specify item material OR head texture");
+    private void verify() {
+        if (material == null && texture == null) {
+            throw new IllegalStateException("You must specify item material or head texture");
         }
+    }
+
+    /**
+     * Возвращает материал предмета.
+     * <p>
+     * Если указана текстура, вернёт {@link Material#PLAYER_HEAD} независимо от указанного материала.
+     *
+     * @return материал предмета
+     */
+    @NotNull
+    public Material material() {
+        return texture != null ? Material.PLAYER_HEAD : material;
+    }
+
+    /**
+     * Возвращает текстуру головы, если указана.
+     *
+     * @return текстура головы
+     */
+    @Nullable
+    public String texture() {
+        return texture;
+    }
+
+    /**
+     * Возвращает кол-во предметов в стаке, если указано.
+     *
+     * @return кол-во предметов
+     */
+    public Integer amount() {
+        return amount;
+    }
+
+    /**
+     * Устанавливает кол-во предметов в стаке.
+     *
+     * @param amount кол-во предметов в стаке
+     */
+    public ItemSettings amount(int amount) {
+        this.amount = amount;
+
+        return this;
+    }
+
+    /**
+     * Возвращает название предмета без применения какого-либо форматирования, если указано.
+     *
+     * @return название предмета
+     */
+    @Nullable
+    private String displayName() {
+        return name;
+    }
+
+    /**
+     * Устанавливает название предмета.
+     *
+     * @param name название предмета
+     */
+    public ItemSettings displayName(@NotNull String name) {
+        this.name = name;
+
+        return this;
+    }
+
+    /**
+     * Возвращает описание предмета без применения какого-либо форматирования, если указано.
+     *
+     * @return описание предмета
+     */
+    @Nullable
+    public List<String> lore() {
+        return lore;
+    }
+
+    /**
+     * Устанавливает описание предмета
+     *
+     * @param lore описание предмета
+     */
+    public ItemSettings lore(@NotNull List<String> lore) {
+        this.lore = lore;
+
+        return this;
+    }
+
+    /**
+     * Возвращает флаг неразрушаемости предмета.
+     * <p>
+     * Только для предметов, имеющих прочность.
+     *
+     * @return флаг неразрушаемости предмета
+     */
+    @Nullable
+    public Boolean unbreakable() {
+        return unbreakable;
+    }
+
+    /**
+     * Устанавливает флаг неразрушаемости предмета.
+     * <p>
+     * Только для предметов, имеющих прочность.
+     *
+     * @param unbreakable флаг неразрушаемости предмета
+     */
+    public ItemSettings unbreakable(boolean unbreakable) {
+        this.unbreakable = unbreakable;
+
+        return this;
+    }
+
+    /**
+     * Возвращает флаги скрытия атрибутов предмета, если указаны.
+     *
+     * @return флаги скрытия атрибутов предмета
+     * @see ItemFlag
+     */
+    @Nullable
+    public List<ItemFlag> flags() {
+        return flags;
+    }
+
+    /**
+     * Устанавливает флаги скрытия атрибутов предмета.
+     *
+     * @param flags флаги скрытия атрибутов предмета
+     */
+    public ItemSettings flags(@NotNull ItemFlag... flags) {
+        this.flags = List.of(flags);
+
+        return this;
+    }
+
+    /**
+     * Возвращает степень повреждения предмета, если указано.
+     * <p>
+     * Только для предметов, имеющих прочность.
+     *
+     * @return степень повреждения предмета
+     */
+    @Nullable
+    public Integer damage() {
+        return damage;
+    }
+
+    /**
+     * Устанавливает степень повреждения предмета.
+     * <p>
+     * Только для предметов, имеющих прочность.
+     *
+     * @param damage степень повреждения предмета
+     */
+    public ItemSettings damage(int damage) {
+        this.damage = damage;
+
+        return this;
+    }
+
+    /**
+     * Возвращает чары, наложенные на предмет, если указаны.
+     *
+     * @return чары, наложенные на предмет
+     */
+    @Nullable
+    public Map<String, Integer> enchantments() {
+        return enchants;
+    }
+
+    /**
+     * Добавляет все указанные чары к предмету.
+     *
+     * @param enchantments чары
+     */
+    public ItemSettings enchantments(@NotNull Map<Enchantment, Integer> enchantments) {
+        final Map<String, Integer> enchants = new HashMap<>();
+
+        for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+            enchants.put(entry.getKey().getKey().getKey(), entry.getValue());
+        }
+
+        this.enchants = enchants;
+
+        return this;
+    }
+
+    /**
+     * Создаёт и возвращает ItemStack со всеми параметрами из этого класса.
+     *
+     * @return новый экземпляр ItemStack
+     */
+    @NotNull
+    public ItemStack itemStack() {
+        final ItemStack item = texture != null ?
+            HeadUtils.createHead(texture) :
+            ItemStack.of(material);
 
         if (amount != null) {
             item.setAmount(Math.max(1, Math.min(64, amount)));
@@ -166,7 +371,7 @@ public final class ItemSettings {
         }
 
         if (enchants != null) {
-            for (final var entry : enchants.entrySet()) {
+            for (Map.Entry<String, Integer> entry : enchants.entrySet()) {
                 final NamespacedKey keyInRegistry = NamespacedKey.fromString(entry.getKey());
                 if (keyInRegistry == null) {
                     Crystal.instance().logger().warn("Invalid enchantment key: {}", entry.getKey());
@@ -184,11 +389,6 @@ public final class ItemSettings {
         }
 
         item.setItemMeta(meta);
-    }
-
-    @NotNull
-    public ItemStack itemStack() {
-        Preconditions.checkNotNull(item, "ItemSettings not initialized properly");
 
         return item;
     }

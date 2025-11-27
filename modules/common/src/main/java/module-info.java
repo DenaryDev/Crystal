@@ -19,6 +19,7 @@ module crystal.common {
     requires configlib;
 
     exports me.denarydev.crystal.config;
+    exports me.denarydev.crystal.config.internal;
     exports me.denarydev.crystal.database;
     exports me.denarydev.crystal.database.connection;
     exports me.denarydev.crystal.database.connection.file;

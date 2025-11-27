@@ -28,7 +28,7 @@ public final class MaterialSerializer extends ScalarSerializer<Material> {
     @Override
     public @NotNull Material deserialize(@NotNull final Type type, @Nullable final Object obj) throws SerializationException {
         if (obj instanceof String s) {
-            final var material = Material.matchMaterial(s);
+            final Material material = Material.matchMaterial(s);
             if (material == null) {
                 throw new SerializationException("Cannot deserialize " + obj + " as a Material");
             }

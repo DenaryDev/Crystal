@@ -13,6 +13,7 @@ public final class TimeUtils {
 
     public static String timeToStr(final long time, final TimeUnit unit, final String day, final String hour, final String minute, final String second) {
         final long millis = unit.toMillis(time);
+
         return toString(millis, day, hour, minute, second);
     }
 
@@ -21,7 +22,7 @@ public final class TimeUtils {
     }
 
     private static String toString(final long millis, final String day, final String hour, final String minute, final String second) {
-        final var builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
 
         final long days = TimeUnit.MILLISECONDS.toDays(millis);
         final long hours = TimeUnit.MILLISECONDS.toHours(millis) - TimeUnit.DAYS.toHours(TimeUnit.MILLISECONDS.toDays(millis));
@@ -34,19 +35,19 @@ public final class TimeUtils {
         }
 
         if (hours > 0) {
-            if (builder.length() > 0) builder.append(" ");
+            if (!builder.isEmpty()) builder.append(" ");
             builder.append(hours);
             builder.append(hour);
         }
 
         if (minutes > 0) {
-            if (builder.length() > 0) builder.append(" ");
+            if (!builder.isEmpty()) builder.append(" ");
             builder.append(minutes);
             builder.append(minute);
         }
 
         if (seconds > 0) {
-            if (builder.length() > 0) builder.append(" ");
+            if (!builder.isEmpty()) builder.append(" ");
             builder.append(seconds);
             builder.append(second);
         }

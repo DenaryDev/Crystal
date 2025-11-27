@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
  */
 public final class ItemBuilder {
     @NotNull
-    private final ItemStack itemStack;
+    private ItemStack itemStack;
 
     //region Методы создания билдера
 
@@ -51,7 +51,7 @@ public final class ItemBuilder {
      * Тип по умолчанию - воздух
      */
     public static ItemBuilder empty() {
-        return new ItemBuilder(new ItemStack(Material.AIR));
+        return new ItemBuilder(ItemStack.of(Material.AIR));
     }
 
     /**
@@ -60,7 +60,7 @@ public final class ItemBuilder {
      * @param material тип предмета
      */
     public static ItemBuilder fromMaterial(@NotNull final Material material) {
-        return new ItemBuilder(new ItemStack(material));
+        return new ItemBuilder(ItemStack.of(material));
     }
 
     /**
@@ -82,7 +82,7 @@ public final class ItemBuilder {
      * @param texture текстура скина
      */
     public static ItemBuilder playerHead(@NotNull final String texture) {
-        return new ItemBuilder(new ItemStack(Material.PLAYER_HEAD))
+        return new ItemBuilder(ItemStack.of(Material.PLAYER_HEAD))
             .texture(texture);
     }
     //endregion
@@ -99,7 +99,7 @@ public final class ItemBuilder {
      * @param type тип предмета.
      */
     public ItemBuilder type(@NotNull final Material type) {
-        this.itemStack.setType(type);
+        this.itemStack = this.itemStack.withType(type);
 
         return this;
     }
@@ -185,7 +185,7 @@ public final class ItemBuilder {
      */
     public ItemBuilder loreRich(@Nullable final List<String> lore, @NotNull final TagResolver... tags) {
         if (lore != null) {
-            return this.lore(lore.stream()
+            return lore(lore.stream()
                 .map(line -> MiniMessage.miniMessage().deserialize(line, tags))
                 .toList());
         }
@@ -202,7 +202,7 @@ public final class ItemBuilder {
      */
     public ItemBuilder lorePlain(@Nullable final List<String> lore) {
         if (lore != null) {
-            return this.lore(lore.stream().map(Component::text).collect(Collectors.toList()));
+            return lore(lore.stream().map(Component::text).collect(Collectors.toList()));
         }
 
         return this;
@@ -214,7 +214,7 @@ public final class ItemBuilder {
      * @param flags флаги для добавления.
      */
     public ItemBuilder itemFlags(@NotNull final ItemFlag... flags) {
-        return this.editMeta(meta -> meta.addItemFlags(flags));
+        return editMeta(meta -> meta.addItemFlags(flags));
     }
 
     /**
@@ -223,7 +223,7 @@ public final class ItemBuilder {
      * @param flags флаги для удаления.
      */
     public ItemBuilder removeFlags(@NotNull final ItemFlag... flags) {
-        return this.editMeta(meta -> meta.removeItemFlags(flags));
+        return editMeta(meta -> meta.removeItemFlags(flags));
     }
 
     /**
@@ -232,7 +232,7 @@ public final class ItemBuilder {
      * Работает только на предметах, которые имеют прочность.
      */
     public ItemBuilder unbreakable() {
-        return this.unbreakable(true);
+        return unbreakable(true);
     }
 
     /**
@@ -243,7 +243,7 @@ public final class ItemBuilder {
      * @param unbreakable может ли предмет разрушаться.
      */
     public ItemBuilder unbreakable(final boolean unbreakable) {
-        return this.editMeta(meta -> meta.setUnbreakable(unbreakable));
+        return editMeta(meta -> meta.setUnbreakable(unbreakable));
     }
 
     /**
@@ -254,7 +254,7 @@ public final class ItemBuilder {
      * @param damage степень повреждений предмета.
      */
     public ItemBuilder damage(final int damage) {
-        return this.editMeta(meta -> {
+        return editMeta(meta -> {
             if (meta instanceof Damageable damageable) {
                 damageable.setDamage(damage);
             }
@@ -269,7 +269,7 @@ public final class ItemBuilder {
      * @param data кастомдата модельки предмета.
      */
     public ItemBuilder customModelData(@Nullable final Integer data) {
-        return this.editMeta(meta -> meta.setCustomModelData(data));
+        return editMeta(meta -> meta.setCustomModelData(data));
     }
 
     /**
@@ -281,8 +281,8 @@ public final class ItemBuilder {
      * @param value само значение.
      */
     public ItemBuilder persistentData(@NotNull final NamespacedKey key, @NotNull final Object value) {
-        return this.editMeta(meta -> {
-            final var container = meta.getPersistentDataContainer();
+        return editMeta(meta -> {
+            final PersistentDataContainer container = meta.getPersistentDataContainer();
 
             if (value instanceof String s) container.set(key, PersistentDataType.STRING, s);
             else if (value instanceof Byte b) container.set(key, PersistentDataType.BYTE, b);
@@ -296,7 +296,6 @@ public final class ItemBuilder {
             else if (value instanceof int[] ia) container.set(key, PersistentDataType.INTEGER_ARRAY, ia);
             else if (value instanceof long[] la) container.set(key, PersistentDataType.LONG_ARRAY, la);
             else if (value instanceof PersistentDataContainer pdc) container.set(key, PersistentDataType.TAG_CONTAINER, pdc);
-            else if (value instanceof PersistentDataContainer[] pdca) container.set(key, PersistentDataType.TAG_CONTAINER_ARRAY, pdca);
             else throw new IllegalArgumentException("Unknown persistent data type: " + value.getClass().getName());
         });
     }
@@ -308,7 +307,7 @@ public final class ItemBuilder {
      * @param level       уровень чара.
      */
     public ItemBuilder enchantment(@NotNull final Enchantment enchantment, final int level) {
-        return this.enchantments(Map.of(enchantment, level));
+        return enchantments(Map.of(enchantment, level));
     }
 
     /**
@@ -319,13 +318,13 @@ public final class ItemBuilder {
      * @param enchantments чары для накладывания.
      */
     public ItemBuilder enchantments(@NotNull final Enchantment... enchantments) {
-        final var map = new HashMap<Enchantment, Integer>();
+        final Map<Enchantment, Integer> map = new HashMap<>();
 
-        for (final var enchantment : enchantments) {
+        for (Enchantment enchantment : enchantments) {
             map.putIfAbsent(enchantment, 1);
         }
 
-        return this.enchantments(map);
+        return enchantments(map);
     }
 
     /**
@@ -334,8 +333,8 @@ public final class ItemBuilder {
      * @param enchantments чары для накладывания.
      */
     public ItemBuilder enchantments(@NotNull final Map<Enchantment, Integer> enchantments) {
-        return this.editMeta(meta -> {
-            for (final var enchantment : enchantments.entrySet()) {
+        return editMeta(meta -> {
+            for (Map.Entry<Enchantment, Integer> enchantment : enchantments.entrySet()) {
                 meta.addEnchant(enchantment.getKey(), enchantment.getValue(), true);
             }
         });
@@ -353,7 +352,7 @@ public final class ItemBuilder {
      * @param type тип зелья.
      */
     public ItemBuilder potionType(@NotNull final PotionType type) {
-        return this.editMeta(meta -> {
+        return editMeta(meta -> {
             if (meta instanceof PotionMeta potion) {
                 potion.setBasePotionType(type);
             }
@@ -371,7 +370,7 @@ public final class ItemBuilder {
      * @param effects эффекты
      */
     public ItemBuilder potionEffects(@NotNull final PotionEffect... effects) {
-        return this.potionEffects(true, effects);
+        return potionEffects(true, effects);
     }
 
     /**
@@ -387,13 +386,13 @@ public final class ItemBuilder {
      * @param effects   эффекты
      */
     public ItemBuilder potionEffects(final boolean overwrite, @NotNull final PotionEffect... effects) {
-        final var map = new HashMap<PotionEffect, Boolean>();
+        final Map<PotionEffect, Boolean> map = new HashMap<>();
 
-        for (final var effect : effects) {
+        for (PotionEffect effect : effects) {
             map.put(effect, overwrite);
         }
 
-        return this.potionEffects(map);
+        return potionEffects(map);
     }
 
     /**
@@ -409,7 +408,7 @@ public final class ItemBuilder {
      * @param effects эффекты
      */
     public ItemBuilder potionEffects(@NotNull final Map<PotionEffect, Boolean> effects) {
-        return this.editMeta(meta -> {
+        return editMeta(meta -> {
             if (meta instanceof PotionMeta potion) {
                 effects.forEach(potion::addCustomEffect);
             }
@@ -425,7 +424,7 @@ public final class ItemBuilder {
      * @param type тип эффекта для удаления.
      */
     public ItemBuilder removePotionEffect(@NotNull final PotionEffectType type) {
-        return this.editMeta(meta -> {
+        return editMeta(meta -> {
             if (meta instanceof PotionMeta potion) {
                 potion.removeCustomEffect(type);
             }
@@ -439,7 +438,7 @@ public final class ItemBuilder {
      * {@link Material#SPLASH_POTION} или {@link Material#LINGERING_POTION}.
      */
     public ItemBuilder clearPotionEffects() {
-        return this.editMeta(meta -> {
+        return editMeta(meta -> {
             if (meta instanceof PotionMeta potion) {
                 potion.clearCustomEffects();
             }
@@ -458,7 +457,7 @@ public final class ItemBuilder {
      * @param level       уровень чара.
      */
     public ItemBuilder storedEnchantment(@NotNull final Enchantment enchantment, final int level) {
-        return this.storedEnchantments(Map.of(enchantment, level));
+        return storedEnchantments(Map.of(enchantment, level));
     }
 
     /**
@@ -469,13 +468,13 @@ public final class ItemBuilder {
      * @param enchantments типs чар для сохранения.
      */
     public ItemBuilder storedEnchantments(@NotNull final Enchantment... enchantments) {
-        final var map = new HashMap<Enchantment, Integer>();
+        final Map<Enchantment, Integer> map = new HashMap<>();
 
-        for (final var enchantment : enchantments) {
+        for (Enchantment enchantment : enchantments) {
             map.putIfAbsent(enchantment, 1);
         }
 
-        return this.storedEnchantments(map);
+        return storedEnchantments(map);
     }
 
     /**
@@ -483,13 +482,13 @@ public final class ItemBuilder {
      * <p>
      * Применяется только к предмету с типом {@link Material#ENCHANTED_BOOK}
      *
-     * @param enchants чары для сохранения.
+     * @param enchantments чары для сохранения.
      */
-    public ItemBuilder storedEnchantments(@NotNull final Map<Enchantment, Integer> enchants) {
-        return this.editMeta(meta -> {
+    public ItemBuilder storedEnchantments(@NotNull final Map<Enchantment, Integer> enchantments) {
+        return editMeta(meta -> {
             if (meta instanceof EnchantmentStorageMeta storage) {
-                for (final var enchant : enchants.entrySet()) {
-                    storage.addStoredEnchant(enchant.getKey(), enchant.getValue(), true);
+                for (Map.Entry<Enchantment, Integer> enchantment : enchantments.entrySet()) {
+                    storage.addStoredEnchant(enchantment.getKey(), enchantment.getValue(), true);
                 }
             }
         });

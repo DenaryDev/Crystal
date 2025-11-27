@@ -7,6 +7,7 @@
  */
 package me.denarydev.crystal.paper.utils;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -68,9 +69,9 @@ public final class HeadUtils {
      */
     @NotNull
     public static ItemStack createHead(@NotNull final String texture, @Nullable final String signature, final int amount) {
-        final var head = new ItemStack(Material.PLAYER_HEAD, Math.max(Math.min(amount, 64), 1));
+        final ItemStack head = new ItemStack(Material.PLAYER_HEAD, Math.max(Math.min(amount, 64), 1));
 
-        final var meta = (SkullMeta) head.getItemMeta();
+        final SkullMeta meta = (SkullMeta) head.getItemMeta();
         setTexture(meta, texture, signature);
 
         head.setItemMeta(meta);
@@ -96,7 +97,7 @@ public final class HeadUtils {
      * @param signature подпись (Не обязательно)
      */
     public static void setTexture(@NotNull final SkullMeta meta, @NotNull final String texture, @Nullable String signature) {
-        final var profile = Bukkit.createProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "CrystalHead");
+        final PlayerProfile profile = Bukkit.createProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "CrystalHead");
 
         if (texture.endsWith("=")) {
             if (signature == null) {

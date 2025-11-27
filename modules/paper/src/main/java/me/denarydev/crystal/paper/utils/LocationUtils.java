@@ -51,7 +51,7 @@ public final class LocationUtils {
      */
     @NotNull
     public static Location centerLocation(@NotNull final Location location) {
-        final var centerLoc = location.clone();
+        final Location centerLoc = location.clone();
         centerLoc.setX(location.getBlockX() + 0.5);
         centerLoc.setZ(location.getBlockZ() + 0.5);
 
@@ -76,7 +76,7 @@ public final class LocationUtils {
         for (int y = -1; y <= 1; y++) {
             for (int x = -radius; x <= radius; x++) {
                 for (int z = -radius; z <= radius; z++) {
-                    final var current = loc.clone().add(x, y, z);
+                    final Location current = loc.clone().add(x, y, z);
                     if (current.getBlock().getType().equals(type)) {
                         if (closest == null || loc.distance(current) < loc.distance(closest)) {
                             closest = current;

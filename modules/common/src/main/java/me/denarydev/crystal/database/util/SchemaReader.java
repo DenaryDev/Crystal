@@ -26,10 +26,10 @@ public final class SchemaReader {
     }
 
     public static List<String> getStatements(final InputStream is) throws IOException {
-        final var queries = new LinkedList<String>();
+        final List<String> queries = new LinkedList<>();
 
-        try (final var reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
-            var builder = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))) {
+            StringBuilder builder = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("--") || line.startsWith("#")) {
@@ -42,7 +42,7 @@ public final class SchemaReader {
                 if (line.endsWith(";")) {
                     builder.deleteCharAt(builder.length() - 1);
 
-                    final var result = builder.toString().trim();
+                    final String result = builder.toString().trim();
                     if (!result.isEmpty()) {
                         queries.add(result);
                     }

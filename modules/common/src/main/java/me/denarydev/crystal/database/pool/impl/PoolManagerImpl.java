@@ -38,6 +38,8 @@ public final class PoolManagerImpl extends PoolManager {
 
     public PoolManagerImpl(Crystal platform) {
         this.platform = platform;
+
+        setImpl(this);
     }
 
     public void initialize() {

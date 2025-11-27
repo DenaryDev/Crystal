@@ -68,6 +68,17 @@ public final class NameAndLore {
     }
 
     /**
+     * Возвращает название предмета в виде строки.
+     *
+     * @return название предмета
+     * @see NameAndLore#name(TagResolver...)
+     */
+    @NotNull
+    public String rawName() {
+        return name;
+    }
+
+    /**
      * Возвращает название предмета в виде компонента
      * с применением к нему форматирования MiniMessage.
      *
@@ -77,6 +88,16 @@ public final class NameAndLore {
     @NotNull
     public Component name(TagResolver... placeholders) {
         return MiniMessage.miniMessage().deserialize(name, placeholders);
+    }
+
+    /**
+     * Возвращает описание предмета в виде списка строк.
+     *
+     * @return описание предмета
+     * @see NameAndLore#lore(TagResolver...)
+     */
+    public List<String> rawLore() {
+        return lore;
     }
 
     /**

@@ -28,7 +28,7 @@ public final class NamespacedKeySerializer extends ScalarSerializer<NamespacedKe
     @Override
     public NamespacedKey deserialize(@NotNull final Type type, @Nullable final Object obj) throws SerializationException {
         if (obj instanceof String s) {
-            final var key = NamespacedKey.fromString(s);
+            final NamespacedKey key = NamespacedKey.fromString(s);
             if (key == null) {
                 throw new SerializationException("Cannot deserialize " + obj + " as a NamespacedKey");
             }

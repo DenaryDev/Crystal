@@ -10,7 +10,9 @@ package me.denarydev.crystal.utils;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -31,7 +33,7 @@ public final class NumberUtils {
      */
     @NotNull
     public static String formatNumber(final double number) {
-        final var format = new DecimalFormat(number == Math.ceil(number) ? "#,###" : "#,###.00");
+        final DecimalFormat format = new DecimalFormat(number == Math.ceil(number) ? "#,###" : "#,###.00");
 
         return formatNumber(number, format);
     }
@@ -46,7 +48,7 @@ public final class NumberUtils {
     @NotNull
     public static String formatNumber(final double number, @NotNull final DecimalFormat format) {
         // This is done to specifically prevent the NBSP character from printing in foreign languages.
-        final var symbols = format.getDecimalFormatSymbols();
+        final DecimalFormatSymbols symbols = format.getDecimalFormatSymbols();
         symbols.setGroupingSeparator(',');
         symbols.setDecimalSeparator('.');
 
@@ -99,9 +101,9 @@ public final class NumberUtils {
      */
     @NotNull
     public static <T> T randomValue(@NotNull final Map<Integer, T> map) {
-        final var list = new ArrayList<T>();
+        final List<T> list = new ArrayList<>();
 
-        for (final var entry : map.entrySet()) {
+        for (Map.Entry<Integer, T> entry : map.entrySet()) {
             final int amount = entry.getKey() * 10;
             for (int i = 0; i < amount; i++) {
                 list.add(entry.getValue());

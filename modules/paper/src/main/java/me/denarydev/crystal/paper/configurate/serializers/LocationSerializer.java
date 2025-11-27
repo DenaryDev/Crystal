@@ -10,6 +10,7 @@ package me.denarydev.crystal.paper.configurate.serializers;
 import me.denarydev.crystal.paper.utils.LocationUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
@@ -22,19 +23,19 @@ public final class LocationSerializer implements TypeSerializer<Location> {
 
     @Override
     public Location deserialize(@NotNull Type type, ConfigurationNode node) throws SerializationException {
-        final var s = node.getString();
+        final String s = node.getString();
         if (s != null) {
             final String[] loc = s.split(";");
             if (loc.length == 3) { // X;Y;Z
-                final var x = parseDouble(loc[0]);
-                final var y = parseDouble(loc[1]);
-                final var z = parseDouble(loc[2]);
+                final double x = parseDouble(loc[0]);
+                final double y = parseDouble(loc[1]);
+                final double z = parseDouble(loc[2]);
 
                 return new Location(null, x, y, z);
             } else if (loc.length == 4) { // WORLD;X;Y;Z
                 return locationWithWorld(loc);
             } else if (loc.length == 6) { // WORLD;X;Y;Z;YAW;PITCH
-                final var location = locationWithWorld(loc);
+                final Location location = locationWithWorld(loc);
                 location.setYaw((float) parseDouble(loc[4]));
                 location.setPitch((float) parseDouble(loc[5]));
 
@@ -48,14 +49,14 @@ public final class LocationSerializer implements TypeSerializer<Location> {
     }
 
     private Location locationWithWorld(String[] loc) throws SerializationException {
-        final var world = Bukkit.getWorld(loc[0]);
+        final World world = Bukkit.getWorld(loc[0]);
         if (world == null) {
             throw new SerializationException("Unknown world!");
         }
 
-        final var x = parseDouble(loc[1]);
-        final var y = parseDouble(loc[2]);
-        final var z = parseDouble(loc[3]);
+        final double x = parseDouble(loc[1]);
+        final double y = parseDouble(loc[2]);
+        final double z = parseDouble(loc[3]);
 
         return new Location(world, x, y, z);
     }

@@ -54,7 +54,7 @@ public abstract class PoolManager {
     public abstract ConnectionPool requirePool(@NotNull String poolName);
 
     @ApiStatus.Internal
-    static void setImpl(PoolManager impl) {
+    protected static void setImpl(PoolManager impl) {
         PoolManager.impl = impl;
     }
 }

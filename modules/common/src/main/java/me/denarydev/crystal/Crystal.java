@@ -10,6 +10,7 @@ package me.denarydev.crystal;
 import me.denarydev.crystal.config.ConfigLibLoader;
 import me.denarydev.crystal.config.internal.CrystalConfig;
 import me.denarydev.crystal.database.pool.impl.PoolManagerImpl;
+import me.denarydev.crystal.skin.SkinProviders;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 
@@ -38,6 +39,8 @@ public abstract class Crystal {
         this.config = ConfigLibLoader.updateConfig(dataFolder().resolve("config.yml"), CrystalConfig.class, CrystalConfig.HEADER);
 
         poolManager.initialize();
+
+        SkinProviders.initialize(logger());
     }
 
     public final void disable() {

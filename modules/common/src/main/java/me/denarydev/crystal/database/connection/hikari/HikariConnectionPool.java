@@ -113,7 +113,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
 
     @Override
     public void initialize() {
-        final var config = new HikariConfig();
+        final HikariConfig config = new HikariConfig();
 
         // set pool name so the logging output can be linked back to us
         config.setPoolName(this.poolPrefix + "-Hikari");

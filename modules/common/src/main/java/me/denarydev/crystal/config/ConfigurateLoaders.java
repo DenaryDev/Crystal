@@ -44,7 +44,7 @@ public final class ConfigurateLoaders {
      * @return {@link HoconConfigurationLoader}
      */
     public static HoconConfigurationLoader hocon(@NotNull final Path path, @Nullable TypeSerializerCollection serializers) {
-        final var builder = HoconConfigurationLoader.builder()
+        final HoconConfigurationLoader.Builder builder = HoconConfigurationLoader.builder()
             .path(path)
             .emitJsonCompatible(false);
 
@@ -88,7 +88,7 @@ public final class ConfigurateLoaders {
      * @return {@link YamlConfigurationLoader}
      */
     public static YamlConfigurationLoader yaml(@NotNull final Path path, @Nullable TypeSerializerCollection serializers) {
-        final var builder = YamlConfigurationLoader.builder()
+        final YamlConfigurationLoader.Builder builder = YamlConfigurationLoader.builder()
             .path(path)
             .nodeStyle(NodeStyle.BLOCK)
             .indent(2);
