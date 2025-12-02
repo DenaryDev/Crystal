@@ -40,7 +40,12 @@ import java.util.Set;
  *
  * @author DenaryDev
  * @since 23:09 12.08.2025
+ * @deprecated Используйте Configurate вместо ConfigLib.
+ * <p>
+ * Оставлено для обратной совместимости с уже написанными плагинами.
+ * Будет удалено в одном из будущих промежуточных релизов.
  */
+@Deprecated(forRemoval = true)
 @SuppressWarnings("FieldMayBeFinal")
 @Configuration
 public final class ItemSettings {
@@ -90,9 +95,11 @@ public final class ItemSettings {
     }
 
     private ItemSettings() {
+        System.err.println("Detected ConfigLib usage. It is deprecated and will be removed in near future");
     }
 
     private ItemSettings(@NotNull ItemStack stack) {
+        System.err.println("Detected ConfigLib usage. It is deprecated and will be removed in near future");
         final ItemMeta meta = stack.getItemMeta();
         if (meta instanceof SkullMeta skull) {
             final PlayerProfile profile = skull.getPlayerProfile();

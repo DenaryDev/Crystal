@@ -7,11 +7,13 @@
  */
 package me.denarydev.crystal;
 
-import me.denarydev.crystal.config.ConfigLibLoader;
+import me.denarydev.crystal.config.ConfigLoaders;
+import me.denarydev.crystal.config.ConfigMapper;
 import me.denarydev.crystal.config.internal.CrystalConfig;
 import me.denarydev.crystal.database.pool.impl.PoolManagerImpl;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
+import org.spongepowered.configurate.ConfigurateException;
 
 import java.nio.file.Path;
 
@@ -35,9 +37,13 @@ public abstract class Crystal {
     public final void enable() {
         this.poolManager = new PoolManagerImpl(this);
 
-        this.config = ConfigLibLoader.updateConfig(dataFolder().resolve("config.yml"), CrystalConfig.class, CrystalConfig.HEADER);
+        try {
+            this.config = ConfigMapper.load(ConfigLoaders.yaml(dataFolder().resolve("config.yml"), CrystalConfig.HEADER), CrystalConfig.class);
 
-        poolManager.initialize();
+            poolManager.initialize();
+        } catch (ConfigurateException e) {
+            throw new RuntimeException("Failed to load crystal configuration", e);
+        }
     }
 
     public final void disable() {

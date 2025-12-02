@@ -16,8 +16,18 @@ import org.bukkit.World;
 /**
  * @author DenaryDev
  * @since 22:24 12.08.2025
+ * @deprecated Используйте Configurate вместо ConfigLib.
+ * <p>
+ * Оставлено для обратной совместимости с уже написанными плагинами.
+ * Будет удалено в одном из будущих промежуточных релизов.
  */
+@Deprecated(forRemoval = true)
 public final class LocationSerializer implements Serializer<Location, String> {
+
+    public LocationSerializer() {
+        System.err.println("Detected ConfigLib usage. It is deprecated and will be removed in near future");
+    }
+
     @Override
     public String serialize(Location element) {
         return LocationUtils.locationToString(element);

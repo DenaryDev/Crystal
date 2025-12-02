@@ -7,10 +7,10 @@
  */
 package me.denarydev.crystal.config.internal;
 
-import de.exlll.configlib.Comment;
-import de.exlll.configlib.Configuration;
 import me.denarydev.crystal.Crystal;
 import org.jetbrains.annotations.ApiStatus;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 import java.nio.file.Path;
 
@@ -19,7 +19,7 @@ import java.nio.file.Path;
  * @since 1:44 28.10.2025
  */
 @ApiStatus.Internal
-@Configuration
+@ConfigSerializable
 public final class CrystalConfig {
     public static final String HEADER = """
                                         +--------------------------------+

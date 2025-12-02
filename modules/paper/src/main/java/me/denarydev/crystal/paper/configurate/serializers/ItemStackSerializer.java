@@ -50,7 +50,6 @@ public final class ItemStackSerializer implements TypeSerializer<ItemStack> {
             HeadUtils.createHead(node.node("texture").getString(), amount)
             : new ItemStack(material, amount);
 
-
         final ItemMeta meta = item.getItemMeta();
 
         if (node.hasChild("name")) {

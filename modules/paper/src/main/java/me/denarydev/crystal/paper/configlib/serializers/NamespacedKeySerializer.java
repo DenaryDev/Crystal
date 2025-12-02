@@ -13,8 +13,17 @@ import org.bukkit.NamespacedKey;
 /**
  * @author DenaryDev
  * @since 22:24 12.08.2025
+ * @deprecated Используйте Configurate вместо ConfigLib.
+ * <p>
+ * Оставлено для обратной совместимости с уже написанными плагинами.
+ * Будет удалено в одном из будущих промежуточных релизов.
  */
+@Deprecated(forRemoval = true)
 public final class NamespacedKeySerializer implements Serializer<NamespacedKey, String> {
+
+    public NamespacedKeySerializer() {
+        System.err.println("Detected ConfigLib usage. It is deprecated and will be removed in near future");
+    }
 
     @Override
     public String serialize(NamespacedKey element) {

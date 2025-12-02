@@ -5,8 +5,8 @@ velocity = "3.4.0-SNAPSHOT"
 core = "1.1.0"
 
 # Configs
-configurate = "4.2.0"
-configlib = "4.6.3"
+configurate = "4.2.0-DEV-SNAPSHOT" # Версия из нашего репозитория с поддержкой комментариев в yaml файлах
+configlib = "4.6.4"
 
 # Plugins
 skinsrestorer = "15.7.7"

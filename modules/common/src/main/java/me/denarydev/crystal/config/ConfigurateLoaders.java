@@ -24,6 +24,13 @@ import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.nio.file.Path;
 
+/**
+ * @deprecated Создание загрузчиков конфига перемещено в {@link ConfigLoaders},
+ * а загрузка экземпляров классов из конфигов перемещено в {@link ConfigMapper}.
+ * <p>
+ * Будет удалено в одном из будущих промежуточных релизов.
+ */
+@Deprecated(forRemoval = true)
 public final class ConfigurateLoaders {
 
     /**

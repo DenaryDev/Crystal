@@ -10,6 +10,7 @@ package me.denarydev.crystal.config;
 import de.exlll.configlib.NameFormatters;
 import de.exlll.configlib.YamlConfigurationProperties;
 import de.exlll.configlib.YamlConfigurations;
+import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -17,7 +18,14 @@ import java.nio.file.Path;
 /**
  * @author DenaryDev
  * @since 1:46 28.10.2025
+ * @deprecated ConfigLib не имеет некоторых важных и удобных, вместо неё
+ * лучше использовать Configurate от SpongePowered ({@link ConfigLoaders}).
+ * В Crystal используется мой форк, поддерживающий комментарии через аннотации {@link Comment}.
+ * <p>
+ * Оставлено для обратной совместимости с уже написанными плагинами.
+ * Будет удалено в одном из будущих промежуточных релизов.
  */
+@Deprecated(forRemoval = true)
 public class ConfigLibLoader {
     private static final YamlConfigurationProperties.Builder<?> properties = YamlConfigurationProperties.newBuilder()
         .charset(StandardCharsets.UTF_8)
@@ -34,6 +42,7 @@ public class ConfigLibLoader {
      * @return загруженный конфиг или null, если не удалось загрузить.
      */
     public static <T> T loadConfig(Path file, Class<T> clazz) {
+        System.err.println("Detected ConfigLib usage. It is deprecated and will be removed in near future");
         return YamlConfigurations.load(file, clazz, properties.build());
     }
 
@@ -47,6 +56,7 @@ public class ConfigLibLoader {
      * @return загруженный конфиг или null, если не удалось загрузить.
      */
     public static <T> T loadConfig(Path file, Class<T> clazz, YamlConfigurationProperties properties) {
+        System.err.println("Detected ConfigLib usage. It is deprecated and will be removed in near future");
         return YamlConfigurations.load(file, clazz, properties);
     }
 
@@ -60,6 +70,7 @@ public class ConfigLibLoader {
      * @return загруженный конфиг или null, если не удалось загрузить.
      */
     public static <T> T updateConfig(Path file, Class<T> clazz, String header) {
+        System.err.println("Detected ConfigLib usage. It is deprecated and will be removed in near future");
         return YamlConfigurations.update(file, clazz, properties.header(header).build());
     }
 
@@ -73,6 +84,7 @@ public class ConfigLibLoader {
      * @return загруженный конфиг или null, если не удалось загрузить.
      */
     public static <T> T updateConfig(Path file, Class<T> clazz, YamlConfigurationProperties properties) {
+        System.err.println("Detected ConfigLib usage. It is deprecated and will be removed in near future");
         return YamlConfigurations.update(file, clazz, properties);
     }
 
@@ -84,6 +96,7 @@ public class ConfigLibLoader {
      * @param instance объект конфига.
      */
     public static <T> void saveConfig(Path file, Class<T> clazz, T instance) {
+        System.err.println("Detected ConfigLib usage. It is deprecated and will be removed in near future");
         YamlConfigurations.save(file, clazz, instance);
     }
 
@@ -96,6 +109,7 @@ public class ConfigLibLoader {
      * @param properties свойства загрузчика конфига.
      */
     public static <T> void saveConfig(Path file, Class<T> clazz, T instance, YamlConfigurationProperties properties) {
+        System.err.println("Detected ConfigLib usage. It is deprecated and will be removed in near future");
         YamlConfigurations.save(file, clazz, instance, properties);
     }
 
@@ -103,6 +117,7 @@ public class ConfigLibLoader {
      * Возвращает билдер свойств загрузчика конфига.
      */
     public static YamlConfigurationProperties.Builder<?> properties() {
+        System.err.println("Detected ConfigLib usage. It is deprecated and will be removed in near future");
         return properties;
     }
 }

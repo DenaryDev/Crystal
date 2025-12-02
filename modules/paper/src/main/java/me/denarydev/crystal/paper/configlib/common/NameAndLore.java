@@ -23,7 +23,12 @@ import java.util.List;
  *
  * @author DenaryDev
  * @since 15:01 25.11.2025
+ * @deprecated Используйте Configurate вместо ConfigLib.
+ * <p>
+ * Оставлено для обратной совместимости с уже написанными плагинами.
+ * Будет удалено в одном из будущих промежуточных релизов.
  */
+@Deprecated(forRemoval = true)
 @Configuration
 public final class NameAndLore {
 
@@ -60,9 +65,11 @@ public final class NameAndLore {
     private List<String> lore;
 
     private NameAndLore() {
+        System.err.println("Detected ConfigLib usage. It is deprecated and will be removed in near future");
     }
 
     private NameAndLore(String name, List<String> lore) {
+        System.err.println("Detected ConfigLib usage. It is deprecated and will be removed in near future");
         this.name = name;
         this.lore = lore;
     }

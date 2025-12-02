@@ -22,7 +22,12 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author DenaryDev
  * @since 22:52 12.08.2025
+ * @deprecated Используйте Configurate вместо ConfigLib.
+ * <p>
+ * Оставлено для обратной совместимости с уже написанными плагинами.
+ * Будет удалено в одном из будущих промежуточных релизов.
  */
+@Deprecated(forRemoval = true)
 public final class PaperSerializers {
 
     /**
@@ -31,6 +36,7 @@ public final class PaperSerializers {
      * @param builder билдер
      */
     public static void applyTo(YamlConfigurationProperties.Builder<?> builder) {
+        System.err.println("Detected ConfigLib usage. It is deprecated and will be removed in near future");
         builder
             .addSerializer(Component.class, new ComponentSerializer())
             .addSerializer(Location.class, new LocationSerializer())
@@ -44,6 +50,7 @@ public final class PaperSerializers {
      * @return свойства в виде {@link YamlConfigurationProperties}
      */
     public static YamlConfigurationProperties getProperties() {
+        System.err.println("Detected ConfigLib usage. It is deprecated and will be removed in near future");
         return getProperties(null);
     }
 
@@ -54,6 +61,7 @@ public final class PaperSerializers {
      * @return свойства в виде {@link YamlConfigurationProperties}
      */
     public static YamlConfigurationProperties getProperties(@Nullable String header) {
+        System.err.println("Detected ConfigLib usage. It is deprecated and will be removed in near future");
         final YamlConfigurationProperties.Builder<?> builder = ConfigLibLoader.properties();
 
         applyTo(builder);

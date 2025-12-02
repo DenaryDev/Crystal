@@ -8,8 +8,9 @@
 package me.denarydev.crystal.database.pool.impl;
 
 import me.denarydev.crystal.Crystal;
-import me.denarydev.crystal.config.ConfigLibLoader;
-import me.denarydev.crystal.config.internal.PoolsConfiguration;
+import me.denarydev.crystal.config.ConfigLoaders;
+import me.denarydev.crystal.config.ConfigMapper;
+import me.denarydev.crystal.config.internal.PoolsConfig;
 import me.denarydev.crystal.database.connection.ConnectionPool;
 import me.denarydev.crystal.database.connection.ConnectionPoolBuilders;
 import me.denarydev.crystal.database.connection.file.FlatfileConnectionPool;
@@ -18,6 +19,7 @@ import me.denarydev.crystal.database.pool.PoolManager;
 import me.denarydev.crystal.database.util.LazyValue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.spongepowered.configurate.ConfigurateException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,44 +44,21 @@ public final class PoolManagerImpl extends PoolManager {
         setImpl(this);
     }
 
-    public void initialize() {
-        final PoolsConfiguration config = ConfigLibLoader.updateConfig(platform.config().poolsPath(), PoolsConfiguration.class, PoolsConfiguration.HEADER);
+    public void initialize() throws ConfigurateException {
+        final PoolsConfig config = ConfigMapper.load(ConfigLoaders.yaml(platform.config().poolsPath(), PoolsConfig.HEADER), PoolsConfig.class);
         if (config == null) {
             platform.logger().error("Pools configuration could not be loaded, Crystal PoolManager disabled!");
             disabled = true;
             return;
         }
 
+        final PoolsConfig.PoolConfig def = config.defaultSettings();
+
         config.pools().forEach((name, pool) -> {
             final LazyValue<ConnectionPool> lazySource = new LazyValue<>(() -> {
                 platform.logger().info("Creating pool {}: {}", name, pool);
 
-                final ConnectionPool.Builder<?> builder = switch (pool.type()) {
-                    case SQLITE -> ConnectionPoolBuilders.sqlite();
-                    case H2 -> ConnectionPoolBuilders.h2();
-                    case MYSQL -> ConnectionPoolBuilders.mysql();
-                    case MARIADB -> ConnectionPoolBuilders.mariadb();
-                    case POSTGRESQL -> ConnectionPoolBuilders.postgresql();
-                };
-
-                final ConnectionPool factory = switch (builder) {
-                    case FlatfileConnectionPool.Builder<?> flatFileBuilder -> flatFileBuilder
-                        .file(pool.file())
-                        .build();
-                    case HikariConnectionPool.Builder<?> hikariBuilder -> hikariBuilder
-                        .address(pool.address())
-                        .port(pool.port())
-                        .database(pool.database())
-                        .username(pool.username())
-                        .password(pool.password())
-                        .maxPoolSize(pool.maxPoolSize())
-                        .minimumIdle(pool.minimumIdle())
-                        .maxLifetime(pool.maxLifetime())
-                        .keepAliveTime(pool.keepAliveTime())
-                        .connectionTimeout(pool.connectionTimeout())
-                        .properties(pool.properties())
-                        .build();
-                };
+                final ConnectionPool factory = createPool(pool, def);
 
                 factory.initialize();
 
@@ -89,7 +68,7 @@ public final class PoolManagerImpl extends PoolManager {
             this.pools.put(name, lazySource);
 
             if (pool.aliases() != null) {
-                for (final String alias : pool.aliases()) {
+                for (String alias : pool.aliases()) {
                     this.pools.put(alias, lazySource);
                 }
             }
@@ -100,6 +79,39 @@ public final class PoolManagerImpl extends PoolManager {
         });
     }
 
+    private ConnectionPool createPool(PoolsConfig.PoolConfig pool, PoolsConfig.PoolConfig def) {
+        final ConnectionPool.Builder<?> builder = switch (valueOrDefault(pool.type(), def.type())) {
+            case SQLITE -> ConnectionPoolBuilders.sqlite();
+            case H2 -> ConnectionPoolBuilders.h2();
+            case MYSQL -> ConnectionPoolBuilders.mysql();
+            case MARIADB -> ConnectionPoolBuilders.mariadb();
+            case POSTGRESQL -> ConnectionPoolBuilders.postgresql();
+        };
+
+        return switch (builder) {
+            case FlatfileConnectionPool.Builder<?> flatFileBuilder -> flatFileBuilder
+                .file(valueOrDefault(pool.file(), def.file()))
+                .build();
+            case HikariConnectionPool.Builder<?> hikariBuilder -> hikariBuilder
+                .address(valueOrDefault(pool.address(), def.address()))
+                .port(valueOrDefault(pool.port(), def.port()))
+                .database(valueOrDefault(pool.database(), def.database()))
+                .username(valueOrDefault(pool.username(), def.username()))
+                .password(valueOrDefault(pool.password(), def.password()))
+                .maxPoolSize(valueOrDefault(pool.maxPoolSize(), valueOrDefault(def.maxPoolSize(), 6)))
+                .minimumIdle(valueOrDefault(pool.minimumIdle(), valueOrDefault(def.minimumIdle(), 6)))
+                .maxLifetime(valueOrDefault(pool.maxLifetime(), valueOrDefault(def.maxLifetime(), 1800000)))
+                .keepAliveTime(valueOrDefault(pool.keepAliveTime(), valueOrDefault(def.keepAliveTime(), 0)))
+                .connectionTimeout(valueOrDefault(pool.connectionTimeout(), valueOrDefault(def.connectionTimeout(), 5000)))
+                .properties(valueOrDefault(pool.properties(), valueOrDefault(def.properties(), Map.of("useUnicode", "true", "characterEncoding", "utf8"))))
+                .build();
+        };
+    }
+
+    private <T> T valueOrDefault(T value, T defaultValue) {
+        return value != null ? value : defaultValue;
+    }
+
     @Override
     public Optional<ConnectionPool> getPool(@NotNull String poolName) {
         if (this.disabled) {
@@ -108,12 +120,21 @@ public final class PoolManagerImpl extends PoolManager {
 
         this.platform.logger().info("A pool was requested with name {}", poolName);
 
-        return Optional.ofNullable(this.pools.get(poolName)).map(LazyValue::get);
+        final LazyValue<ConnectionPool> lazySource = this.pools.get(poolName);
+        if (lazySource != null) {
+            try {
+                return Optional.of(lazySource.get());
+            } catch (Throwable t) {
+                this.platform.logger().error("Failed to initialize pool {}", poolName, t);
+            }
+        }
+
+        return Optional.empty();
     }
 
     @Override
     public ConnectionPool requirePool(@NotNull String poolName) {
-        return getPool(poolName).orElseThrow(() -> new IllegalStateException("Pool " + poolName + " was not found, check pool configuration!"));
+        return getPool(poolName).orElseThrow(() -> new IllegalStateException("Pool " + poolName + " was not found, check Crystal pools configuration!"));
     }
 
     public void shutdown() {
@@ -121,7 +142,7 @@ public final class PoolManagerImpl extends PoolManager {
 
         platform.logger().info("Closing {} pools", pools.size());
 
-        for (final LazyValue<ConnectionPool> pool : pools.values()) {
+        for (LazyValue<ConnectionPool> pool : pools.values()) {
             pool.ifPresent(ConnectionPool::shutdown);
         }
     }

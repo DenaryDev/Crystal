@@ -7,10 +7,10 @@
  */
 package me.denarydev.crystal.config.internal;
 
-import de.exlll.configlib.Comment;
-import de.exlll.configlib.Configuration;
 import me.denarydev.crystal.database.DatabaseType;
 import org.jetbrains.annotations.ApiStatus;
+import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -21,8 +21,8 @@ import java.util.Map;
  * @since 1:40 28.10.2025
  */
 @ApiStatus.Internal
-@Configuration
-public final class PoolsConfiguration {
+@ConfigSerializable
+public final class PoolsConfig {
     public static final String HEADER = """
                                         +--------------------------------+
                                         |             Crystal            |
@@ -35,13 +35,13 @@ public final class PoolsConfiguration {
     private boolean eagerConnect = false;
     @Comment(
         """
-        \nНастройки, базовые для любого пула.
+        Настройки, базовые для любого пула.
         Если в пуле что-то не определено, это будет взято отсюда."""
     )
     private PoolConfig defaultSettings = new PoolConfig(6, 6, 1800000, 0, 5000);
     @Comment(
         """
-        \nПулы соединений.
+        Пулы соединений.
         Основной ID пула - название секции с ним."""
     )
     private Map<String, PoolConfig> pools = Map.of(
@@ -61,19 +61,19 @@ public final class PoolsConfiguration {
         return pools;
     }
 
-    @Configuration
+    @ConfigSerializable
     public static final class PoolConfig {
         @Comment("Доступные типы: H2, SQLITE, MYSQL, MARIADB, POSTGRESQL")
         private DatabaseType type;
 
         @Comment(
             """
-            \nФайл, в котором будет храниться база данных.
+            Файл, в котором будет храниться база данных.
             Для локальных БД указывается ТОЛЬКО этот параметр."""
         )
         private Path file;
 
-        @Comment("\nIP или адрес базы данных без порта.")
+        @Comment("IP или адрес базы данных без порта.")
         private String address;
         @Comment(
             """
@@ -90,7 +90,7 @@ public final class PoolsConfiguration {
 
         @Comment(
             """
-            \nМаксимальное количество одновременных подключений.
+            Максимальное количество одновременных подключений.
             Должно быть столько же, сколько у вас ядер.
             По умолчанию: 6."""
         )
@@ -123,7 +123,7 @@ public final class PoolsConfiguration {
         @Comment("Дополнительные свойства соединения.")
         private Map<String, String> properties;
 
-        @Comment("\nДополнительные ID этого пула, по которым плагины могут получать его.")
+        @Comment("Дополнительные ID этого пула, по которым плагины могут получать его.")
         private List<String> aliases;
 
         private PoolConfig() {
@@ -141,6 +141,7 @@ public final class PoolsConfiguration {
             this.database = database;
             this.username = username;
             this.password = password;
+            this.aliases = aliases;
         }
 
         private PoolConfig(int maxPoolSize, int minimumIdle, int maxLifetime, int keepAliveTime, int connectionTimeout) {
@@ -180,28 +181,28 @@ public final class PoolsConfiguration {
             return password;
         }
 
-        public int maxPoolSize() {
-            return maxPoolSize == null ? 6 : maxPoolSize;
+        public Integer maxPoolSize() {
+            return maxPoolSize;
         }
 
-        public int minimumIdle() {
-            return minimumIdle == null ? 6 : minimumIdle;
+        public Integer minimumIdle() {
+            return minimumIdle;
         }
 
-        public int maxLifetime() {
-            return maxLifetime == null ? 1800000 : maxLifetime;
+        public Integer maxLifetime() {
+            return maxLifetime;
         }
 
-        public int keepAliveTime() {
-            return keepAliveTime == null ? 0 : keepAliveTime;
+        public Integer keepAliveTime() {
+            return keepAliveTime;
         }
 
-        public int connectionTimeout() {
-            return connectionTimeout == null ? 5000 : connectionTimeout;
+        public Integer connectionTimeout() {
+            return connectionTimeout;
         }
 
         public Map<String, String> properties() {
-            return properties == null ? Map.of("useUnicode", "true", "characterEncoding", "utf8") : properties;
+            return properties;
         }
 
         public List<String> aliases() {
