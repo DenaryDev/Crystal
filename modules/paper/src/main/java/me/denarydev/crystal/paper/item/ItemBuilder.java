@@ -12,6 +12,7 @@ import me.denarydev.crystal.paper.utils.HeadUtils;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -22,6 +23,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.components.CustomModelDataComponent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
@@ -59,7 +61,7 @@ public final class ItemBuilder {
      *
      * @param material тип предмета
      */
-    public static ItemBuilder fromMaterial(@NotNull final Material material) {
+    public static ItemBuilder fromMaterial(@NotNull Material material) {
         return new ItemBuilder(ItemStack.of(material));
     }
 
@@ -70,7 +72,7 @@ public final class ItemBuilder {
      *
      * @param stack другой предмет для основы.
      */
-    public static ItemBuilder fromItem(@NotNull final ItemStack stack) {
+    public static ItemBuilder fromItem(@NotNull ItemStack stack) {
         return new ItemBuilder(stack.clone());
     }
 
@@ -81,27 +83,43 @@ public final class ItemBuilder {
      *
      * @param texture текстура скина
      */
-    public static ItemBuilder playerHead(@NotNull final String texture) {
+    public static ItemBuilder playerHead(@NotNull String texture) {
         return new ItemBuilder(ItemStack.of(Material.PLAYER_HEAD))
             .texture(texture);
     }
+
     //endregion
 
-    private ItemBuilder(@NotNull final ItemStack itemStack) {
+    private ItemBuilder(@NotNull ItemStack itemStack) {
         this.itemStack = itemStack;
     }
 
-    //region Общие методы для всех типов предметов
+    //region Тип, название, описание
 
     /**
      * Устанавливает тип предмета.
      *
      * @param type тип предмета.
      */
-    public ItemBuilder type(@NotNull final Material type) {
+    public ItemBuilder type(@NotNull Material type) {
         this.itemStack = this.itemStack.withType(type);
 
         return this;
+    }
+
+    /**
+     * Устанавливает текстуру для предмета с типом {@link Material#PLAYER_HEAD}
+     * <p>
+     * Перед этим обязательно задайте тип через {@link #type(Material)}
+     *
+     * @param texture текстура для предмета.
+     */
+    public ItemBuilder texture(@NotNull String texture) {
+        return editMeta(meta -> {
+            if (meta instanceof SkullMeta skull) {
+                HeadUtils.setTexture(skull, texture);
+            }
+        });
     }
 
     /**
@@ -109,7 +127,7 @@ public final class ItemBuilder {
      *
      * @param amount количество предметов.
      */
-    public ItemBuilder amount(final int amount) {
+    public ItemBuilder amount(int amount) {
         Preconditions.checkArgument(amount > 0, "amount less than 1");
         Preconditions.checkArgument(amount <= 64, "amount greater than 64");
 
@@ -125,7 +143,7 @@ public final class ItemBuilder {
      *
      * @param displayName имя предмета.
      */
-    public ItemBuilder displayName(@Nullable final Component displayName) {
+    public ItemBuilder displayName(@Nullable Component displayName) {
         return editMeta(meta -> meta.displayName(displayName));
     }
 
@@ -139,7 +157,7 @@ public final class ItemBuilder {
      * @param displayName имя предмета.
      * @param tags        методы для замены тегов.
      */
-    public ItemBuilder displayNameRich(@Nullable final String displayName, @NotNull final TagResolver... tags) {
+    public ItemBuilder displayNameRich(@Nullable String displayName, @NotNull TagResolver... tags) {
         if (displayName != null) {
             return displayName(MiniMessage.miniMessage().deserialize(displayName, tags));
         }
@@ -154,7 +172,7 @@ public final class ItemBuilder {
      *
      * @param displayName имя предмета.
      */
-    public ItemBuilder displayNamePlain(@Nullable final String displayName) {
+    public ItemBuilder displayNamePlain(@Nullable String displayName) {
         if (displayName != null) {
             return displayName(Component.text(displayName));
         }
@@ -169,7 +187,7 @@ public final class ItemBuilder {
      *
      * @param lore описание предмета.
      */
-    public ItemBuilder lore(@Nullable final List<Component> lore) {
+    public ItemBuilder lore(@Nullable List<Component> lore) {
         return editMeta(meta -> meta.lore(lore));
     }
 
@@ -183,7 +201,7 @@ public final class ItemBuilder {
      * @param lore описание предмета.
      * @param tags методы для замены тегов.
      */
-    public ItemBuilder loreRich(@Nullable final List<String> lore, @NotNull final TagResolver... tags) {
+    public ItemBuilder loreRich(@Nullable List<String> lore, @NotNull TagResolver... tags) {
         if (lore != null) {
             return lore(lore.stream()
                 .map(line -> MiniMessage.miniMessage().deserialize(line, tags))
@@ -200,7 +218,7 @@ public final class ItemBuilder {
      *
      * @param lore описание предмета.
      */
-    public ItemBuilder lorePlain(@Nullable final List<String> lore) {
+    public ItemBuilder lorePlain(@Nullable List<String> lore) {
         if (lore != null) {
             return lore(lore.stream().map(Component::text).collect(Collectors.toList()));
         }
@@ -208,12 +226,16 @@ public final class ItemBuilder {
         return this;
     }
 
+    //endregion
+
+    //region Флаги, нерушимость, степень разрушения
+
     /**
      * Добавляет к предмету указанные флаги.
      *
      * @param flags флаги для добавления.
      */
-    public ItemBuilder itemFlags(@NotNull final ItemFlag... flags) {
+    public ItemBuilder itemFlags(@NotNull ItemFlag... flags) {
         return editMeta(meta -> meta.addItemFlags(flags));
     }
 
@@ -222,7 +244,7 @@ public final class ItemBuilder {
      *
      * @param flags флаги для удаления.
      */
-    public ItemBuilder removeFlags(@NotNull final ItemFlag... flags) {
+    public ItemBuilder removeFlags(@NotNull ItemFlag... flags) {
         return editMeta(meta -> meta.removeItemFlags(flags));
     }
 
@@ -242,7 +264,7 @@ public final class ItemBuilder {
      *
      * @param unbreakable может ли предмет разрушаться.
      */
-    public ItemBuilder unbreakable(final boolean unbreakable) {
+    public ItemBuilder unbreakable(boolean unbreakable) {
         return editMeta(meta -> meta.setUnbreakable(unbreakable));
     }
 
@@ -253,11 +275,92 @@ public final class ItemBuilder {
      *
      * @param damage степень повреждений предмета.
      */
-    public ItemBuilder damage(final int damage) {
+    public ItemBuilder damage(int damage) {
         return editMeta(meta -> {
             if (meta instanceof Damageable damageable) {
                 damageable.setDamage(damage);
             }
+        });
+    }
+
+    //endregion
+
+    //region Управление моделькой и кастомдатой предмета
+
+    /**
+     * Устанавливает предмету указанную модель.
+     *
+     * @param model ключ модели предмета
+     */
+    public ItemBuilder itemModel(@NotNull NamespacedKey model) {
+        return editMeta(meta -> meta.setItemModel(model));
+    }
+
+    /**
+     * Добавляет список указанных чисел с плавающей запятой в компонент кастомдаты предмета.
+     * <p>
+     * Обычно используется в связке с текстурпаком.
+     *
+     * @param floats список чисел с плавающей запятой
+     * @see CustomModelDataComponent#setFloats(List)
+     */
+    @SuppressWarnings("UnstableApiUsage")
+    public ItemBuilder customModelDataFloats(@NotNull List<Float> floats) {
+        return editMeta(meta -> {
+            final CustomModelDataComponent component = meta.getCustomModelDataComponent();
+            component.setFloats(floats);
+            meta.setCustomModelDataComponent(component);
+        });
+    }
+
+    /**
+     * Добавляет список указанных флагов в компонент кастомдаты предмета.
+     * <p>
+     * Обычно используется в связке с текстурпаком.
+     *
+     * @param flags список флагов
+     * @see CustomModelDataComponent#setFlags(List)
+     */
+    @SuppressWarnings("UnstableApiUsage")
+    public ItemBuilder customModelDataFlags(@NotNull List<Boolean> flags) {
+        return editMeta(meta -> {
+            CustomModelDataComponent component = meta.getCustomModelDataComponent();
+            component.setFlags(flags);
+            meta.setCustomModelDataComponent(component);
+        });
+    }
+
+    /**
+     * Добавляет список указанных строк в компонент кастомдаты предмета.
+     * <p>
+     * Обычно используется в связке с текстурпаком.
+     *
+     * @param strings список строк
+     * @see CustomModelDataComponent#setStrings(List)
+     */
+    @SuppressWarnings("UnstableApiUsage")
+    public ItemBuilder customModelDataStrings(@NotNull List<String> strings) {
+        return editMeta(meta -> {
+            final CustomModelDataComponent component = meta.getCustomModelDataComponent();
+            component.setStrings(strings);
+            meta.setCustomModelDataComponent(component);
+        });
+    }
+
+    /**
+     * Добавляет список указанных цветов в компонент кастомдаты предмета.
+     * <p>
+     * Обычно используется в связке с текстурпаком.
+     *
+     * @param colors список цветов
+     * @see CustomModelDataComponent#setColors(List)
+     */
+    @SuppressWarnings("UnstableApiUsage")
+    public ItemBuilder customModelDataColors(@NotNull List<Color> colors) {
+        return editMeta(meta -> {
+            final CustomModelDataComponent component = meta.getCustomModelDataComponent();
+            component.setColors(colors);
+            meta.setCustomModelDataComponent(component);
         });
     }
 
@@ -267,38 +370,16 @@ public final class ItemBuilder {
      * Обычно используется в связке с текстурпаком.
      *
      * @param data кастомдата модельки предмета.
+     * @deprecated используйте {@link #customModelDataFloats(List)}
      */
-    public ItemBuilder customModelData(@Nullable final Integer data) {
+    @Deprecated(since = "3.0.0")
+    public ItemBuilder customModelData(@Nullable Integer data) {
         return editMeta(meta -> meta.setCustomModelData(data));
     }
 
-    /**
-     * Добавляет значение по указанному ключу в контейнер кастомных данных предмета.
-     * <p>
-     * Поддерживаемые типы ключей: {@link PersistentDataType}
-     *
-     * @param key   ключ, по которому сохранится значение.
-     * @param value само значение.
-     */
-    public ItemBuilder persistentData(@NotNull final NamespacedKey key, @NotNull final Object value) {
-        return editMeta(meta -> {
-            final PersistentDataContainer container = meta.getPersistentDataContainer();
+    //endregion
 
-            if (value instanceof String s) container.set(key, PersistentDataType.STRING, s);
-            else if (value instanceof Byte b) container.set(key, PersistentDataType.BYTE, b);
-            else if (value instanceof Short s) container.set(key, PersistentDataType.SHORT, s);
-            else if (value instanceof Integer i) container.set(key, PersistentDataType.INTEGER, i);
-            else if (value instanceof Long l) container.set(key, PersistentDataType.LONG, l);
-            else if (value instanceof Float f) container.set(key, PersistentDataType.FLOAT, f);
-            else if (value instanceof Double d) container.set(key, PersistentDataType.DOUBLE, d);
-            else if (value instanceof Enum<?> e) container.set(key, PersistentDataType.STRING, e.name());
-            else if (value instanceof byte[] ba) container.set(key, PersistentDataType.BYTE_ARRAY, ba);
-            else if (value instanceof int[] ia) container.set(key, PersistentDataType.INTEGER_ARRAY, ia);
-            else if (value instanceof long[] la) container.set(key, PersistentDataType.LONG_ARRAY, la);
-            else if (value instanceof PersistentDataContainer pdc) container.set(key, PersistentDataType.TAG_CONTAINER, pdc);
-            else throw new IllegalArgumentException("Unknown persistent data type: " + value.getClass().getName());
-        });
-    }
+    //region Наложение чаров на предмет
 
     /**
      * Накладывает чару на предмет с указанным уровнем.
@@ -306,7 +387,7 @@ public final class ItemBuilder {
      * @param enchantment тип чар для накладывания.
      * @param level       уровень чара.
      */
-    public ItemBuilder enchantment(@NotNull final Enchantment enchantment, final int level) {
+    public ItemBuilder enchantment(@NotNull Enchantment enchantment, int level) {
         return enchantments(Map.of(enchantment, level));
     }
 
@@ -317,7 +398,7 @@ public final class ItemBuilder {
      *
      * @param enchantments чары для накладывания.
      */
-    public ItemBuilder enchantments(@NotNull final Enchantment... enchantments) {
+    public ItemBuilder enchantments(@NotNull Enchantment... enchantments) {
         final Map<Enchantment, Integer> map = new HashMap<>();
 
         for (Enchantment enchantment : enchantments) {
@@ -332,16 +413,17 @@ public final class ItemBuilder {
      *
      * @param enchantments чары для накладывания.
      */
-    public ItemBuilder enchantments(@NotNull final Map<Enchantment, Integer> enchantments) {
+    public ItemBuilder enchantments(@NotNull Map<Enchantment, Integer> enchantments) {
         return editMeta(meta -> {
             for (Map.Entry<Enchantment, Integer> enchantment : enchantments.entrySet()) {
                 meta.addEnchant(enchantment.getKey(), enchantment.getValue(), true);
             }
         });
     }
+
     //endregion
 
-    //region Методы добавления эффектов к зельям
+    //region Добавление эффектов к зельям
 
     /**
      * Устанавливает тип зелья.
@@ -351,7 +433,7 @@ public final class ItemBuilder {
      *
      * @param type тип зелья.
      */
-    public ItemBuilder potionType(@NotNull final PotionType type) {
+    public ItemBuilder potionType(@NotNull PotionType type) {
         return editMeta(meta -> {
             if (meta instanceof PotionMeta potion) {
                 potion.setBasePotionType(type);
@@ -369,7 +451,7 @@ public final class ItemBuilder {
      *
      * @param effects эффекты
      */
-    public ItemBuilder potionEffects(@NotNull final PotionEffect... effects) {
+    public ItemBuilder potionEffects(@NotNull PotionEffect... effects) {
         return potionEffects(true, effects);
     }
 
@@ -385,7 +467,7 @@ public final class ItemBuilder {
      * @param overwrite перезаписывать ли эффекты
      * @param effects   эффекты
      */
-    public ItemBuilder potionEffects(final boolean overwrite, @NotNull final PotionEffect... effects) {
+    public ItemBuilder potionEffects(boolean overwrite, @NotNull PotionEffect... effects) {
         final Map<PotionEffect, Boolean> map = new HashMap<>();
 
         for (PotionEffect effect : effects) {
@@ -407,7 +489,7 @@ public final class ItemBuilder {
      *
      * @param effects эффекты
      */
-    public ItemBuilder potionEffects(@NotNull final Map<PotionEffect, Boolean> effects) {
+    public ItemBuilder potionEffects(@NotNull Map<PotionEffect, Boolean> effects) {
         return editMeta(meta -> {
             if (meta instanceof PotionMeta potion) {
                 effects.forEach(potion::addCustomEffect);
@@ -423,7 +505,7 @@ public final class ItemBuilder {
      *
      * @param type тип эффекта для удаления.
      */
-    public ItemBuilder removePotionEffect(@NotNull final PotionEffectType type) {
+    public ItemBuilder removePotionEffect(@NotNull PotionEffectType type) {
         return editMeta(meta -> {
             if (meta instanceof PotionMeta potion) {
                 potion.removeCustomEffect(type);
@@ -444,9 +526,10 @@ public final class ItemBuilder {
             }
         });
     }
+
     //endregion
 
-    //region Методы сохранения чар в книгу зачарований.
+    //region Сохранение чар в книгу зачарований
 
     /**
      * Сохраняет в предмет указанную чару с указанным уровнем.
@@ -456,7 +539,7 @@ public final class ItemBuilder {
      * @param enchantment тип чара для сохранения.
      * @param level       уровень чара.
      */
-    public ItemBuilder storedEnchantment(@NotNull final Enchantment enchantment, final int level) {
+    public ItemBuilder storedEnchantment(@NotNull Enchantment enchantment, int level) {
         return storedEnchantments(Map.of(enchantment, level));
     }
 
@@ -467,7 +550,7 @@ public final class ItemBuilder {
      *
      * @param enchantments типs чар для сохранения.
      */
-    public ItemBuilder storedEnchantments(@NotNull final Enchantment... enchantments) {
+    public ItemBuilder storedEnchantments(@NotNull Enchantment... enchantments) {
         final Map<Enchantment, Integer> map = new HashMap<>();
 
         for (Enchantment enchantment : enchantments) {
@@ -484,7 +567,7 @@ public final class ItemBuilder {
      *
      * @param enchantments чары для сохранения.
      */
-    public ItemBuilder storedEnchantments(@NotNull final Map<Enchantment, Integer> enchantments) {
+    public ItemBuilder storedEnchantments(@NotNull Map<Enchantment, Integer> enchantments) {
         return editMeta(meta -> {
             if (meta instanceof EnchantmentStorageMeta storage) {
                 for (Map.Entry<Enchantment, Integer> enchantment : enchantments.entrySet()) {
@@ -493,20 +576,43 @@ public final class ItemBuilder {
             }
         });
     }
+
     //endregion
 
+    //region Контейнер кастомных данных предмета
+
     /**
-     * Устанавливает текстуру для предмета с типом {@link Material#PLAYER_HEAD}
+     * Добавляет значение по указанному ключу в контейнер кастомных данных предмета.
+     * <p>
+     * Поддерживаемые типы ключей: {@link PersistentDataType}
      *
-     * @param texture текстура для предмета.
+     * @param key   ключ, по которому сохранится значение.
+     * @param value само значение.
      */
-    public ItemBuilder texture(@NotNull final String texture) {
+    public ItemBuilder persistentData(@NotNull NamespacedKey key, @NotNull Object value) {
         return editMeta(meta -> {
-            if (meta instanceof SkullMeta skullMeta) {
-                HeadUtils.setTexture(skullMeta, texture);
+            final PersistentDataContainer container = meta.getPersistentDataContainer();
+
+            switch (value) {
+                case Byte b -> container.set(key, PersistentDataType.BYTE, b);
+                case Short s -> container.set(key, PersistentDataType.SHORT, s);
+                case Integer i -> container.set(key, PersistentDataType.INTEGER, i);
+                case Long l -> container.set(key, PersistentDataType.LONG, l);
+                case Float f -> container.set(key, PersistentDataType.FLOAT, f);
+                case Double d -> container.set(key, PersistentDataType.DOUBLE, d);
+                case Boolean b -> container.set(key, PersistentDataType.BOOLEAN, b);
+                case String s -> container.set(key, PersistentDataType.STRING, s);
+                case Enum<?> e -> container.set(key, PersistentDataType.STRING, e.name());
+                case byte[] ba -> container.set(key, PersistentDataType.BYTE_ARRAY, ba);
+                case int[] ia -> container.set(key, PersistentDataType.INTEGER_ARRAY, ia);
+                case long[] la -> container.set(key, PersistentDataType.LONG_ARRAY, la);
+                case PersistentDataContainer pdc -> container.set(key, PersistentDataType.TAG_CONTAINER, pdc);
+                default -> throw new IllegalArgumentException("Unknown persistent data type: " + value.getClass().getName());
             }
         });
     }
+
+    //endregion
 
     /**
      * Редактирует метаданные предметы.
@@ -515,7 +621,7 @@ public final class ItemBuilder {
      *
      * @param editor метод редактирования меты предмета.
      */
-    public ItemBuilder editMeta(@NotNull final Consumer<? super ItemMeta> editor) {
+    public ItemBuilder editMeta(@NotNull Consumer<? super ItemMeta> editor) {
         this.itemStack.editMeta(editor);
 
         return this;
