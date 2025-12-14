@@ -9,8 +9,12 @@ package me.denarydev.crystal.config.internal;
 
 import io.sapphiremc.lib.configurate.objectmapping.ConfigSerializable;
 import io.sapphiremc.lib.configurate.objectmapping.meta.Comment;
+import io.sapphiremc.lib.configurate.objectmapping.meta.PostProcess;
+import io.sapphiremc.lib.configurate.serialize.SerializationException;
 import me.denarydev.crystal.database.DatabaseType;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -46,7 +50,7 @@ public final class PoolsConfig {
     )
     private Map<String, PoolConfig> pools = Map.of(
         "local", new PoolConfig(Path.of("storage.db")),
-        "main", new PoolConfig("localhost", "3006", "minecraft", "root", "", List.of("games"))
+        "main", new PoolConfig("localhost", "3306", "minecraft", "root", "", List.of("games"))
     );
 
     public boolean eagerConnect() {
@@ -59,6 +63,58 @@ public final class PoolsConfig {
 
     public Map<String, PoolConfig> pools() {
         return pools;
+    }
+
+    @PostProcess
+    private void validate() throws SerializationException {
+        for (Map.Entry<String, PoolConfig> entry : pools.entrySet()) {
+            final String name = entry.getKey();
+            final PoolConfig pool = entry.getValue();
+
+            pool.type = valueOrThrow(name, "type", pool.type, defaultSettings.type);
+            if (!pool.type.remote()) {
+                pool.file = valueOrThrow(name, "file", pool.file, defaultSettings.file);
+                continue;
+            }
+
+            pool.address = valueOrThrow(name, "address", pool.address, defaultSettings.address);
+            pool.port = valueOrFallback(pool.port, defaultSettings.port, "3306");
+
+            pool.database = valueOrThrow(name, "database", pool.database, defaultSettings.database);
+            pool.username = valueOrThrow(name, "username", pool.username, defaultSettings.username);
+            pool.password = valueOrThrow(name, "password", pool.password, defaultSettings.password);
+
+            pool.maxPoolSize = valueOrFallback(pool.maxPoolSize, defaultSettings.maxPoolSize, 6);
+            pool.minimumIdle = valueOrFallback(pool.minimumIdle, defaultSettings.minimumIdle, 6);
+            pool.maxLifetime = valueOrFallback(pool.maxLifetime, defaultSettings.maxLifetime, 1800000);
+            pool.keepAliveTime = valueOrFallback(pool.keepAliveTime, defaultSettings.keepAliveTime, 0);
+            pool.connectionTimeout = valueOrFallback(pool.connectionTimeout, defaultSettings.connectionTimeout, 5000);
+            pool.properties = valueOrFallback(pool.properties, defaultSettings.properties, Map.of("useUnicode", "true", "characterEncoding", "utf8"));
+        }
+    }
+
+    private <T> T valueOrThrow(@NotNull String pool, @NotNull String name, @Nullable T value, @Nullable T def) throws SerializationException {
+        if (value == null) {
+            if (def == null) {
+                throw new SerializationException("Value '" + name + "' not found in pool '" + pool + "' and not specified in default pool settings!");
+            }
+
+            return def;
+        }
+
+        return value;
+    }
+
+    private <T> T valueOrFallback(@Nullable T value, @Nullable T def, @NotNull T fallback) {
+        if (value == null) {
+            if (def == null) {
+                return fallback;
+            }
+
+            return def;
+        }
+
+        return value;
     }
 
     @ConfigSerializable

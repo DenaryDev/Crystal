@@ -52,13 +52,11 @@ public final class PoolManagerImpl extends PoolManager {
             return;
         }
 
-        final PoolsConfig.PoolConfig def = config.defaultSettings();
-
         config.pools().forEach((name, pool) -> {
             final LazyValue<ConnectionPool> lazySource = new LazyValue<>(() -> {
                 platform.logger().info("Creating pool {}: {}", name, pool);
 
-                final ConnectionPool factory = createPool(pool, def);
+                final ConnectionPool factory = createPool(pool);
 
                 factory.initialize();
 
@@ -79,8 +77,8 @@ public final class PoolManagerImpl extends PoolManager {
         });
     }
 
-    private ConnectionPool createPool(PoolsConfig.PoolConfig pool, PoolsConfig.PoolConfig def) {
-        final ConnectionPool.Builder<?> builder = switch (valueOrDefault(pool.type(), def.type())) {
+    private ConnectionPool createPool(PoolsConfig.PoolConfig pool) {
+        final ConnectionPool.Builder<?> builder = switch (pool.type()) {
             case SQLITE -> ConnectionPoolBuilders.sqlite();
             case H2 -> ConnectionPoolBuilders.h2();
             case MYSQL -> ConnectionPoolBuilders.mysql();
@@ -90,26 +88,22 @@ public final class PoolManagerImpl extends PoolManager {
 
         return switch (builder) {
             case FlatfileConnectionPool.Builder<?> flatFileBuilder -> flatFileBuilder
-                .file(valueOrDefault(pool.file(), def.file()))
+                .file(pool.file())
                 .build();
             case HikariConnectionPool.Builder<?> hikariBuilder -> hikariBuilder
-                .address(valueOrDefault(pool.address(), def.address()))
-                .port(valueOrDefault(pool.port(), def.port()))
-                .database(valueOrDefault(pool.database(), def.database()))
-                .username(valueOrDefault(pool.username(), def.username()))
-                .password(valueOrDefault(pool.password(), def.password()))
-                .maxPoolSize(valueOrDefault(pool.maxPoolSize(), valueOrDefault(def.maxPoolSize(), 6)))
-                .minimumIdle(valueOrDefault(pool.minimumIdle(), valueOrDefault(def.minimumIdle(), 6)))
-                .maxLifetime(valueOrDefault(pool.maxLifetime(), valueOrDefault(def.maxLifetime(), 1800000)))
-                .keepAliveTime(valueOrDefault(pool.keepAliveTime(), valueOrDefault(def.keepAliveTime(), 0)))
-                .connectionTimeout(valueOrDefault(pool.connectionTimeout(), valueOrDefault(def.connectionTimeout(), 5000)))
-                .properties(valueOrDefault(pool.properties(), valueOrDefault(def.properties(), Map.of("useUnicode", "true", "characterEncoding", "utf8"))))
+                .address(pool.address())
+                .port(pool.port())
+                .database(pool.database())
+                .username(pool.username())
+                .password(pool.password())
+                .maxPoolSize(pool.maxPoolSize())
+                .minimumIdle(pool.minimumIdle())
+                .maxLifetime(pool.maxLifetime())
+                .keepAliveTime(pool.keepAliveTime())
+                .connectionTimeout(pool.connectionTimeout())
+                .properties(pool.properties())
                 .build();
         };
-    }
-
-    private <T> T valueOrDefault(T value, T defaultValue) {
-        return value != null ? value : defaultValue;
     }
 
     @Override
