@@ -9,11 +9,10 @@ module crystal.paper {
     requires net.kyori.adventure.text.minimessage;
     requires net.kyori.adventure.text.serializer.plain;
     requires com.google.common;
-    requires org.spongepowered.configurate;
+    requires io.sapphiremc.lib.configurate;
     requires net.kyori.examination.api;
     requires com.google.gson;
     requires java.logging;
-    requires org.spongepowered.configurate.yaml;
     requires configlib;
     requires crystal.common;
     requires org.slf4j;

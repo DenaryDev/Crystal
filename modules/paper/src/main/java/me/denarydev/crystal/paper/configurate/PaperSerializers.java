@@ -14,8 +14,14 @@ import me.denarydev.crystal.paper.configurate.serializers.MaterialSerializer;
 import me.denarydev.crystal.paper.configurate.serializers.NamespacedKeySerializer;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
-import org.spongepowered.configurate.serialize.TypeSerializerCollection;
+import io.sapphiremc.lib.configurate.serialize.TypeSerializerCollection;
 
+/**
+ * Набор кастомных сериализаторов для некоторых объектов из ядра Paper.
+ * <p>
+ * <b>Обязательно используйте Configurate из пути <code>io.sapphiremc.lib.configurate</code>,
+ * не <code>org.spongepowered.configurate</code></b>
+ */
 public final class PaperSerializers {
 
     /**

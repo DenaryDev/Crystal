@@ -24,9 +24,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.configurate.ConfigurationNode;
-import org.spongepowered.configurate.serialize.SerializationException;
-import org.spongepowered.configurate.serialize.TypeSerializer;
+import io.sapphiremc.lib.configurate.ConfigurationNode;
+import io.sapphiremc.lib.configurate.serialize.SerializationException;
+import io.sapphiremc.lib.configurate.serialize.TypeSerializer;
 
 import java.lang.reflect.Type;
 import java.net.URL;

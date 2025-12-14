@@ -41,6 +41,7 @@ import java.util.Set;
  * @author DenaryDev
  * @since 23:09 12.08.2025
  * @deprecated Используйте Configurate вместо ConfigLib.
+ * Configurate может записывать ItemStack напрямую через {@link me.denarydev.crystal.paper.configurate.serializers.ItemStackSerializer}
  * <p>
  * Оставлено для обратной совместимости с уже написанными плагинами.
  * Будет удалено в одном из будущих промежуточных релизов.

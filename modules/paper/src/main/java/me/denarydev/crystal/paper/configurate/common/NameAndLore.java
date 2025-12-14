@@ -5,9 +5,9 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package me.denarydev.crystal.paper.configlib.common;
+package me.denarydev.crystal.paper.configurate.common;
 
-import de.exlll.configlib.Configuration;
+import io.sapphiremc.lib.configurate.objectmapping.ConfigSerializable;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -19,18 +19,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 /**
- * Название и описание предмета для записи в конфиг через ConfigLib
- *
- * @author DenaryDev
- * @since 15:01 25.11.2025
- * @deprecated Используйте Configurate вместо ConfigLib.
- * Прямая замена: {@link me.denarydev.crystal.paper.configurate.common.NameAndLore}
- * <p>
- * Оставлено для обратной совместимости с уже написанными плагинами.
- * Будет удалено в одном из будущих промежуточных релизов.
+ * Название и описание предмета для записи в конфиг через Configurate
  */
-@Deprecated(forRemoval = true)
-@Configuration
+@ConfigSerializable
 public final class NameAndLore {
 
     /**
@@ -66,11 +57,9 @@ public final class NameAndLore {
     private List<String> lore;
 
     private NameAndLore() {
-        System.err.println("Detected ConfigLib usage. It is deprecated and will be removed in near future");
     }
 
     private NameAndLore(String name, List<String> lore) {
-        System.err.println("Detected ConfigLib usage. It is deprecated and will be removed in near future");
         this.name = name;
         this.lore = lore;
     }

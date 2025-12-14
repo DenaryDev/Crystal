@@ -7,12 +7,12 @@
  */
 package me.denarydev.crystal.config;
 
+import io.sapphiremc.lib.configurate.ConfigurationOptions;
+import io.sapphiremc.lib.configurate.hocon.HoconConfigurationLoader;
+import io.sapphiremc.lib.configurate.serialize.TypeSerializerCollection;
+import io.sapphiremc.lib.configurate.yaml.NodeStyle;
+import io.sapphiremc.lib.configurate.yaml.YamlConfigurationLoader;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.configurate.ConfigurationOptions;
-import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
-import org.spongepowered.configurate.serialize.TypeSerializerCollection;
-import org.spongepowered.configurate.yaml.NodeStyle;
-import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.nio.file.Path;
 import java.util.function.UnaryOperator;
@@ -21,6 +21,9 @@ import java.util.function.UnaryOperator;
  * Класс для создания загрузчиков конфигураций из библиотеки Configurate.
  * <p>
  * Crystal использует свой форк Configurate с поддержкой комментариев в yaml файлах.
+ * <p>
+ * <b>Обязательно используйте Configurate из пути <code>io.sapphiremc.lib.configurate</code>,
+ * не <code>org.spongepowered.configurate</code></b>
  */
 public final class ConfigLoaders {
 

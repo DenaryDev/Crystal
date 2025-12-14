@@ -7,6 +7,7 @@
  */
 package me.denarydev.crystal.database.pool.impl;
 
+import io.sapphiremc.lib.configurate.ConfigurateException;
 import me.denarydev.crystal.Crystal;
 import me.denarydev.crystal.config.ConfigLoaders;
 import me.denarydev.crystal.config.ConfigMapper;
@@ -19,7 +20,6 @@ import me.denarydev.crystal.database.pool.PoolManager;
 import me.denarydev.crystal.database.util.LazyValue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.configurate.ConfigurateException;
 
 import java.util.HashMap;
 import java.util.Map;

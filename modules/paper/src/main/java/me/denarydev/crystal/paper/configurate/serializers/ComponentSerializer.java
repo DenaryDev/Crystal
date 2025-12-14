@@ -11,8 +11,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.spongepowered.configurate.serialize.ScalarSerializer;
-import org.spongepowered.configurate.serialize.SerializationException;
+import io.sapphiremc.lib.configurate.serialize.ScalarSerializer;
+import io.sapphiremc.lib.configurate.serialize.SerializationException;
 
 import java.lang.reflect.Type;
 import java.util.function.Predicate;

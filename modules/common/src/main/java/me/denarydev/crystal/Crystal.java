@@ -7,13 +7,13 @@
  */
 package me.denarydev.crystal;
 
+import io.sapphiremc.lib.configurate.ConfigurateException;
 import me.denarydev.crystal.config.ConfigLoaders;
 import me.denarydev.crystal.config.ConfigMapper;
 import me.denarydev.crystal.config.internal.CrystalConfig;
 import me.denarydev.crystal.database.pool.impl.PoolManagerImpl;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
-import org.spongepowered.configurate.ConfigurateException;
 
 import java.nio.file.Path;
 

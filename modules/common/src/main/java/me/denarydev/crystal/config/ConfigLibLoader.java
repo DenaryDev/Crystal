@@ -10,7 +10,7 @@ package me.denarydev.crystal.config;
 import de.exlll.configlib.NameFormatters;
 import de.exlll.configlib.YamlConfigurationProperties;
 import de.exlll.configlib.YamlConfigurations;
-import org.spongepowered.configurate.objectmapping.meta.Comment;
+import io.sapphiremc.lib.configurate.objectmapping.meta.Comment;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -19,7 +19,7 @@ import java.nio.file.Path;
  * @author DenaryDev
  * @since 1:46 28.10.2025
  * @deprecated ConfigLib не имеет некоторых важных и удобных, вместо неё
- * лучше использовать Configurate от SpongePowered ({@link ConfigLoaders}).
+ * лучше использовать библиотеку Configurate ({@link ConfigLoaders}).
  * В Crystal используется мой форк, поддерживающий комментарии через аннотации {@link Comment}.
  * <p>
  * Оставлено для обратной совместимости с уже написанными плагинами.

@@ -7,6 +7,10 @@
  */
 package me.denarydev.crystal.paper.configurate.serializers;
 
+import io.sapphiremc.lib.configurate.BasicConfigurationNode;
+import io.sapphiremc.lib.configurate.ConfigurateException;
+import io.sapphiremc.lib.configurate.ConfigurationNode;
+import io.sapphiremc.lib.configurate.serialize.SerializationException;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -15,10 +19,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockbukkit.mockbukkit.ServerMock;
-import org.spongepowered.configurate.BasicConfigurationNode;
-import org.spongepowered.configurate.ConfigurateException;
-import org.spongepowered.configurate.ConfigurationNode;
-import org.spongepowered.configurate.serialize.SerializationException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

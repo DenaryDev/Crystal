@@ -7,10 +7,10 @@
  */
 package me.denarydev.crystal.config.internal;
 
+import io.sapphiremc.lib.configurate.objectmapping.ConfigSerializable;
+import io.sapphiremc.lib.configurate.objectmapping.meta.Comment;
 import me.denarydev.crystal.Crystal;
 import org.jetbrains.annotations.ApiStatus;
-import org.spongepowered.configurate.objectmapping.ConfigSerializable;
-import org.spongepowered.configurate.objectmapping.meta.Comment;
 
 import java.nio.file.Path;
 

@@ -4,9 +4,9 @@
  */
 module crystal.common {
     requires org.jetbrains.annotations;
-    requires org.spongepowered.configurate;
-    requires org.spongepowered.configurate.hocon;
-    requires org.spongepowered.configurate.yaml;
+    requires io.sapphiremc.lib.configurate;
+    requires io.sapphiremc.lib.configurate.hocon;
+    requires io.sapphiremc.lib.configurate.yaml;
     requires java.sql;
     requires org.slf4j;
     requires org.xerial.sqlitejdbc;

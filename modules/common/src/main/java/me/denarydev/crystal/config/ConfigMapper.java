@@ -7,18 +7,21 @@
  */
 package me.denarydev.crystal.config;
 
+import io.sapphiremc.lib.configurate.CommentedConfigurationNode;
+import io.sapphiremc.lib.configurate.ConfigurateException;
+import io.sapphiremc.lib.configurate.ConfigurationNode;
+import io.sapphiremc.lib.configurate.loader.ConfigurationLoader;
+import io.sapphiremc.lib.configurate.serialize.SerializationException;
+import io.sapphiremc.lib.configurate.util.CheckedFunction;
 import org.jetbrains.annotations.NotNull;
-import org.spongepowered.configurate.CommentedConfigurationNode;
-import org.spongepowered.configurate.ConfigurateException;
-import org.spongepowered.configurate.ConfigurationNode;
-import org.spongepowered.configurate.loader.ConfigurationLoader;
-import org.spongepowered.configurate.serialize.SerializationException;
-import org.spongepowered.configurate.util.CheckedFunction;
 
 /**
  * Получает экземпляры указанных классов из файла.
  * <p>
  * Подробнее: <a href="https://github.com/SpongePowered/Configurate/wiki/Object-Mapper">документация Configurate`s ObjectMapper (англ)</a>
+ * <p>
+ * <b>Обязательно используйте Configurate из пути <code>io.sapphiremc.lib.configurate</code>,
+ * не <code>org.spongepowered.configurate</code></b>
  */
 public final class ConfigMapper {
 
