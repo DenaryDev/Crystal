@@ -45,7 +45,11 @@ public final class PoolManagerImpl extends PoolManager {
     }
 
     public void initialize() throws ConfigurateException {
-        final PoolsConfig config = ConfigMapper.load(ConfigLoaders.yaml(platform.config().poolsPath(), PoolsConfig.HEADER), PoolsConfig.class);
+        final PoolsConfig config = ConfigMapper.load(ConfigLoaders.yaml(platform.config().poolsPath(), options -> options
+            .header(PoolsConfig.HEADER)
+            .implicitInitialization(false)
+        ), PoolsConfig.class);
+
         if (config == null) {
             platform.logger().error("Pools configuration could not be loaded, Crystal PoolManager disabled!");
             disabled = true;

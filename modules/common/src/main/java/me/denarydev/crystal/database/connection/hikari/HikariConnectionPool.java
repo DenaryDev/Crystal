@@ -31,7 +31,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
     private final String poolPrefix;
 
     private final String address;
-    private final String port;
+    private final Integer port;
     private final String database;
     private final String username;
     private final String password;
@@ -46,7 +46,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
 
     private HikariDataSource dataSource;
 
-    public HikariConnectionPool(String poolPrefix, String address, String port, String database, String username, String password,
+    public HikariConnectionPool(String poolPrefix, String address, Integer port, String database, String username, String password,
                                 int maxPoolSize, int minimumIdle, int maxLifetime, int keepaliveTime, int connectionTimeout, Map<String, String> properties) {
         this.poolPrefix = poolPrefix;
         this.address = address;
@@ -67,7 +67,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
      *
      * @return порт по умолчанию
      */
-    protected abstract String defaultPort();
+    protected abstract Integer defaultPort();
 
     /**
      * Настраивает {@link HikariConfig} с соответствующими свойствами базы данных.
@@ -81,7 +81,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
      * @param username     имя пользователя базы данных
      * @param password     пароль базы данных
      */
-    protected abstract void configureDatabase(HikariConfig config, String address, String port, String databaseName, String username, String password);
+    protected abstract void configureDatabase(HikariConfig config, String address, Integer port, String databaseName, String username, String password);
 
     /**
      * Позволяет экземпляру фабрики подключений переопределять определенные свойства до их установки.
@@ -170,7 +170,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
     public static abstract sealed class Builder<T extends HikariConnectionPool> extends ConnectionPool.Builder<T> permits MariaDBConnectionPool.Builder,
         MySqlConnectionPool.Builder, PostgresConnectionPool.Builder {
         protected String address;
-        protected String port;
+        protected Integer port;
         protected String database;
         protected String username;
         protected String password;
@@ -197,7 +197,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
          * <p>
          * По умолчанию: 3306 для MySQL и MariaDB, 5432 для PostgreSQL
          */
-        public Builder<T> port(@NotNull String port) {
+        public Builder<T> port(@NotNull Integer port) {
             this.port = port;
 
             return this;

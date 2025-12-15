@@ -23,7 +23,7 @@ import java.util.Map;
 @ApiStatus.Internal
 public abstract sealed class DriverBasedHikariConnectionPool extends HikariConnectionPool permits MySqlConnectionPool, MariaDBConnectionPool, PostgresConnectionPool {
 
-    protected DriverBasedHikariConnectionPool(String poolPrefix, String address, String port, String database, String username, String password,
+    protected DriverBasedHikariConnectionPool(String poolPrefix, String address, Integer port, String database, String username, String password,
                                               int maxPoolSize, int minimumIdle, int maxLifetime, int keepaliveTime, int connectionTimeout, Map<String, String> properties) {
         super(poolPrefix, address, port, database, username, password, maxPoolSize, minimumIdle, maxLifetime, keepaliveTime, connectionTimeout, properties);
     }
@@ -33,7 +33,7 @@ public abstract sealed class DriverBasedHikariConnectionPool extends HikariConne
     protected abstract String driverJdbcIdentifier();
 
     @Override
-    protected final void configureDatabase(HikariConfig config, String address, String port, String databaseName, String username, String password) {
+    protected final void configureDatabase(HikariConfig config, String address, Integer port, String databaseName, String username, String password) {
         config.setDriverClassName(driverClassName());
         config.setJdbcUrl(String.format("jdbc:%s://%s:%s/%s", driverJdbcIdentifier(), address, port, databaseName));
         config.setUsername(username);

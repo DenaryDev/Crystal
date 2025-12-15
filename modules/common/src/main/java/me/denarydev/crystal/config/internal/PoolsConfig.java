@@ -33,6 +33,8 @@ public final class PoolsConfig {
                                         |          by DenaryDev          |
                                         +--------------------------------+
                                         |- В этом конфиге настраиваются пулы подключений к БД.
+                                        |- Все параметры, у которых указано значение по умолчанию, можно удалить из
+                                        |  конфига, и тогда плагин будет использовать их значения по умолчанию.
                                         """;
 
     @Comment("Если true, плагин сразу после старта подключится ко всем БД, не ожидая, пока кто-то их попросит.")
@@ -50,7 +52,7 @@ public final class PoolsConfig {
     )
     private Map<String, PoolConfig> pools = Map.of(
         "local", new PoolConfig(Path.of("storage.db")),
-        "main", new PoolConfig("localhost", "3306", "minecraft", "root", "", List.of("games"))
+        "main", new PoolConfig("localhost", 3306, "minecraft", "root", "", List.of("games"))
     );
 
     public boolean eagerConnect() {
@@ -78,7 +80,7 @@ public final class PoolsConfig {
             }
 
             pool.address = valueOrThrow(name, "address", pool.address, defaultSettings.address);
-            pool.port = valueOrFallback(pool.port, defaultSettings.port, "3306");
+            pool.port = valueOrFallback(pool.port, defaultSettings.port, 3306);
 
             pool.database = valueOrThrow(name, "database", pool.database, defaultSettings.database);
             pool.username = valueOrThrow(name, "username", pool.username, defaultSettings.username);
@@ -136,7 +138,7 @@ public final class PoolsConfig {
             Порт для подключения.
             По умолчанию: 3306 для MySQL и MariaDB, 5432 для PostgreSQL."""
         )
-        private String port;
+        private Integer port;
         @Comment("Название базы данных.")
         private String database;
         @Comment("Имя пользователя.")
@@ -190,7 +192,7 @@ public final class PoolsConfig {
             this.file = file;
         }
 
-        private PoolConfig(String address, String port, String database, String username, String password, List<String> aliases) {
+        private PoolConfig(String address, Integer port, String database, String username, String password, List<String> aliases) {
             this.type = DatabaseType.MARIADB;
             this.address = address;
             this.port = port;
@@ -221,7 +223,7 @@ public final class PoolsConfig {
             return address;
         }
 
-        public String port() {
+        public Integer port() {
             return port;
         }
 

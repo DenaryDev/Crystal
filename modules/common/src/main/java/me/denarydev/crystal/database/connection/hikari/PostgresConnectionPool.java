@@ -19,7 +19,7 @@ import java.util.function.Function;
  */
 public final class PostgresConnectionPool extends DriverBasedHikariConnectionPool {
 
-    public PostgresConnectionPool(String poolPrefix, String address, String port, String database, String username, String password,
+    public PostgresConnectionPool(String poolPrefix, String address, Integer port, String database, String username, String password,
                                   int maxPoolSize, int minimumIdle, int maxLifetime, int keepaliveTime, int connectionTimeout, Map<String, String> properties) {
         super(poolPrefix, address, port, database, username, password, maxPoolSize, minimumIdle, maxLifetime, keepaliveTime, connectionTimeout, properties);
     }
@@ -30,8 +30,8 @@ public final class PostgresConnectionPool extends DriverBasedHikariConnectionPoo
     }
 
     @Override
-    protected String defaultPort() {
-        return "5432";
+    protected Integer defaultPort() {
+        return 5432;
     }
 
     @Override
