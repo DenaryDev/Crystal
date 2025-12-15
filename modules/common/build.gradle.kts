@@ -8,8 +8,6 @@ dependencies {
     api(libs.hikaricp)
     api(libs.bundles.sql.drivers)
 
-    api(libs.configlib.yaml)
-
     compileOnly(libs.skinsrestorer)
 }
 

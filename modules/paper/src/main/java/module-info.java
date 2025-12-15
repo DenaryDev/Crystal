@@ -13,13 +13,9 @@ module crystal.paper {
     requires net.kyori.examination.api;
     requires com.google.gson;
     requires java.logging;
-    requires configlib;
     requires crystal.common;
     requires org.slf4j;
 
-    exports me.denarydev.crystal.paper.configlib;
-    exports me.denarydev.crystal.paper.configlib.common;
-    exports me.denarydev.crystal.paper.configlib.serializers;
     exports me.denarydev.crystal.paper.configurate;
     exports me.denarydev.crystal.paper.configurate.serializers;
     exports me.denarydev.crystal.paper.gui;
