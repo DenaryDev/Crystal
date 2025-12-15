@@ -95,6 +95,7 @@ public final class PoolManagerImpl extends PoolManager {
                 .file(pool.file())
                 .build();
             case HikariConnectionPool.Builder<?> hikariBuilder -> hikariBuilder
+                .poolPrefix("Crystal-PoolManager")
                 .address(pool.address())
                 .port(pool.port())
                 .database(pool.database())

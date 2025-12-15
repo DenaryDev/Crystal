@@ -1,8 +1,27 @@
-.gradle/
+# Intellij
 .idea/
-.fleet/
-build/
-run/
-libs/
-
+out/
 *.iml
+
+# Fleet
+.fleet/
+
+# Maven
+target/
+dependency-reduced-pom.xml
+
+# Gradle
+.gradle/
+build/
+.kotlin/
+
+# Java
+*.hprof
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+
+# Common run directory
+run/
+
+# MacOS
+*.DS_Store

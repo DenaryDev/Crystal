@@ -8,17 +8,16 @@
 package me.denarydev.crystal.database.connection.file;
 
 import me.denarydev.crystal.database.connection.ConnectionPool;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import javax.sql.DataSource;
 import java.nio.file.Path;
+import java.sql.SQLException;
 
 /**
  * @author DenaryDev
  * @since 16:40 23.11.2023
  */
-@ApiStatus.Internal
 public sealed abstract class FlatfileConnectionPool extends ConnectionPool permits H2ConnectionPool, SQLiteConnectionPool {
     protected final Path file;
     protected DataSource dataSource;
@@ -28,7 +27,11 @@ public sealed abstract class FlatfileConnectionPool extends ConnectionPool permi
     }
 
     @Override
-    public final @NotNull DataSource dataSource() {
+    public final @NotNull DataSource dataSource() throws SQLException {
+        if (this.dataSource == null) {
+            throw new SQLException("DataSource not initialized");
+        }
+
         return this.dataSource;
     }
 

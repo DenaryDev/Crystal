@@ -17,7 +17,7 @@ import java.util.function.Function;
  * @author DenaryDev
  * @since 0:09 24.11.2023
  */
-public final class MySqlConnectionPool extends DriverBasedHikariConnectionPool {
+public final class MySqlConnectionPool extends HikariConnectionPool {
 
     public MySqlConnectionPool(String poolPrefix, String address, Integer port, String database, String username, String password,
                                int maxPoolSize, int minimumIdle, int maxLifetime, int keepaliveTime, int connectionTimeout, Map<String, String> properties) {

@@ -12,12 +12,14 @@ import com.zaxxer.hikari.HikariDataSource;
 import me.denarydev.crystal.database.connection.ConnectionPool;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -26,8 +28,7 @@ import java.util.concurrent.TimeUnit;
  * @author DenaryDev
  * @since 16:48 23.11.2023
  */
-@ApiStatus.Internal
-public abstract sealed class HikariConnectionPool extends ConnectionPool permits DriverBasedHikariConnectionPool {
+public abstract sealed class HikariConnectionPool extends ConnectionPool permits MySqlConnectionPool, MariaDBConnectionPool, PostgresConnectionPool {
     private final String poolPrefix;
 
     private final String address;
@@ -70,18 +71,18 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
     protected abstract Integer defaultPort();
 
     /**
-     * Настраивает {@link HikariConfig} с соответствующими свойствами базы данных.
-     * <p>
-     * Каждый драйвер делает это немного по-своему...
+     * Название класса драйвера для данного типа БД.
      *
-     * @param config       конфигурация hikari
-     * @param address      адрес базы данных
-     * @param port         порт базы данных
-     * @param databaseName название базы данных
-     * @param username     имя пользователя базы данных
-     * @param password     пароль базы данных
+     * @return название класса драйвера
      */
-    protected abstract void configureDatabase(HikariConfig config, String address, Integer port, String databaseName, String username, String password);
+    protected abstract String driverClassName();
+
+    /**
+     * Идентификатор типа бд для JDBC-ссылки (jdbc:айди://...)
+     *
+     * @return идентификатор типа бд
+     */
+    protected abstract String driverJdbcIdentifier();
 
     /**
      * Позволяет экземпляру фабрики подключений переопределять определенные свойства до их установки.
@@ -105,21 +106,21 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         }
     }
 
-    /**
-     * Вызывается после инициализации пула Hikari.
-     */
-    protected void postInitialize() {
-    }
-
     @Override
     public void initialize() {
         final HikariConfig config = new HikariConfig();
 
         // set pool name so the logging output can be linked back to us
-        config.setPoolName(this.poolPrefix + "-Hikari");
+        final String poolName = this.poolPrefix != null ?
+            this.poolPrefix + "-Hikari" :
+            "Crystal-Hikari";
+        config.setPoolName(poolName);
 
-        // allow the implementation to configure the HikariConfig appropriately with these values
-        configureDatabase(config, this.address, this.port, this.database, this.username, this.password);
+        // configure the HikariConfig with these values
+        config.setDriverClassName(driverClassName());
+        config.setJdbcUrl(String.format("jdbc:%s://%s:%s/%s", driverJdbcIdentifier(), this.address, this.port, this.database));
+        config.setUsername(this.username);
+        config.setPassword(this.password);
 
         // get the extra connection properties from the config
         Map<String, Object> properties = new HashMap<>(this.properties);
@@ -143,7 +144,24 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
 
         this.dataSource = new HikariDataSource(config);
 
-        postInitialize();
+        // Calling Class.forName("<driver class name>") is enough to call the static initializer
+        // which makes our driver available in DriverManager. We don't want that, so unregister it after
+        // the pool has been setup.
+        deregisterDriver(driverClassName());
+    }
+
+    private static void deregisterDriver(String driverClassName) {
+        final Enumeration<Driver> drivers = DriverManager.getDrivers();
+        while (drivers.hasMoreElements()) {
+            final Driver driver = drivers.nextElement();
+            if (driver.getClass().getName().equals(driverClassName)) {
+                try {
+                    DriverManager.deregisterDriver(driver);
+                } catch (SQLException e) {
+                    // ignore
+                }
+            }
+        }
     }
 
     @Override
@@ -154,7 +172,11 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
     }
 
     @Override
-    public @Nullable DataSource dataSource() {
+    public @NotNull DataSource dataSource() throws SQLException {
+        if (this.dataSource == null) {
+            throw new SQLException("DataSource not initialized");
+        }
+
         return this.dataSource;
     }
 
@@ -163,12 +185,13 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         try (final Connection connection = connection()) {
             callback.accept(connection);
         } catch (SQLException ex) {
-            logger.error("An error occured executing a SQL query", ex);
+            logger.error("An error occurred executing a SQL query", ex);
         }
     }
 
     public static abstract sealed class Builder<T extends HikariConnectionPool> extends ConnectionPool.Builder<T> permits MariaDBConnectionPool.Builder,
         MySqlConnectionPool.Builder, PostgresConnectionPool.Builder {
+        protected String poolPrefix;
         protected String address;
         protected Integer port;
         protected String database;
@@ -182,6 +205,19 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         protected int connectionTimeout = 5000;
 
         protected final Map<String, String> properties = new HashMap<>();
+
+        /**
+         * Префикс для имён пулов в hikari.
+         * <p>
+         * Уникальный префикс позволит вам отличать логи hikari этого плагина от логов hikari других плагинов.
+         * <p>
+         * <u>Лучше всего использовать название вашего плагина в качестве префикса имени пула.
+         */
+        public final Builder<T> poolPrefix(@NotNull final String pluginName) {
+            this.poolPrefix = pluginName;
+
+            return this;
+        }
 
         /**
          * IP или адрес базы данных без порта.
@@ -314,7 +350,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
          * <p>
          * По умолчанию: true
          * <p>
-         * <i>Недоступно PostgreSQL</i>
+         * <i>Недоступно на PostgreSQL</i>
          */
         public Builder<T> useUnicode(boolean useUnicode) {
             this.properties.put("useUnicode", Boolean.toString(useUnicode));
@@ -327,7 +363,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
          * <p>
          * По умолчанию: utf8
          * <p>
-         * <i>Недоступно PostgreSQL</i>
+         * <i>Недоступно на PostgreSQL</i>
          */
         public Builder<T> characterEncoding(@NotNull String characterEncoding) {
             this.properties.put("characterEncoding", characterEncoding);

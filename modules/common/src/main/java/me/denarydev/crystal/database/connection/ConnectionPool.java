@@ -13,7 +13,6 @@ import me.denarydev.crystal.database.connection.file.FlatfileConnectionPool;
 import me.denarydev.crystal.database.connection.hikari.HikariConnectionPool;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
 import javax.sql.DataSource;
@@ -43,26 +42,30 @@ public sealed abstract class ConnectionPool permits FlatfileConnectionPool, Hika
     public abstract void shutdown();
 
     /**
-     * Возвращает пул соединений с БД или null, если он не инициализирован.
+     * Возвращает источник соединений с БД или выкидывает исключение, если он не инициализирован.
      *
-     * @return {@link DataSource} или null, если нет соединения с БД.
+     * @return Источник подключений к БД.
+     * @throws SQLException если не удалось соединиться с БД.
      */
-    @Nullable
-    public abstract DataSource dataSource();
+    @NotNull
+    public abstract DataSource dataSource() throws SQLException;
 
     /**
      * Подключается к БД и возвращает это подключение.
      *
-     * @return {@link Connection}
+     * @return Новое подключение к БД.
      * @throws SQLException когда соединение не может быть получено.
      */
     @NotNull
     public final Connection connection() throws SQLException {
-        if (dataSource() == null) {
-            throw new SQLException("Unable to get a connection from the pool. (dataSource is null)");
+        final DataSource dataSource;
+        try {
+            dataSource = dataSource();
+        } catch (SQLException e) {
+            throw new SQLException("Unable to get a connection from the pool. (dataSource not initialized)");
         }
 
-        final Connection connection = dataSource().getConnection();
+        final Connection connection = dataSource.getConnection();
         if (connection == null) {
             throw new SQLException("Unable to get a connection from the pool. (getConnection returned null)");
         }
@@ -88,20 +91,6 @@ public sealed abstract class ConnectionPool permits FlatfileConnectionPool, Hika
     }
 
     public static abstract sealed class Builder<T extends ConnectionPool> permits FlatfileConnectionPool.Builder, HikariConnectionPool.Builder {
-        protected String poolPrefix;
-
-        /**
-         * Префикс для имён пулов в hikari.
-         * <p>
-         * Уникальный префикс позволит вам отличать логи hikari этого плагина от логов hikari других плагинов.
-         * <p>
-         * <u>Лучше всего использовать название вашего плагина в качестве префикса имени пула.
-         */
-        public final Builder<T> poolPrefix(@NotNull final String pluginName) {
-            this.poolPrefix = pluginName;
-
-            return this;
-        }
 
         /**
          * Создаёт фабрику соединений с параметрами из этого билдера.

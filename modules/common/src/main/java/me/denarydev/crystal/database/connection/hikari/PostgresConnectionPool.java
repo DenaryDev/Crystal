@@ -17,7 +17,7 @@ import java.util.function.Function;
  * @author DenaryDev
  * @since 0:50 24.11.2023
  */
-public final class PostgresConnectionPool extends DriverBasedHikariConnectionPool {
+public final class PostgresConnectionPool extends HikariConnectionPool {
 
     public PostgresConnectionPool(String poolPrefix, String address, Integer port, String database, String username, String password,
                                   int maxPoolSize, int minimumIdle, int maxLifetime, int keepaliveTime, int connectionTimeout, Map<String, String> properties) {
