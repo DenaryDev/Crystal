@@ -58,7 +58,7 @@ public final class PoolManagerImpl extends PoolManager {
 
         config.pools().forEach((name, pool) -> {
             final LazyValue<ConnectionPool> lazySource = new LazyValue<>(() -> {
-                platform.logger().info("Creating pool {}: {}", name, pool);
+                platform.logger().info("Creating pool '{}': {}", name, pool);
 
                 final ConnectionPool factory = createPool(pool);
 
@@ -116,14 +116,14 @@ public final class PoolManagerImpl extends PoolManager {
             throw new IllegalStateException("PoolManager is disabled!");
         }
 
-        this.platform.logger().info("A pool was requested with name {}", poolName);
+        this.platform.logger().info("A pool was requested with name '{}'", poolName);
 
         final LazyValue<ConnectionPool> lazySource = this.pools.get(poolName);
         if (lazySource != null) {
             try {
                 return Optional.of(lazySource.get());
             } catch (Throwable t) {
-                this.platform.logger().error("Failed to initialize pool {}", poolName, t);
+                this.platform.logger().error("Failed to initialize pool '{}'", poolName, t);
             }
         }
 
@@ -132,7 +132,7 @@ public final class PoolManagerImpl extends PoolManager {
 
     @Override
     public ConnectionPool requirePool(@NotNull String poolName) {
-        return getPool(poolName).orElseThrow(() -> new IllegalStateException("Pool " + poolName + " was not found, check Crystal pools configuration!"));
+        return getPool(poolName).orElseThrow(() -> new IllegalStateException("Pool '" + poolName + "' was not found, check Crystal pools configuration!"));
     }
 
     public void shutdown() {
