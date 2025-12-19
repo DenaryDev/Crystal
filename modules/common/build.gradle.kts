@@ -5,8 +5,9 @@ plugins {
 dependencies {
     compileOnlyApi(libs.annotations)
     api(libs.bundles.configurate)
-    api(libs.hikaricp)
-    api(libs.bundles.sql.drivers)
+
+    implementation(libs.hikaricp)
+    implementation(libs.bundles.sql.drivers)
 
     compileOnly(libs.skinsrestorer)
 }
