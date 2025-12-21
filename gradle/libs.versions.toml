@@ -6,7 +6,6 @@ core = "1.1.0"
 
 # Configs
 configurate = "4.3.0-DEV-SNAPSHOT" # Версия из нашего репозитория с поддержкой комментариев в yaml файлах
-configlib = "4.6.4"
 
 # Plugins
 skinsrestorer = "15.7.7"
@@ -28,6 +27,11 @@ annotations = "26.0.2-1"
 # Tests
 mockbukkit = "4.98.0"
 
+# Plugins
+buildconfig = "5.6.7"
+plugin-yml = "0.8.0"
+run-task = "3.0.2"
+
 [libraries]
 # Platforms
 paper = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
@@ -38,8 +42,6 @@ core = { module = "ru.prostocraft.core:core", version.ref = "core" }
 configurate-core = { module = "io.sapphiremc.lib:configurate-core", version.ref = "configurate" }
 configurate-hocon = { module = "io.sapphiremc.lib:configurate-hocon", version.ref = "configurate" }
 configurate-yaml = { module = "io.sapphiremc.lib:configurate-yaml", version.ref = "configurate" }
-configlib-core = { module = "de.exlll:configlib-core", version.ref = "configlib" }
-configlib-yaml = { module = "de.exlll:configlib-yaml", version.ref = "configlib" }
 
 # Plugins
 skinsrestorer = { module = "net.skinsrestorer:skinsrestorer-api", version.ref = "skinsrestorer" }
@@ -64,3 +66,9 @@ mockbukkit = { module = "org.mockbukkit.mockbukkit:mockbukkit-v1.21", version.re
 [bundles]
 sql-drivers = ["driver-sqlite", "driver-h2", "driver-mysql", "driver-mariadb", "driver-postgresql"]
 configurate = ["configurate-hocon", "configurate-yaml"]
+
+[plugins]
+buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
+pluginyml = { id = "de.eldoria.plugin-yml.paper", version.ref = "plugin-yml" }
+runpaper = { id = "xyz.jpenilla.run-paper", version.ref = "run-task" }
+runvelocity = { id = "xyz.jpenilla.run-velocity", version.ref = "run-task" }

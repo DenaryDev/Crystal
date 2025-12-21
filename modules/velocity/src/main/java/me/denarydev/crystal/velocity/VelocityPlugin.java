@@ -30,7 +30,7 @@ import java.nio.file.Path;
     id = "crystal",
     name = "Crystal",
     version = BuildConfig.VERSION,
-    description = "Набор библиотек для плагинов на платформе Velocity",
+    description = BuildConfig.DESCRIPTION,
     authors = "DenaryDev",
     dependencies = {
         @Dependency(

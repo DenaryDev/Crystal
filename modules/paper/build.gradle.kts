@@ -2,7 +2,8 @@ import net.minecrell.pluginyml.paper.PaperPluginDescription
 
 plugins {
     id("crystal.common")
-    id("de.eldoria.plugin-yml.paper") version "0.8.0"
+    alias(libs.plugins.pluginyml)
+    alias(libs.plugins.runpaper)
 }
 
 base {
@@ -21,15 +22,11 @@ dependencies {
 
 paper {
     name = "Crystal"
-    description = "Набор библиотек для плагинов на платформе Paper"
     author = "DenaryDev"
 
     main = "me.denarydev.crystal.paper.PaperPlugin"
 
     apiVersion = "1.21"
-
-    // ConfigLib является частью Crystal
-    provides = listOf("ConfigLib")
 
     serverDependencies {
         register("SkinsRestorer") {
@@ -39,14 +36,16 @@ paper {
     }
 }
 
-extraJavaModuleInfo {
-    automaticModule("de.exlll:configlib-core", "configlib") {
-        mergeJar("de.exlll:configlib-yaml")
-    }
-}
-
 tasks {
     compileJava {
         dependsOn(":crystal-common:shadowJar")
+    }
+
+    runServer {
+        minecraftVersion("1.21.10")
+        runDirectory(rootProject.projectDir.resolve("run/paper"))
+
+        val file = rootProject.projectDir.resolve("run/paper/paper.jar")
+        if (file.exists()) serverJar(file)
     }
 }
