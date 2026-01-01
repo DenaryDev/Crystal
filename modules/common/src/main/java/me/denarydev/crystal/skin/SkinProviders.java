@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 DenaryDev
+ * Copyright (c) 2026 DenaryDev
  *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file or at
@@ -20,10 +20,10 @@ import java.util.function.Supplier;
  * @since 3:11 13.08.2025
  */
 public final class SkinProviders {
-
     private static final Map<String, Supplier<SkinProvider>> providers = Map.of(
         "skinsrestorer", SkinsRestorerProvider::new
     );
+
     private static SkinProvider currentSkinProvider;
 
     /**

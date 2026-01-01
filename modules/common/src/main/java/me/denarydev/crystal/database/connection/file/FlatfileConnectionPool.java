@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 DenaryDev
+ * Copyright (c) 2026 DenaryDev
  *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file or at
@@ -19,6 +19,7 @@ import java.sql.SQLException;
  * @since 16:40 23.11.2023
  */
 public sealed abstract class FlatfileConnectionPool extends ConnectionPool permits H2ConnectionPool, SQLiteConnectionPool {
+
     protected final Path file;
     protected DataSource dataSource;
 

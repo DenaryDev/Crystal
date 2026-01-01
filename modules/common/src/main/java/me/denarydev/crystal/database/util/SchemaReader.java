@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 DenaryDev
+ * Copyright (c) 2026 DenaryDev
  *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file or at
@@ -22,6 +22,7 @@ import java.util.List;
  * @since 13:33 23.12.2023
  */
 public final class SchemaReader {
+
     private SchemaReader() {
     }
 

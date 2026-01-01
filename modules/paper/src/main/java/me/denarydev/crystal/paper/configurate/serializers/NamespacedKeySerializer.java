@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 DenaryDev
+ * Copyright (c) 2026 DenaryDev
  *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file or at
@@ -21,6 +21,7 @@ import java.util.function.Predicate;
  * @since 0:00 18.02.2024
  */
 public final class NamespacedKeySerializer extends ScalarSerializer<NamespacedKey> {
+
     public NamespacedKeySerializer() {
         super(NamespacedKey.class);
     }

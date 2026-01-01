@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 DenaryDev
+ * Copyright (c) 2026 DenaryDev
  *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file or at
@@ -29,6 +29,7 @@ import java.util.Map;
  * @since 16:04 25.11.2025
  */
 public sealed abstract class Template permits SimpleTemplate, MatrixTemplate {
+
     @Nullable
     protected final Component title;
     protected final int size;

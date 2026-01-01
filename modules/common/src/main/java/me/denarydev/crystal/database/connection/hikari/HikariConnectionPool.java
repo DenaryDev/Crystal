@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 DenaryDev
+ * Copyright (c) 2026 DenaryDev
  *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file or at
@@ -29,6 +29,7 @@ import java.util.concurrent.TimeUnit;
  * @since 16:48 23.11.2023
  */
 public abstract sealed class HikariConnectionPool extends ConnectionPool permits MySqlConnectionPool, MariaDBConnectionPool, PostgresConnectionPool {
+
     private final String poolPrefix;
 
     private final String address;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 DenaryDev
+ * Copyright (c) 2026 DenaryDev
  *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file or at
@@ -19,6 +19,7 @@ import java.util.function.Function;
  * @since 16:46 23.11.2023
  */
 public final class H2ConnectionPool extends FlatfileConnectionPool {
+
     H2ConnectionPool(Path file) {
         super(file);
     }

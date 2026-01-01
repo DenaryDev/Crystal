@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 DenaryDev
+ * Copyright (c) 2026 DenaryDev
  *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file or at
@@ -36,6 +36,7 @@ import java.util.Map;
  * или {@link Menu#builder(Template)} для создания меню по шаблону
  */
 public class Menu implements InventoryHolder {
+
     private final Template template;
     private final Inventory inventory;
 

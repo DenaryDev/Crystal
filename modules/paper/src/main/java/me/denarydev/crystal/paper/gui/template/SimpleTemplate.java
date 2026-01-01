@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 DenaryDev
+ * Copyright (c) 2026 DenaryDev
  *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file or at
@@ -31,6 +31,7 @@ import java.util.Map;
  * При желании можно обойтись без шаблона, обратившись напрямую к {@link Menu#builder()}
  */
 public final class SimpleTemplate extends Template {
+
     @Nullable
     private final InventoryType type;
 

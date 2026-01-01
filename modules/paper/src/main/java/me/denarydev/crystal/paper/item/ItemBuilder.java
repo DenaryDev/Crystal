@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 DenaryDev
+ * Copyright (c) 2026 DenaryDev
  *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file or at
@@ -42,6 +42,7 @@ import java.util.stream.Collectors;
  * Класс для создания ItemStack'ов.
  */
 public final class ItemBuilder {
+
     @NotNull
     private ItemStack itemStack;
 

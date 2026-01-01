@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 DenaryDev
+ * Copyright (c) 2026 DenaryDev
  *
  * Use of this source code is governed by an MIT-style
  * license that can be found in the LICENSE file or at
@@ -22,6 +22,7 @@ import java.util.WeakHashMap;
 
 @ApiStatus.Internal
 public final class InventoryListener implements Listener {
+
     private final Map<UUID, Long> activeCooldowns = new WeakHashMap<>();
 
     @EventHandler(priority = EventPriority.LOWEST)
