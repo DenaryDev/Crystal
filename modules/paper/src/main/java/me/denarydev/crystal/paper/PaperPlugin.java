@@ -8,7 +8,9 @@
 package me.denarydev.crystal.paper;
 
 import me.denarydev.crystal.paper.listener.InventoryListener;
-import me.denarydev.crystal.skin.SkinProviders;
+import me.denarydev.crystal.paper.skin.PaperSkinProvider;
+import me.denarydev.crystal.skin.SkinProvider;
+import me.denarydev.crystal.skin.provider.SkinsRestorerSkinProvider;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
@@ -29,7 +31,11 @@ public final class PaperPlugin extends JavaPlugin {
         final PluginManager manager = getServer().getPluginManager();
         manager.registerEvents(new InventoryListener(), this);
 
-        SkinProviders.initialize(manager::isPluginEnabled);
+        if (manager.isPluginEnabled("SkinsRestorer")) {
+            SkinProvider.set(new SkinsRestorerSkinProvider());
+        } else {
+            SkinProvider.set(new PaperSkinProvider());
+        }
     }
 
     @Override

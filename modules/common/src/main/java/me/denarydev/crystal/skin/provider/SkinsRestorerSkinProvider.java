@@ -22,26 +22,25 @@ import java.util.UUID;
  * @author DenaryDev
  * @since 20:03 13.08.2025
  */
-public final class SkinsRestorerProvider implements SkinProvider {
+@ApiStatus.Internal
+public final class SkinsRestorerSkinProvider extends SkinProvider {
 
     private final SkinsRestorer skinsRestorer;
 
-    @ApiStatus.Internal
-    public SkinsRestorerProvider() {
+    public SkinsRestorerSkinProvider() {
         this.skinsRestorer = net.skinsrestorer.api.SkinsRestorerProvider.get();
     }
 
     @Override
-    public @NotNull Optional<SkinProperty> getPlayerSkin(@NotNull UUID uuid) {
+    public Optional<SkinProperty> getPlayerSkin(@NotNull UUID uuid) {
         return getPlayerSkin0(uuid.toString());
     }
 
     @Override
-    public @NotNull Optional<SkinProperty> getPlayerSkin(@NotNull String name) {
+    public Optional<SkinProperty> getPlayerSkin(@NotNull String name) {
         return getPlayerSkin0(name);
     }
 
-    @NotNull
     private Optional<SkinProperty> getPlayerSkin0(@NotNull String nameOrUniqueId) {
         if (skinsRestorer == null) return Optional.empty();
 

@@ -7,7 +7,7 @@
  */
 package me.denarydev.crystal.skin;
 
-import me.denarydev.crystal.skin.provider.SkinsRestorerProvider;
+import me.denarydev.crystal.Crystal;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -17,7 +17,45 @@ import java.util.UUID;
  * @author DenaryDev
  * @since 20:04 13.08.2025
  */
-public sealed interface SkinProvider permits SkinsRestorerProvider {
+public abstract class SkinProvider {
+
+    private static SkinProvider current;
+
+    /**
+     * Проверяет, инициализирован ли провайдер скинов.
+     *
+     * @return true, если провайдер инициализирован, иначе false
+     */
+    public static boolean isInitialized() {
+        return current != null;
+    }
+
+    /**
+     * Возвращает текущий провайдер скинов, если он инициализирован.
+     *
+     * @return Провайдер скинов
+     * @throws IllegalStateException если провайдер не инициализирован.
+     */
+    public static SkinProvider get() {
+        if (current == null) {
+            throw new IllegalStateException("SkinProvider has not been initialized");
+        }
+
+        return current;
+    }
+
+    /**
+     * Устанавливает текущий провайдер скинов.
+     * <p>
+     * <b>Необходимо вызывать на этапе первой инициализации вашего плагина</b>
+     *
+     * @param provider провайдер скинов
+     */
+    public static void set(@NotNull SkinProvider provider) {
+        current = provider;
+
+        Crystal.instance().logger().info("Using {} as default skin provider", current.getClass().getSimpleName());
+    }
 
     /**
      * Получает скин игрока по его уникальному идентификатору (UUID).
@@ -25,8 +63,7 @@ public sealed interface SkinProvider permits SkinsRestorerProvider {
      * @param uuid уникальный ID игрока
      * @return Optional со скином, или пустой Optional, если скин не найден
      */
-    @NotNull
-    Optional<SkinProperty> getPlayerSkin(@NotNull UUID uuid);
+    public abstract Optional<SkinProperty> getPlayerSkin(@NotNull UUID uuid);
 
     /**
      * Получает скин игрока по его никнейму.
@@ -34,6 +71,5 @@ public sealed interface SkinProvider permits SkinsRestorerProvider {
      * @param name никнейм игрока
      * @return Optional со скином, или пустой Optional, если скин не найден
      */
-    @NotNull
-    Optional<SkinProperty> getPlayerSkin(@NotNull String name);
+    public abstract Optional<SkinProperty> getPlayerSkin(@NotNull String name);
 }
