@@ -59,10 +59,6 @@ public final class PoolsConfig {
         return eagerConnect;
     }
 
-    public PoolConfig defaultSettings() {
-        return defaultSettings;
-    }
-
     public Map<String, PoolConfig> pools() {
         return pools;
     }
@@ -265,6 +261,17 @@ public final class PoolsConfig {
 
         public List<String> aliases() {
             return aliases;
+        }
+
+        @PostProcess
+        private void postProcess() {
+            if (properties != null && properties.isEmpty()) {
+                properties = null;
+            }
+
+            if (aliases != null && aliases.isEmpty()) {
+                aliases = null;
+            }
         }
 
         @Override
