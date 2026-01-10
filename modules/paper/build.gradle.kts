@@ -36,6 +36,10 @@ paper {
     }
 }
 
+extraJavaModuleInfo {
+    automaticModule("com.mojang:brigadier", "com.mojang.brigadier")
+}
+
 tasks {
     compileJava {
         dependsOn(":crystal-common:shadowJar")

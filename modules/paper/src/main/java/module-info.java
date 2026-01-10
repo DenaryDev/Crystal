@@ -15,6 +15,7 @@ module crystal.paper {
     requires java.logging;
     requires crystal.common;
     requires org.slf4j;
+    requires com.mojang.brigadier;
 
     exports me.denarydev.crystal.paper.configurate;
     exports me.denarydev.crystal.paper.configurate.serializers;
