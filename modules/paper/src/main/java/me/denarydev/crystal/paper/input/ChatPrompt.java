@@ -25,9 +25,6 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Запрашивает у игрока ответ в виде сообщения в чат.
- *
- * @author DenaryDev
- * @since 4:12 27.11.2025
  */
 public final class ChatPrompt {
 

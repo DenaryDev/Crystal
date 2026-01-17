@@ -13,10 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-/**
- * @author DenaryDev
- * @since 19:33 27.10.2025
- */
 @ApiStatus.Internal
 public final class LazyValue<T> {
 

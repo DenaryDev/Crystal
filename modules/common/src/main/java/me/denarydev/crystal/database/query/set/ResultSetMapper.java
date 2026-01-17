@@ -12,9 +12,6 @@ import java.sql.SQLException;
 
 /**
  * Преобразует {@link ResultSet} в объект.
- *
- * @author DenaryDev
- * @since 2:17 17.01.2026
  */
 @FunctionalInterface
 public interface ResultSetMapper<T> {

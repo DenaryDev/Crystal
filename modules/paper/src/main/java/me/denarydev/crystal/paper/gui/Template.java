@@ -22,11 +22,8 @@ import java.util.Map;
 
 /**
  * Абстрактный класс шаблона.
- *
+ * <p>
  * Для создания шаблонов используйте {@link SimpleTemplate#builder()} и {@link MatrixTemplate#builder()}
- *
- * @author DenaryDev
- * @since 16:04 25.11.2025
  */
 public sealed abstract class Template permits SimpleTemplate, MatrixTemplate {
 

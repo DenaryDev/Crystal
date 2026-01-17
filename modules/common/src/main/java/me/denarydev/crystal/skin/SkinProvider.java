@@ -13,10 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 import java.util.UUID;
 
-/**
- * @author DenaryDev
- * @since 20:04 13.08.2025
- */
 public abstract class SkinProvider {
 
     private static SkinProvider current;

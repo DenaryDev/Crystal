@@ -21,9 +21,6 @@ import java.util.Arrays;
 
 /**
  * Утилитный класс для создания объектов запросов.
- *
- * @author DenaryDev
- * @since 2:17 17.01.2026
  */
 public final class QueryBuilder {
 

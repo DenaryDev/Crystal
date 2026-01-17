@@ -21,9 +21,6 @@ import java.util.List;
 /**
  * Позволяет выполнять запрос с несколькими списками параметров в одном пакете,
  * используя метод {@link PreparedStatement#executeBatch()}.
- *
- * @author DenaryDev
- * @since 2:17 17.01.2026
  */
 public final class BatchBuilder {
 

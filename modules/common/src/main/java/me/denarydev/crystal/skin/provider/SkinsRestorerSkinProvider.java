@@ -18,10 +18,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 import java.util.UUID;
 
-/**
- * @author DenaryDev
- * @since 20:03 13.08.2025
- */
 @ApiStatus.Internal
 public final class SkinsRestorerSkinProvider extends SkinProvider {
 

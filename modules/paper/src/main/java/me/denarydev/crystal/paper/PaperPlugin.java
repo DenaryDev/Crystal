@@ -15,10 +15,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
 
-/**
- * @author DenaryDev
- * @since 18:09 17.05.2025
- */
 @ApiStatus.Internal
 public final class PaperPlugin extends JavaPlugin {
 

@@ -14,10 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import javax.sql.DataSource;
 import java.util.Optional;
 
-/**
- * @author DenaryDev
- * @since 1:27 28.10.2025
- */
 public abstract class PoolManager {
 
     private static PoolManager impl;

@@ -9,9 +9,6 @@ package me.denarydev.crystal.database.query;
 
 /**
  * Перечисление поддерживаемых диалектов SQL.
- *
- * @author DenaryDev
- * @since 4:35 17.01.2026
  */
 public enum Dialect {
     /**

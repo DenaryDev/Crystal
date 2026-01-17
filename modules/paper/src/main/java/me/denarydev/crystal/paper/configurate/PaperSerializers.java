@@ -7,6 +7,7 @@
  */
 package me.denarydev.crystal.paper.configurate;
 
+import io.sapphiremc.lib.configurate.serialize.TypeSerializerCollection;
 import me.denarydev.crystal.paper.configurate.serializers.ComponentSerializer;
 import me.denarydev.crystal.paper.configurate.serializers.ItemStackSerializer;
 import me.denarydev.crystal.paper.configurate.serializers.LocationSerializer;
@@ -14,7 +15,6 @@ import me.denarydev.crystal.paper.configurate.serializers.MaterialSerializer;
 import me.denarydev.crystal.paper.configurate.serializers.NamespacedKeySerializer;
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
-import io.sapphiremc.lib.configurate.serialize.TypeSerializerCollection;
 
 /**
  * Набор кастомных сериализаторов для некоторых объектов из ядра Paper.

@@ -24,10 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author DenaryDev
- * @since 16:48 23.11.2023
- */
 public abstract sealed class HikariConnectionPool extends ConnectionPool permits MySqlConnectionPool, MariaDBConnectionPool, PostgresConnectionPool {
 
     private final String poolPrefix;

@@ -10,10 +10,6 @@ package me.denarydev.crystal.error;
 import me.denarydev.crystal.random.StringGenerator;
 import org.slf4j.Logger;
 
-/**
- * @author DenaryDev
- * @since 3:27 10.01.2026
- */
 public final class ErrorLogger {
 
     /**

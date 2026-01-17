@@ -1,7 +1,3 @@
-/**
- * @author DenaryDev
- * @since 20:00 17.05.2025
- */
 module crystal.paper {
     requires org.bukkit;
     requires org.jetbrains.annotations;

@@ -7,9 +7,5 @@
  */
 package me.denarydev.crystal.skin;
 
-/**
- * @author DenaryDev
- * @since 3:23 13.08.2025
- */
 public record SkinProperty(String value, String signature) {
 }

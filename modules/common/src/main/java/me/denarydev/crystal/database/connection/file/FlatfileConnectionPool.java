@@ -14,10 +14,6 @@ import javax.sql.DataSource;
 import java.nio.file.Path;
 import java.sql.SQLException;
 
-/**
- * @author DenaryDev
- * @since 16:40 23.11.2023
- */
 public sealed abstract class FlatfileConnectionPool extends ConnectionPool permits H2ConnectionPool, SQLiteConnectionPool {
 
     protected final Path file;

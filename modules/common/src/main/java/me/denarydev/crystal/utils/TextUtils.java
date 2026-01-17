@@ -16,9 +16,6 @@ import java.util.List;
 
 /**
  * Методы для работы со строками.
- *
- * @author DenaryDev
- * @since 13:47 25.11.2023
  */
 public final class TextUtils {
 
@@ -58,7 +55,7 @@ public final class TextUtils {
     /**
      * Переносит слишком длинный текст по словам с учётом указанной длинны строки.
      *
-     * @param text          исходный текст
+     * @param text      исходный текст
      * @param maxLength максимальная длина строки в символах
      * @return список строк
      */

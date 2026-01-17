@@ -13,10 +13,6 @@ import ru.prostocraft.core.Async;
 
 import java.nio.file.Path;
 
-/**
- * @author DenaryDev
- * @since 19:03 23.11.2025
- */
 public final class CrystalCore extends Crystal {
 
     private final CorePlugin plugin;

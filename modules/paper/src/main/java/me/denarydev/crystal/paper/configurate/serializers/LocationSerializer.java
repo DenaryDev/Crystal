@@ -7,15 +7,15 @@
  */
 package me.denarydev.crystal.paper.configurate.serializers;
 
+import io.sapphiremc.lib.configurate.ConfigurationNode;
+import io.sapphiremc.lib.configurate.serialize.SerializationException;
+import io.sapphiremc.lib.configurate.serialize.TypeSerializer;
 import me.denarydev.crystal.paper.utils.LocationUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import io.sapphiremc.lib.configurate.ConfigurationNode;
-import io.sapphiremc.lib.configurate.serialize.SerializationException;
-import io.sapphiremc.lib.configurate.serialize.TypeSerializer;
 
 import java.lang.reflect.Type;
 

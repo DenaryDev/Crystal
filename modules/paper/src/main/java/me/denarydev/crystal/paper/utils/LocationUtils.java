@@ -15,9 +15,6 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Утилиты для работы с местоположением игрока.
- *
- * @author DenaryDev
- * @since 13:56 25.11.2023
  */
 public final class LocationUtils {
 

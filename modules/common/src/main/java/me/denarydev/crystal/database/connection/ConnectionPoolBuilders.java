@@ -13,10 +13,6 @@ import me.denarydev.crystal.database.connection.hikari.MariaDBConnectionPool;
 import me.denarydev.crystal.database.connection.hikari.MySqlConnectionPool;
 import me.denarydev.crystal.database.connection.hikari.PostgresConnectionPool;
 
-/**
- * @author DenaryDev
- * @since 3:29 18.05.2025
- */
 public final class ConnectionPoolBuilders {
 
     /**

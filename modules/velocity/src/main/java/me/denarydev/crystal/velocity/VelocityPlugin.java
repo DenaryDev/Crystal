@@ -18,15 +18,12 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import me.denarydev.crystal.Crystal;
 import me.denarydev.crystal.skin.SkinProvider;
 import me.denarydev.crystal.skin.provider.SkinsRestorerSkinProvider;
+import me.denarydev.crystal.velocity.skin.VelocitySkinProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 
 import java.nio.file.Path;
 
-/**
- * @author DenaryDev
- * @since 18:13 17.05.2025
- */
 @Plugin(
     id = "crystal",
     name = "Crystal",
@@ -62,6 +59,8 @@ public final class VelocityPlugin extends Crystal {
 
         if (proxy.getPluginManager().isLoaded("skinsrestorer")) {
             SkinProvider.set(new SkinsRestorerSkinProvider());
+        } else {
+            SkinProvider.set(new VelocitySkinProvider(proxy));
         }
     }
 

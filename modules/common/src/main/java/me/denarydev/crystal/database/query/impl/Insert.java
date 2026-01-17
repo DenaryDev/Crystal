@@ -25,9 +25,6 @@ import java.util.Set;
 
 /**
  * Запрос <code>INSERT</code>.
- *
- * @author DenaryDev
- * @since 2:17 17.01.2026
  */
 public final class Insert extends AbstractQuery {
 

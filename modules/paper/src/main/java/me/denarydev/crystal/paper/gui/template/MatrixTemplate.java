@@ -21,10 +21,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author DenaryDev
- * @since 16:06 25.11.2025
- */
 @ApiStatus.Experimental
 public final class MatrixTemplate extends Template {
 

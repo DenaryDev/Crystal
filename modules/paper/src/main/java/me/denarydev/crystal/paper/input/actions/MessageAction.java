@@ -9,9 +9,6 @@ package me.denarydev.crystal.paper.input.actions;
 
 /**
  * Действие при получении ответа на запрос.
- *
- * @author DenaryDev
- * @since 4:21 27.11.2025
  */
 @FunctionalInterface
 public interface MessageAction {

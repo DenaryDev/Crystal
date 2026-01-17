@@ -15,10 +15,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.function.Function;
 
-/**
- * @author DenaryDev
- * @since 16:46 23.11.2023
- */
 public final class SQLiteConnectionPool extends FlatfileConnectionPool {
 
     SQLiteConnectionPool(Path file) {

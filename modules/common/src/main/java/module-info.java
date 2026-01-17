@@ -1,7 +1,3 @@
-/**
- * @author DenaryDev
- * @since 19:58 17.05.2025
- */
 module crystal.common {
     requires org.jetbrains.annotations;
     requires io.sapphiremc.lib.configurate;

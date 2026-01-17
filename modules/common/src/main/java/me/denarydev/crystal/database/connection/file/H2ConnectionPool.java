@@ -14,10 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.file.Path;
 import java.util.function.Function;
 
-/**
- * @author DenaryDev
- * @since 16:46 23.11.2023
- */
 public final class H2ConnectionPool extends FlatfileConnectionPool {
 
     H2ConnectionPool(Path file) {

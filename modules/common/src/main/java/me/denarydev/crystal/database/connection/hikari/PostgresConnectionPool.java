@@ -13,10 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 import java.util.function.Function;
 
-/**
- * @author DenaryDev
- * @since 0:50 24.11.2023
- */
 public final class PostgresConnectionPool extends HikariConnectionPool {
 
     public PostgresConnectionPool(String poolPrefix, String address, Integer port, String database, String username, String password,

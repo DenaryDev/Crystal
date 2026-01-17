@@ -17,9 +17,6 @@ import java.util.List;
 
 /**
  * Methods for getting schemas from .sql files
- *
- * @author DenaryDev
- * @since 13:33 23.12.2023
  */
 public final class SchemaReader {
 

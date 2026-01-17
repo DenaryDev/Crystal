@@ -14,10 +14,6 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.nio.file.Path;
 
-/**
- * @author DenaryDev
- * @since 1:44 28.10.2025
- */
 @ApiStatus.Internal
 @ConfigSerializable
 public final class CrystalConfig {

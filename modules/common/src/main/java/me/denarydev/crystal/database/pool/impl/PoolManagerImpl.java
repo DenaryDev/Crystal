@@ -25,10 +25,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-/**
- * @author DenaryDev
- * @since 19:34 27.10.2025
- */
 @ApiStatus.Internal
 public final class PoolManagerImpl extends PoolManager {
 

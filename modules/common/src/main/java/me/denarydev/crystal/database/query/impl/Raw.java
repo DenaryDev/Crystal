@@ -15,9 +15,6 @@ import java.util.List;
 
 /**
  * Необработанный (raw) запрос с произвольным SQL-кодом.
- *
- * @author DenaryDev
- * @since 2:17 17.01.2026
  */
 public final class Raw extends AbstractQuery {
 

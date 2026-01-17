@@ -18,9 +18,6 @@ import java.util.List;
 
 /**
  * Представляет SQL-запрос с предложением <code>WHERE</code>.
- *
- * @author DenaryDev
- * @since 2:17 17.01.2026
  */
 public abstract class ConditionalQuery<T extends ConditionalQuery<T>> extends AbstractQuery {
 

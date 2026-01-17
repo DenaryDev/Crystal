@@ -18,9 +18,6 @@ import java.util.List;
 
 /**
  * Запрос <code>DELETE</code>.
- *
- * @author DenaryDev
- * @since 2:17 17.01.2026
  */
 public final class Delete extends ConditionalQuery<Delete> {
 

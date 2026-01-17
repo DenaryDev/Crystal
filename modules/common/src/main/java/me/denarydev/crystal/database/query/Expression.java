@@ -11,9 +11,6 @@ import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Внутренний класс, не используйте напрямую.
- *
- * @author DenaryDev
- * @since 2:17 17.01.2026
  */
 @ApiStatus.Internal
 public record Expression(String expr, Object[] params) {

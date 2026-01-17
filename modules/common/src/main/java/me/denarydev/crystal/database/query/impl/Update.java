@@ -23,9 +23,6 @@ import java.util.Map;
 
 /**
  * Запрос <code>UPDATE</code>.
- *
- * @author DenaryDev
- * @since 2:17 17.01.2026
  */
 public final class Update extends ConditionalQuery<Update> {
 

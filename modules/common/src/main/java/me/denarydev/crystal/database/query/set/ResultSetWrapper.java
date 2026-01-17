@@ -20,8 +20,6 @@ import java.util.Optional;
  * При закрытии обертки будет закрыт и лежащий в основе ResultSet.
  *
  * @param set Объект ResultSet.
- * @author DenaryDev
- * @since 2:17 17.01.2026
  */
 public record ResultSetWrapper(ResultSet set) implements AutoCloseable {
 

@@ -14,10 +14,6 @@ import org.slf4j.Logger;
 
 import java.nio.file.Path;
 
-/**
- * @author DenaryDev
- * @since 3:46 28.10.2025
- */
 @ApiStatus.Internal
 public final class CrystalPaper extends Crystal {
 

@@ -20,10 +20,6 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
-/**
- * @author DenaryDev
- * @since 1:40 28.10.2025
- */
 @ApiStatus.Internal
 @ConfigSerializable
 public final class PoolsConfig {

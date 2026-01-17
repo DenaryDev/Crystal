@@ -20,9 +20,6 @@ import java.util.List;
 
 /**
  * Запрос <code>SELECT</code>.
- *
- * @author DenaryDev
- * @since 2:17 17.01.2026
  */
 public final class Select extends ConditionalQuery<Select> {
 

@@ -23,10 +23,6 @@ import org.mockbukkit.mockbukkit.ServerMock;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-/**
- * @author DenaryDev
- * @since 1:10 02.11.2023
- */
 public class SerializersTest {
 
     private ServerMock server;

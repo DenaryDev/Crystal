@@ -21,9 +21,6 @@ import java.util.Locale;
 
 /**
  * Запрос <code>CREATE TABLE</code>.
- *
- * @author DenaryDev
- * @since 2:17 17.01.2026
  */
 public final class CreateTable extends AbstractQuery {
 

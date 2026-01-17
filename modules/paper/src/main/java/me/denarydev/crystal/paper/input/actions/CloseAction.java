@@ -11,9 +11,6 @@ import me.denarydev.crystal.paper.input.CloseReason;
 
 /**
  * Действие при закрытии запроса.
- *
- * @author DenaryDev
- * @since 4:23 27.11.2025
  */
 @FunctionalInterface
 public interface CloseAction {

@@ -10,10 +10,6 @@ package me.denarydev.crystal.core;
 import org.jetbrains.annotations.ApiStatus;
 import ru.prostocraft.core.api.plugin.Plugin;
 
-/**
- * @author DenaryDev
- * @since 19:01 23.11.2025
- */
 @ApiStatus.Internal
 public final class CorePlugin extends Plugin {
 

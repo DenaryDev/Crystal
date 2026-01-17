@@ -17,10 +17,6 @@ import org.slf4j.Logger;
 
 import java.nio.file.Path;
 
-/**
- * @author DenaryDev
- * @since 19:39 27.10.2025
- */
 @ApiStatus.Internal
 public abstract class Crystal {
 

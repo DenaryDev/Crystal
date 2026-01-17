@@ -12,9 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Внутренний класс, не используйте напрямую.
- *
- * @author DenaryDev
- * @since 2:17 17.01.2026
  */
 @ApiStatus.Internal
 public final class SQLUtil {

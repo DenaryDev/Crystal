@@ -19,10 +19,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
-/**
- * @author DenaryDev
- * @since 21:58 10.01.2026
- */
 @ApiStatus.Internal
 public final class PaperSkinProvider extends SkinProvider {
 

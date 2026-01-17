@@ -19,10 +19,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-/**
- * @author DenaryDev
- * @since 22:14 10.01.2026
- */
 @ApiStatus.Internal
 public final class VelocitySkinProvider extends SkinProvider {
 

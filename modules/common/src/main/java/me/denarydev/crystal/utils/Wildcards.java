@@ -11,17 +11,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.regex.Pattern;
 
-/**
- * @author DenaryDev
- * @since 18:24 01.01.2026
- */
 public final class Wildcards {
 
     /**
      * Проверяет строку на соответствие указанному "дикому" шаблону
      *
      * @param wildcard шаблон
-     * @param string строка
+     * @param string   строка
      * @return true, если строка соответствует шаблону, в ином случае false
      */
     public static boolean matches(@NotNull String wildcard, @NotNull String string) {

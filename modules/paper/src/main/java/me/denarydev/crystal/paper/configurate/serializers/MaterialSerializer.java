@@ -7,19 +7,15 @@
  */
 package me.denarydev.crystal.paper.configurate.serializers;
 
+import io.sapphiremc.lib.configurate.serialize.ScalarSerializer;
+import io.sapphiremc.lib.configurate.serialize.SerializationException;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import io.sapphiremc.lib.configurate.serialize.ScalarSerializer;
-import io.sapphiremc.lib.configurate.serialize.SerializationException;
 
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
 
-/**
- * @author DenaryDev
- * @since 14:31 28.04.2024
- */
 public final class MaterialSerializer extends ScalarSerializer<Material> {
 
     public MaterialSerializer() {
