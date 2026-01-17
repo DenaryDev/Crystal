@@ -7,6 +7,8 @@
  */
 package me.denarydev.crystal.database;
 
+import me.denarydev.crystal.database.query.Dialect;
+
 public enum DatabaseType {
     SQLITE(false),
     H2(false),
@@ -25,5 +27,18 @@ public enum DatabaseType {
      */
     public boolean remote() {
         return remote;
+    }
+
+    /**
+     * Возвращает диалект для данного типа базы данных.
+     *
+     * @return диалект базы данных
+     */
+    public Dialect dialect() {
+        return switch (this) {
+            case SQLITE -> Dialect.SQLITE;
+            case POSTGRESQL -> Dialect.POSTGRES;
+            default -> Dialect.DEFAULT;
+        };
     }
 }

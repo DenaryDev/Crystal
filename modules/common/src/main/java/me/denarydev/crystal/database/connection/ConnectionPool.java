@@ -11,6 +11,8 @@ import me.denarydev.crystal.Crystal;
 import me.denarydev.crystal.database.DatabaseType;
 import me.denarydev.crystal.database.connection.file.FlatfileConnectionPool;
 import me.denarydev.crystal.database.connection.hikari.HikariConnectionPool;
+import me.denarydev.crystal.database.query.QueryBuilder;
+import me.denarydev.crystal.database.query.batch.BatchBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -41,6 +43,26 @@ public sealed abstract class ConnectionPool permits FlatfileConnectionPool, Hika
      * Закрывает пул соединений с БД.
      */
     public abstract void shutdown();
+
+    /**
+     * Создает новый создатель запросов, использующий данный пул соединений.
+     *
+     * @return Экземпляр {@link QueryBuilder} для формирования SQL-запросов.
+     * @see me.denarydev.crystal.database.query.impl
+     */
+    public final QueryBuilder query() {
+        return QueryBuilder.of(this);
+    }
+
+    /**
+     * Создает новый построитель пакетных запросов (batch), использующий данный пул соединений.
+     * Позволяет эффективно выполнять однотипные запросы с разными наборами параметров за один раз.
+     *
+     * @return Экземпляр {@link BatchBuilder} для формирования пакета SQL-запросов.
+     */
+    public final BatchBuilder batch() {
+        return BatchBuilder.of(this);
+    }
 
     /**
      * Возвращает источник соединений с БД или выкидывает исключение, если он не инициализирован.
