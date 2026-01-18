@@ -19,14 +19,16 @@ module crystal.common {
     exports me.denarydev.crystal.database.connection;
     exports me.denarydev.crystal.database.connection.file;
     exports me.denarydev.crystal.database.connection.hikari;
+    exports me.denarydev.crystal.database.pool;
     exports me.denarydev.crystal.database.query;
     exports me.denarydev.crystal.database.query.batch;
     exports me.denarydev.crystal.database.query.impl;
     exports me.denarydev.crystal.database.query.set;
-    exports me.denarydev.crystal.database.pool;
+    exports me.denarydev.crystal.database.schema;
     exports me.denarydev.crystal.database.util;
     exports me.denarydev.crystal.skin;
     exports me.denarydev.crystal.skin.provider;
     exports me.denarydev.crystal.utils;
     exports me.denarydev.crystal;
+    exports me.denarydev.crystal.utils.time;
 }

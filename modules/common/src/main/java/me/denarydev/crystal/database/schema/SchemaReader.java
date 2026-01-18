@@ -5,7 +5,7 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package me.denarydev.crystal.database.util;
+package me.denarydev.crystal.database.schema;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,13 +16,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Methods for getting schemas from .sql files
+ * Методы для получения схем базы данных из .sql файлов.
  */
 public final class SchemaReader {
 
-    private SchemaReader() {
-    }
-
+    /**
+     * Читает SQL-запросы из входного потока, очищая их от комментариев.
+     *
+     * @param is входной поток данных .sql файла
+     * @return список SQL-инструкций без завершающей точки с запятой
+     * @throws IOException если произошла ошибка при чтении потока
+     */
     public static List<String> getStatements(final InputStream is) throws IOException {
         final List<String> queries = new LinkedList<>();
 

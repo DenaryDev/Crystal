@@ -65,7 +65,7 @@ public final class NumberUtils {
      * @param string строка для проверки
      * @return true, если является, в ином случае false
      */
-    public static boolean integer(@NotNull final String string) {
+    public static boolean isInteger(@NotNull final String string) {
         try {
             Integer.parseInt(string);
 
@@ -83,12 +83,12 @@ public final class NumberUtils {
      * @param string строка для проверки
      * @return true, если является, в ином случае false
      */
-    public static boolean numeric(@NotNull final String string) {
+    public static boolean isNumeric(@NotNull final String string) {
         return string.matches(NUMBER_REGEX);
     }
 
     /**
-     * Получает из указанного словаря значение.
+     * Получает из указанного словаря случайное значение.
      * <p>
      * Ключ в словаре - шанс выпадения значения,
      * которое к нему привязано.
