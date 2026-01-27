@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -36,6 +37,21 @@ public final class NameAndLore {
     )
     public static @NotNull NameAndLore of(@NotNull String name) {
         return new NameAndLore(name, null);
+    }
+
+    /**
+     * Создаёт связку названия и описания предмета без указания описания.
+     *
+     * @param name название предмета
+     * @param lore описание предмета
+     * @return новый экземпляр этого класса, но без описания
+     */
+    @Contract(
+        value = "_, _ -> new",
+        pure = true
+    )
+    public static @NotNull NameAndLore of(@NotNull String name, @NotNull String... lore) {
+        return new NameAndLore(name, Arrays.asList(lore));
     }
 
     /**
@@ -83,16 +99,17 @@ public final class NameAndLore {
      * @return форматированное название
      */
     @NotNull
-    public Component name(TagResolver... placeholders) {
+    public Component name(@NotNull TagResolver... placeholders) {
         return MiniMessage.miniMessage().deserialize(name, placeholders);
     }
 
     /**
      * Возвращает описание предмета в виде списка строк.
      *
-     * @return описание предмета
+     * @return описание предмета или null, если описание не указано
      * @see NameAndLore#lore(TagResolver...)
      */
+    @Nullable
     public List<String> rawLore() {
         return lore;
     }
@@ -102,10 +119,10 @@ public final class NameAndLore {
      * с применением к нему форматирования MiniMessage.
      *
      * @param tags заполнители
-     * @return форматированное описание
+     * @return форматированное описание или null, если описание не указано
      */
     @Nullable
-    public List<Component> lore(TagResolver... tags) {
+    public List<Component> lore(@NotNull TagResolver... tags) {
         if (lore == null) return null;
 
         return lore.stream()
@@ -121,7 +138,7 @@ public final class NameAndLore {
      * @return Этот же предмет, но с изменённым именем и описанием
      */
     @NotNull
-    public ItemStack apply(@NotNull ItemStack item, TagResolver... placeholders) {
+    public ItemStack apply(@NotNull ItemStack item, @NotNull TagResolver... placeholders) {
         item.editMeta(meta -> {
             meta.displayName(MiniMessage.miniMessage().deserialize(name, placeholders));
             if (lore != null) {
