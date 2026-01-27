@@ -28,9 +28,9 @@ public final class PaperPlugin extends JavaPlugin {
         manager.registerEvents(new InventoryListener(), this);
 
         if (manager.isPluginEnabled("SkinsRestorer")) {
-            SkinProvider.set(new SkinsRestorerSkinProvider());
+            SkinProvider.use(new SkinsRestorerSkinProvider());
         } else {
-            SkinProvider.set(new PaperSkinProvider());
+            SkinProvider.use(new PaperSkinProvider());
         }
     }
 

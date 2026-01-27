@@ -29,22 +29,22 @@ public final class VelocitySkinProvider extends SkinProvider {
     }
 
     @Override
-    public Optional<SkinProperty> getPlayerSkin(@NotNull UUID uuid) {
+    public Optional<SkinProperty> playerSkin(@NotNull UUID uuid) {
         final Optional<Player> opt = proxy.getPlayer(uuid);
         if (opt.isEmpty()) return Optional.empty();
 
-        return getPlayerSkin(opt.get());
+        return playerSkin(opt.get());
     }
 
     @Override
-    public Optional<SkinProperty> getPlayerSkin(@NotNull String name) {
+    public Optional<SkinProperty> playerSkin(@NotNull String name) {
         final Optional<Player> opt = proxy.getPlayer(name);
         if (opt.isEmpty()) return Optional.empty();
 
-        return getPlayerSkin(opt.get());
+        return playerSkin(opt.get());
     }
 
-    private Optional<SkinProperty> getPlayerSkin(@NotNull Player player) {
+    private Optional<SkinProperty> playerSkin(@NotNull Player player) {
         final List<GameProfile.Property> properties = player.getGameProfile().getProperties();
         for (GameProfile.Property property : properties) {
             if (property.getName().equals("textures")) {

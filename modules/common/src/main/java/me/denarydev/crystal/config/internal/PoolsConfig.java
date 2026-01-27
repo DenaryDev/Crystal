@@ -24,28 +24,28 @@ import java.util.Map;
 @ConfigSerializable
 public final class PoolsConfig {
     public static final String HEADER = """
-                                        +--------------------------------+
-                                        |             Crystal            |
-                                        |          by DenaryDev          |
-                                        +--------------------------------+
-                                        |- В этом конфиге настраиваются пулы подключений к БД.
-                                        |- Все параметры, у которых указано значение по умолчанию, можно удалить из
-                                        |  конфига, и тогда плагин будет использовать их значения по умолчанию.
-                                        """;
+        +--------------------------------+
+        |             Crystal            |
+        |          by DenaryDev          |
+        +--------------------------------+
+        |- В этом конфиге настраиваются пулы подключений к БД.
+        |- Все параметры, у которых указано значение по умолчанию, можно удалить из
+        |  конфига, и тогда плагин будет использовать их значения по умолчанию.
+        """;
 
     @Comment("Если true, плагин сразу после старта подключится ко всем БД, не ожидая, пока кто-то их попросит.")
     private boolean eagerConnect = false;
-    @Comment(
-        """
+
+    @Comment("""
         Настройки, базовые для любого пула.
-        Если в пуле что-то не определено, это будет взято отсюда."""
-    )
+        Если в пуле что-то не определено, это будет взято отсюда.
+        """)
     private PoolConfig defaultSettings = new PoolConfig(6, 6, 1800000, 0, 5000);
-    @Comment(
-        """
+
+    @Comment("""
         Пулы соединений.
-        Основной ID пула - название секции с ним."""
-    )
+        Основной ID пула - название секции с ним.
+        """)
     private Map<String, PoolConfig> pools = Map.of(
         "local", new PoolConfig(Path.of("storage.db")),
         "main", new PoolConfig("localhost", 3306, "minecraft", "root", "", List.of("games"))
@@ -116,20 +116,18 @@ public final class PoolsConfig {
         @Comment("Доступные типы: H2, SQLITE, MYSQL, MARIADB, POSTGRESQL")
         private DatabaseType type;
 
-        @Comment(
-            """
+        @Comment("""
             Файл, в котором будет храниться база данных.
-            Для локальных БД указывается ТОЛЬКО этот параметр."""
-        )
+            Для локальных БД указывается ТОЛЬКО этот параметр.
+            """)
         private Path file;
 
         @Comment("IP или адрес базы данных без порта.")
         private String address;
-        @Comment(
-            """
+        @Comment("""
             Порт для подключения.
-            По умолчанию: 3306 для MySQL и MariaDB, 5432 для PostgreSQL."""
-        )
+            По умолчанию: 3306 для MySQL и MariaDB, 5432 для PostgreSQL.
+            """)
         private Integer port;
         @Comment("Название базы данных.")
         private String database;
@@ -138,37 +136,32 @@ public final class PoolsConfig {
         @Comment("Пароль.")
         private String password;
 
-        @Comment(
-            """
+        @Comment("""
             Максимальное количество одновременных подключений.
             Должно быть столько же, сколько у вас ядер.
-            По умолчанию: 6."""
-        )
+            По умолчанию: 6.
+            """)
         private Integer maxPoolSize;
-        @Comment(
-            """
+        @Comment("""
             Количество соединений, которые всегда должны быть открыты.
             Чтобы избежать проблем, установите для этого параметра то же значение, что и для maxPoolSize.
-            По умолчанию: 6."""
-        )
+            По умолчанию: 6.
+            """)
         private Integer minimumIdle;
-        @Comment(
-            """
+        @Comment("""
             Количество миллисекунд, в течение которых одно соединение должно оставаться открытым.
-            По умолчанию: 1800000 (30 минут)."""
-        )
+            По умолчанию: 1800000 (30 минут).
+            """)
         private Integer maxLifetime;
-        @Comment(
-            """
+        @Comment("""
             Установка интервала, в течение которого нужно «пинговать» базу данных. Установите 0, чтобы отключить.
-            По умолчанию: 0."""
-        )
+            По умолчанию: 0.
+            """)
         private Integer keepAliveTime;
-        @Comment(
-            """
+        @Comment("""
             Количество секунд, в течение которых мы ждем ответа от базы данных, прежде чем истечет время ожидания.
-            По умолчанию: 5000."""
-        )
+            По умолчанию: 5000.
+            """)
         private Integer connectionTimeout;
         @Comment("Дополнительные свойства соединения.")
         private Map<String, String> properties;
@@ -176,7 +169,9 @@ public final class PoolsConfig {
         @Comment("Дополнительные ID этого пула, по которым плагины могут получать его.")
         private List<String> aliases;
 
+        @SuppressWarnings("unused")
         private PoolConfig() {
+            // Пустой конструктор для работы ObjectMapping
         }
 
         private PoolConfig(Path file) {

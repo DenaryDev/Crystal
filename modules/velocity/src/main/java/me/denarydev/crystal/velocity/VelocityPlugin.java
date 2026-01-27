@@ -58,9 +58,9 @@ public final class VelocityPlugin extends Crystal {
         enable();
 
         if (proxy.getPluginManager().isLoaded("skinsrestorer")) {
-            SkinProvider.set(new SkinsRestorerSkinProvider());
+            SkinProvider.use(new SkinsRestorerSkinProvider());
         } else {
-            SkinProvider.set(new VelocitySkinProvider(proxy));
+            SkinProvider.use(new VelocitySkinProvider(proxy));
         }
     }
 

@@ -32,7 +32,7 @@ public abstract class SkinProvider {
      * @return Провайдер скинов
      * @throws IllegalStateException если провайдер не инициализирован.
      */
-    public static SkinProvider get() {
+    public static SkinProvider current() {
         if (current == null) {
             throw new IllegalStateException("SkinProvider has not been initialized");
         }
@@ -47,7 +47,7 @@ public abstract class SkinProvider {
      *
      * @param provider провайдер скинов
      */
-    public static void set(@NotNull SkinProvider provider) {
+    public static void use(@NotNull SkinProvider provider) {
         current = provider;
 
         Crystal.instance().logger().info("Using {} as default skin provider", current.getClass().getSimpleName());
@@ -59,7 +59,7 @@ public abstract class SkinProvider {
      * @param uuid уникальный ID игрока
      * @return Optional со скином, или пустой Optional, если скин не найден
      */
-    public abstract Optional<SkinProperty> getPlayerSkin(@NotNull UUID uuid);
+    public abstract Optional<SkinProperty> playerSkin(@NotNull UUID uuid);
 
     /**
      * Получает скин игрока по его никнейму.
@@ -67,5 +67,5 @@ public abstract class SkinProvider {
      * @param name никнейм игрока
      * @return Optional со скином, или пустой Optional, если скин не найден
      */
-    public abstract Optional<SkinProperty> getPlayerSkin(@NotNull String name);
+    public abstract Optional<SkinProperty> playerSkin(@NotNull String name);
 }

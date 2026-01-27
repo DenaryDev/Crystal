@@ -23,22 +23,22 @@ import java.util.UUID;
 public final class PaperSkinProvider extends SkinProvider {
 
     @Override
-    public @NotNull Optional<SkinProperty> getPlayerSkin(@NotNull UUID uuid) {
+    public @NotNull Optional<SkinProperty> playerSkin(@NotNull UUID uuid) {
         final Player player = Bukkit.getPlayer(uuid);
         if (player == null) return Optional.empty();
 
-        return getPlayerSKin(player);
+        return playerSKin(player);
     }
 
     @Override
-    public Optional<SkinProperty> getPlayerSkin(@NotNull String name) {
+    public Optional<SkinProperty> playerSkin(@NotNull String name) {
         final Player player = Bukkit.getPlayer(name);
         if (player == null) return Optional.empty();
 
-        return getPlayerSKin(player);
+        return playerSKin(player);
     }
 
-    private Optional<SkinProperty> getPlayerSKin(@NotNull Player player) {
+    private Optional<SkinProperty> playerSKin(@NotNull Player player) {
         final Set<ProfileProperty> properties = player.getPlayerProfile().getProperties();
         for (ProfileProperty property : properties) {
             if (property.getName().equals("textures")) {

@@ -8,7 +8,6 @@
 package me.denarydev.crystal.paper.gui.template;
 
 import com.google.common.base.Preconditions;
-import me.denarydev.crystal.paper.gui.Menu;
 import me.denarydev.crystal.paper.gui.Template;
 import net.kyori.adventure.text.Component;
 import org.bukkit.event.inventory.InventoryType;
@@ -20,15 +19,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Шаблон меню.
+ * Реализация шаблона меню на основе прямого распределения слотов.
  * <p>
- * Для создания шаблона инициализируйте билдер, используя {@link SimpleTemplate#builder()}
+ * Позволяет точно настраивать размер инвентаря, тип контейнера (например, HOPPER или DISPENSER)
+ * и привязывать предметы к конкретным числовым индексам слотов.
  * <p>
- * Шаблоны нужны для того, чтобы можно было хранить
- * параметры меню и не доставать их каждый раз из конфига
- * при отображении меню игроку.
- * <p>
- * При желании можно обойтись без шаблона, обратившись напрямую к {@link Menu#builder()}
+ * Оптимален для создания стандартных сундуков или меню с фиксированной структурой элементов.
  */
 public final class SimpleTemplate extends Template {
 
@@ -36,7 +32,11 @@ public final class SimpleTemplate extends Template {
     private final InventoryType type;
 
     /**
-     * Запускает создатель простого шаблона.
+     * Создаёт новый билдер для настройки простого шаблона.
+     * Позволяет создать меню с заданным типом, разместить предметы в конкретных
+     * слотах и настроить заголовок меню и кулдаун кликов по предметам в нём.
+     *
+     * @return экземпляр {@link SimpleTemplate.Builder}
      */
     public static Builder builder() {
         return new Builder();

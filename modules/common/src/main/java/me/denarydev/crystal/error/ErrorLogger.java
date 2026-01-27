@@ -10,6 +10,13 @@ package me.denarydev.crystal.error;
 import me.denarydev.crystal.random.StringGenerator;
 import org.slf4j.Logger;
 
+/**
+ * Рекомендуется использовать <code>PaperErrorLogger</code> при использовании <code>crystal-paper</code>,
+ * или <code>VelocityErrorLogger</code> при использовании <code>crystal-velocity</code>
+ * <p>
+ * Этот класс будет удалён в недалёком будущем
+ */
+@Deprecated(forRemoval = true)
 public final class ErrorLogger {
 
     /**

@@ -8,15 +8,12 @@
 package me.denarydev.crystal.config.internal;
 
 import io.sapphiremc.lib.configurate.objectmapping.ConfigSerializable;
-import io.sapphiremc.lib.configurate.objectmapping.meta.Comment;
-import me.denarydev.crystal.Crystal;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.nio.file.Path;
-
+@SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 @ApiStatus.Internal
 @ConfigSerializable
-public final class CrystalConfig {
+public final class MessagesConfig {
     public static final String HEADER = """
         +--------------------------------+
         |             Crystal            |
@@ -26,16 +23,22 @@ public final class CrystalConfig {
         |- Если конфиг лежит не в папке плагина, указывайте полный путь к нему!
         """;
 
-    @Comment("Путь к файлу настроек пулов бд.")
-    private Path poolsPath = Crystal.instance().dataFolder().resolve("pools.yml");
-    @Comment("Путь к файлу настроек сообщений.")
-    private Path messagesPath = Crystal.instance().dataFolder().resolve("messages.yml");
+    private Errors errors = new Errors();
 
-    public Path poolsPath() {
-        return poolsPath;
+    public Errors errors() {
+        return errors;
     }
 
-    public Path messagesPath() {
-        return messagesPath;
+    public static final class Errors {
+        private String errorWithCode = "<red>Произошла неизвестная ошибка! Обратитесь к администрации, сообщив код ошибки: <yellow><u><code></u>";
+        private String errorCodeHover = "<gray>Нажми, чтобы скопировать";
+
+        public String errorWithCode() {
+            return errorWithCode;
+        }
+
+        public String errorCodeHover() {
+            return errorCodeHover;
+        }
     }
 }

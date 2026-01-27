@@ -21,6 +21,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Реализация шаблона меню на основе символьной матрицы.
+ * <p>
+ * Позволяет визуально проектировать интерфейс, используя текстовую маску (строки по 9 символов),
+ * где каждый символ сопоставляется с определенным предметом.
+ * <p>
+ * Идеально подходит для создания рамок, паттернов и сложных макетов инвентаря.
+ */
 @ApiStatus.Experimental
 public final class MatrixTemplate extends Template {
 
@@ -28,9 +36,10 @@ public final class MatrixTemplate extends Template {
     private final Map<Character, ItemStack> elements;
 
     /**
-     * Запускает создатель шаблона.
+     * Создает новый билдер для настройки матричного шаблона.
+     * Позволяет задавать структуру меню с помощью символьной маски.
      *
-     * @return {@link Builder}
+     * @return экземпляр {@link MatrixTemplate.Builder}
      */
     public static Builder builder() {
         return new Builder();

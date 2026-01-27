@@ -11,6 +11,7 @@ import io.sapphiremc.lib.configurate.ConfigurateException;
 import me.denarydev.crystal.config.ConfigLoaders;
 import me.denarydev.crystal.config.ConfigMapper;
 import me.denarydev.crystal.config.internal.CrystalConfig;
+import me.denarydev.crystal.config.internal.MessagesConfig;
 import me.denarydev.crystal.database.pool.impl.PoolManagerImpl;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ public abstract class Crystal {
     private PoolManagerImpl poolManager;
 
     private CrystalConfig config;
+    private MessagesConfig messages;
 
     public static Crystal instance() {
         return instance;
@@ -35,6 +37,7 @@ public abstract class Crystal {
 
         try {
             this.config = ConfigMapper.load(ConfigLoaders.yaml(dataFolder().resolve("config.yml"), CrystalConfig.HEADER), CrystalConfig.class);
+            this.messages = ConfigMapper.load(ConfigLoaders.yaml(this.config.messagesPath(), MessagesConfig.HEADER), MessagesConfig.class);
 
             poolManager.initialize();
         } catch (ConfigurateException e) {
@@ -48,8 +51,12 @@ public abstract class Crystal {
         }
     }
 
-    public CrystalConfig config() {
+    public final CrystalConfig config() {
         return config;
+    }
+
+    public final MessagesConfig messages() {
+        return messages;
     }
 
     public abstract Logger logger();

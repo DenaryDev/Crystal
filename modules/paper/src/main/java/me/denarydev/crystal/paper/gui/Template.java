@@ -21,9 +21,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 /**
- * Абстрактный класс шаблона.
+ * Базовый класс для шаблонов меню в системе Crystal.
  * <p>
- * Для создания шаблонов используйте {@link SimpleTemplate#builder()} и {@link MatrixTemplate#builder()}
+ * Шаблоны позволяют предварительно настроить структуру и содержимое меню,
+ * что удобно для кеширования параметров и упрощения кода отображения.
+ * <p>
+ * <b>Примечание:</b> Использование шаблонов не является обязательным.
+ * Для динамических или простых меню можно создавать меню напрямую
+ * через {@code Menu.builder()}.
  */
 public sealed abstract class Template permits SimpleTemplate, MatrixTemplate {
 
@@ -32,6 +37,27 @@ public sealed abstract class Template permits SimpleTemplate, MatrixTemplate {
     protected final int size;
     protected final Map<Integer, ItemStack> items;
     protected final long cooldown;
+
+    /**
+     * Создаёт новый билдер для настройки простого шаблона.
+     * Позволяет создать меню с заданным типом, разместить предметы в конкретных
+     * слотах и настроить заголовок меню и кулдаун кликов по предметам в нём.
+     *
+     * @return экземпляр {@link SimpleTemplate.Builder}
+     */
+    public static SimpleTemplate.Builder simpleBuilder() {
+        return SimpleTemplate.builder();
+    }
+
+    /**
+     * Создает новый билдер для настройки матричного шаблона.
+     * Позволяет задавать структуру меню с помощью символьной маски.
+     *
+     * @return экземпляр {@link MatrixTemplate.Builder}
+     */
+    public static MatrixTemplate.Builder matrixBuilder() {
+        return MatrixTemplate.builder();
+    }
 
     protected Template(@Nullable Component title, int size, Map<Integer, ItemStack> items, long cooldown) {
         this.title = title;

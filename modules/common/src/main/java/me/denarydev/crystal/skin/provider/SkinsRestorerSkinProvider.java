@@ -28,12 +28,12 @@ public final class SkinsRestorerSkinProvider extends SkinProvider {
     }
 
     @Override
-    public Optional<SkinProperty> getPlayerSkin(@NotNull UUID uuid) {
+    public Optional<SkinProperty> playerSkin(@NotNull UUID uuid) {
         return getPlayerSkin0(uuid.toString());
     }
 
     @Override
-    public Optional<SkinProperty> getPlayerSkin(@NotNull String name) {
+    public Optional<SkinProperty> playerSkin(@NotNull String name) {
         return getPlayerSkin0(name);
     }
 
