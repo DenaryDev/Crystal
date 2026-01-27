@@ -20,6 +20,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -67,10 +69,12 @@ public final class VelocityErrorReporter implements ErrorReporter<Player> {
         final String errorCode = StringGenerator.generateRandomString(8);
 
         {
-            final String messageWithCode = Objects.requireNonNullElse(logMessage, "Unknown error occurred") +
+            final String messageWithCode = Objects.requireNonNullElse(logMessage, "An exception was thrown") +
                 " (error code: " + errorCode + " )";
 
-            this.logger.error(messageWithCode, params);
+            final List<Object> allParams = new ArrayList<>(List.of(params));
+            allParams.add(error);
+            this.logger.error(messageWithCode, allParams.toArray(new Object[0]));
         }
 
         {
