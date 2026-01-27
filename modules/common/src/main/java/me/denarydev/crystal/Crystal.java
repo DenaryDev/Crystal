@@ -20,16 +20,19 @@ import java.nio.file.Path;
 
 @ApiStatus.Internal
 public abstract class Crystal {
-
     private static Crystal instance;
-
-    private PoolManagerImpl poolManager;
 
     private CrystalConfig config;
     private MessagesConfig messages;
 
+    private PoolManagerImpl poolManager;
+
     public static Crystal instance() {
         return instance;
+    }
+
+    protected Crystal(Platform platform) {
+        Platform.current = platform;
     }
 
     public final void enable() {
@@ -37,7 +40,10 @@ public abstract class Crystal {
 
         try {
             this.config = ConfigMapper.load(ConfigLoaders.yaml(dataFolder().resolve("config.yml"), CrystalConfig.HEADER), CrystalConfig.class);
-            this.messages = ConfigMapper.load(ConfigLoaders.yaml(this.config.messagesPath(), MessagesConfig.HEADER), MessagesConfig.class);
+
+            if (Platform.current() != Platform.CORE) { // На коре сообщения попросту не нужны
+                this.messages = ConfigMapper.load(ConfigLoaders.yaml(config.messagesPath(), MessagesConfig.HEADER), MessagesConfig.class);
+            }
 
             poolManager.initialize();
         } catch (ConfigurateException e) {
@@ -56,6 +62,10 @@ public abstract class Crystal {
     }
 
     public final MessagesConfig messages() {
+        if (Platform.current() == Platform.CORE) {
+            throw new UnsupportedOperationException("Messages are not supported on Core");
+        }
+
         return messages;
     }
 

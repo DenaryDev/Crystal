@@ -17,12 +17,11 @@ import org.jetbrains.annotations.ApiStatus;
 
 @ApiStatus.Internal
 public final class PaperPlugin extends JavaPlugin {
-
-    private final CrystalPaper platform = new CrystalPaper(this);
+    private final CrystalPaper crystal = new CrystalPaper(this);
 
     @Override
     public void onEnable() {
-        platform.enable();
+        crystal.enable();
 
         final PluginManager manager = getServer().getPluginManager();
         manager.registerEvents(new InventoryListener(), this);
@@ -36,6 +35,6 @@ public final class PaperPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        platform.disable();
+        crystal.disable();
     }
 }

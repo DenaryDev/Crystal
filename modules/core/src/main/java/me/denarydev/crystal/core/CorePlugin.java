@@ -12,16 +12,15 @@ import ru.prostocraft.core.api.plugin.Plugin;
 
 @ApiStatus.Internal
 public final class CorePlugin extends Plugin {
-
-    private final CrystalCore platform = new CrystalCore(this);
+    private final CrystalCore crystal = new CrystalCore(this);
 
     @Override
     public void onEnable() {
-        platform.enable();
+        crystal.enable();
     }
 
     @Override
     public void onDisable() {
-        platform.disable();
+        crystal.disable();
     }
 }

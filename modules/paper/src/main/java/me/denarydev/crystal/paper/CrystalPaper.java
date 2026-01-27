@@ -8,6 +8,7 @@
 package me.denarydev.crystal.paper;
 
 import me.denarydev.crystal.Crystal;
+import me.denarydev.crystal.Platform;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
@@ -16,10 +17,10 @@ import java.nio.file.Path;
 
 @ApiStatus.Internal
 public final class CrystalPaper extends Crystal {
-
     private final PaperPlugin plugin;
 
-    public CrystalPaper(PaperPlugin plugin) {
+    CrystalPaper(PaperPlugin plugin) {
+        super(Platform.PAPER);
         this.plugin = plugin;
 
         setInstance(this);

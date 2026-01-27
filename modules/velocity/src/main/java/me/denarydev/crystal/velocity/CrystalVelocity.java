@@ -5,20 +5,21 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package me.denarydev.crystal.core;
+package me.denarydev.crystal.velocity;
 
 import me.denarydev.crystal.Crystal;
 import me.denarydev.crystal.Platform;
+import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
-import ru.prostocraft.core.Async;
 
 import java.nio.file.Path;
 
-public final class CrystalCore extends Crystal {
-    private final CorePlugin plugin;
+@ApiStatus.Internal
+public final class CrystalVelocity extends Crystal {
+    private final VelocityPlugin plugin;
 
-    CrystalCore(CorePlugin plugin) {
-        super(Platform.CORE);
+    CrystalVelocity(VelocityPlugin plugin) {
+        super(Platform.VELOCITY);
         this.plugin = plugin;
 
         setInstance(this);
@@ -26,16 +27,16 @@ public final class CrystalCore extends Crystal {
 
     @Override
     public Logger logger() {
-        return plugin.getSLF4JLogger();
+        return plugin.logger();
     }
 
     @Override
     public Path dataFolder() {
-        return plugin.getDataFolder().toPath();
+        return plugin.dataFolder();
     }
 
     @Override
     public void runAsync(Runnable task) {
-        Async.run(task);
+        plugin.proxy().getScheduler().buildTask(this, task).schedule();
     }
 }

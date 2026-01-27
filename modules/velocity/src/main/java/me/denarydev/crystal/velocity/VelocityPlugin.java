@@ -15,7 +15,6 @@ import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.ProxyServer;
-import me.denarydev.crystal.Crystal;
 import me.denarydev.crystal.skin.SkinProvider;
 import me.denarydev.crystal.skin.provider.SkinsRestorerSkinProvider;
 import me.denarydev.crystal.velocity.skin.VelocitySkinProvider;
@@ -38,7 +37,8 @@ import java.nio.file.Path;
     }
 )
 @ApiStatus.Internal
-public final class VelocityPlugin extends Crystal {
+public final class VelocityPlugin {
+    private final CrystalVelocity crystal = new CrystalVelocity(this);
 
     private final ProxyServer proxy;
     private final Logger logger;
@@ -53,9 +53,7 @@ public final class VelocityPlugin extends Crystal {
 
     @Subscribe
     private void onProxyInitialization(ProxyInitializeEvent event) {
-        setInstance(this);
-
-        enable();
+        crystal.enable();
 
         if (proxy.getPluginManager().isLoaded("skinsrestorer")) {
             SkinProvider.use(new SkinsRestorerSkinProvider());
@@ -66,21 +64,18 @@ public final class VelocityPlugin extends Crystal {
 
     @Subscribe
     private void onProxyShutdown(ProxyShutdownEvent event) {
-        disable();
+        crystal.disable();
     }
 
-    @Override
+    public ProxyServer proxy() {
+        return proxy;
+    }
+
     public Logger logger() {
-        return this.logger;
+        return logger;
     }
 
-    @Override
     public Path dataFolder() {
-        return this.directory;
-    }
-
-    @Override
-    public void runAsync(Runnable task) {
-        proxy.getScheduler().buildTask(this, task).schedule();
+        return directory;
     }
 }
