@@ -6,6 +6,7 @@ module crystal.velocity {
     requires org.slf4j;
     requires net.kyori.adventure;
     requires net.kyori.adventure.text.minimessage;
+    requires net.kyori.examination.api;
 
     exports me.denarydev.crystal.velocity;
     exports me.denarydev.crystal.velocity.error;

@@ -29,6 +29,7 @@ public final class MessagesConfig {
         return errors;
     }
 
+    @ConfigSerializable
     public static final class Errors {
         private String errorWithCode = "<red>Произошла неизвестная ошибка! Обратитесь к администрации, сообщив код ошибки: <yellow><u><code></u>";
         private String errorCodeHover = "<gray>Нажми, чтобы скопировать";

@@ -9,10 +9,10 @@ base {
 }
 
 dependencies {
+    api(project(":crystal-common"))
+
     compileOnly(libs.velocity)
     annotationProcessor(libs.velocity)
-
-    api(project(":crystal-common"))
 }
 
 buildConfig {

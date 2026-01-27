@@ -11,10 +11,10 @@ base {
 }
 
 dependencies {
+    api(project(":crystal-common"))
+
     compileOnly(libs.paper)
     compileOnlyApi(libs.configurate.core)
-
-    api(project(":crystal-common"))
 
     testImplementation(libs.paper)
     testImplementation(libs.mockbukkit)

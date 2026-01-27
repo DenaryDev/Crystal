@@ -7,9 +7,9 @@ base {
 }
 
 dependencies {
-    compileOnly(libs.core)
-
     api(project(":crystal-common"))
+
+    compileOnly(libs.core)
 }
 
 extraJavaModuleInfo {
