@@ -18,9 +18,15 @@ public sealed abstract class FlatfileConnectionPool extends ConnectionPool permi
 
     protected final Path file;
     protected DataSource dataSource;
+    protected volatile boolean initialized;
 
     FlatfileConnectionPool(Path file) {
         this.file = file;
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return initialized;
     }
 
     @Override
@@ -36,7 +42,6 @@ public sealed abstract class FlatfileConnectionPool extends ConnectionPool permi
     public void shutdown() {
     }
 
-    @Deprecated
     @Override
     public void connect(@NotNull ConnectionCallback callback) {
         try {

@@ -31,6 +31,7 @@ public final class H2ConnectionPool extends FlatfileConnectionPool {
         source.setURL("jdbc:h2:" + file.toAbsolutePath());
 
         this.dataSource = source;
+        this.initialized = true;
     }
 
     @Override

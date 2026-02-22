@@ -33,6 +33,7 @@ public final class SQLiteConnectionPool extends FlatfileConnectionPool {
         source.setEncoding(StandardCharsets.UTF_8.name());
 
         this.dataSource = source;
+        this.initialized = true;
     }
 
     @Override

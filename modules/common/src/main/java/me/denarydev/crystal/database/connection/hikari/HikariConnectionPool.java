@@ -44,6 +44,8 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
 
     private HikariDataSource dataSource;
 
+    private volatile boolean initialized = false;
+
     public HikariConnectionPool(String poolPrefix, String address, Integer port, String database, String username, String password,
                                 int maxPoolSize, int minimumIdle, int maxLifetime, int keepaliveTime, int connectionTimeout, Map<String, String> properties) {
         this.poolPrefix = poolPrefix;
@@ -58,6 +60,11 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         this.keepaliveTime = keepaliveTime;
         this.connectionTimeout = connectionTimeout;
         this.properties = Collections.unmodifiableMap(properties);
+    }
+
+    @Override
+    public final boolean isInitialized() {
+        return initialized;
     }
 
     /**
@@ -145,6 +152,8 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         // which makes our driver available in DriverManager. We don't want that, so unregister it after
         // the pool has been setup.
         deregisterDriver(driverClassName());
+
+        initialized = true;
     }
 
     private static void deregisterDriver(String driverClassName) {

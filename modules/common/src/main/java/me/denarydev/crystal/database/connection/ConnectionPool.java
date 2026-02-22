@@ -45,6 +45,13 @@ public sealed abstract class ConnectionPool permits FlatfileConnectionPool, Hika
     public abstract void shutdown();
 
     /**
+     * Проверяет, инициализирован ли этот пул соединений с БД.
+     *
+     * @return true, если пул инициализирован и готов к использованию, в ином случае false
+     */
+    public abstract boolean isInitialized();
+
+    /**
      * Создает новый создатель запросов, использующий данный пул соединений.
      *
      * @return Экземпляр {@link QueryBuilder} для формирования SQL-запросов.
@@ -81,6 +88,10 @@ public sealed abstract class ConnectionPool permits FlatfileConnectionPool, Hika
      */
     @NotNull
     public final Connection connection() throws SQLException {
+        if (!isInitialized()) {
+            throw new SQLException("Unable to get a connection from the pool. (ConnectionPool not initialized)");
+        }
+
         final DataSource dataSource;
         try {
             dataSource = dataSource();
