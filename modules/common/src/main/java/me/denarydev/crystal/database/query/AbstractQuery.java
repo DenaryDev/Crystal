@@ -98,7 +98,7 @@ public abstract class AbstractQuery {
      * @throws SQLException При ошибке SQL.
      */
     public final ResultSetWrapper updateWithKeys(@NotNull Connection connection) throws SQLException {
-        final PreparedStatement statement = prepareStatement(connection);
+        final PreparedStatement statement = prepareStatement(connection, PreparedStatement.RETURN_GENERATED_KEYS);
         statement.closeOnCompletion();
         statement.executeUpdate();
 
