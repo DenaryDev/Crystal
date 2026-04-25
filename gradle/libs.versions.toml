@@ -1,8 +1,8 @@
 [versions]
 # Platforms
-paper = "1.21.10-R0.1-SNAPSHOT"
-velocity = "3.4.0-SNAPSHOT"
-core = "1.1.0"
+paper = "1.21.11-R0.1-SNAPSHOT"
+velocity = "3.5.0-SNAPSHOT"
+core = "1.2.0-SNAPSHOT"
 
 # Configs
 configurate = "4.3.0-DEV-SNAPSHOT" # Версия из нашего репозитория с поддержкой комментариев в yaml файлах
@@ -13,23 +13,24 @@ skinsrestorer = "15.7.7"
 # SQL
 hikari = "7.0.2"
 ## Local
-sqlite = "3.51.0.0"
+sqlite = "3.53.0.0"
 h2 = "2.4.240"
 ## Remote
-mysql = "9.5.0"
-mariadb = "3.5.6"
-postgresql = "42.7.8"
+mysql = "9.7.0"
+mariadb = "3.5.8"
+postgresql = "42.7.10"
 
 # Shared
 slf4j = "2.0.17"
+jspecify = "1.0.0"
 annotations = "26.0.2-1"
 
 # Tests
-mockbukkit = "4.98.0"
+mockbukkit = "4.108.0"
 
 # Plugins
-buildconfig = "5.6.7"
-plugin-yml = "0.8.0"
+buildconfig = "6.0.9"
+plugin-yml = "0.9.0"
 run-task = "3.0.2"
 
 [libraries]

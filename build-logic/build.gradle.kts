@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2026 DenaryDev
+ *
+ * Use of this source code is governed by an MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT.
+ */
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -10,9 +17,9 @@ repositories {
 }
 
 dependencies {
-    implementation("com.gradleup.shadow:shadow-gradle-plugin:9.2.2")
-    implementation("com.diffplug.spotless:spotless-plugin-gradle:8.0.0")
-    implementation("org.gradlex:extra-java-module-info:1.13")
+    implementation("com.gradleup.shadow:shadow-gradle-plugin:9.4.1")
+    implementation("com.diffplug.spotless:spotless-plugin-gradle:8.2.1")
+    implementation("org.gradlex:extra-java-module-info:1.14")
 }
 
 java {

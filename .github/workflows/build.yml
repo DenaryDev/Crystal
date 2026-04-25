@@ -1,11 +1,10 @@
-name: Deploy
+name: Build Crystal
 on:
   push:
     branches: [ "master", "develop" ]
 
 jobs:
-  deploy:
-    name: Deploy
+  build:
     runs-on: 'ubuntu-24.04'
     steps:
       - uses: actions/checkout@v5
@@ -20,3 +19,9 @@ jobs:
         env:
           ORG_GRADLE_PROJECT_prostocraftUsername: ${{ secrets.DEPLOY_USERNAME }}
           ORG_GRADLE_PROJECT_prostocraftPassword: ${{ secrets.DEPLOY_PASSWORD }}
+      - name: Create release
+        uses: softprops/action-gh-release@v3
+        if: github.ref_type == 'tag'
+        with:
+          files: |
+            build/libs/*.jar

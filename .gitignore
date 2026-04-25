@@ -3,9 +3,6 @@
 out/
 *.iml
 
-# Fleet
-.fleet/
-
 # Maven
 target/
 dependency-reduced-pom.xml

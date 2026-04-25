@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2026 DenaryDev
+ *
+ * Use of this source code is governed by an MIT-style
+ * license that can be found in the LICENSE file or at
+ * https://opensource.org/licenses/MIT.
+ */
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
@@ -18,4 +25,17 @@ fun submodule(name: String) {
         this.projectDir = file("modules/$name")
         this.name = "crystal-$name"
     }
+}
+
+@Suppress("UnstableApiUsage")
+gradle.lifecycle.beforeProject {
+    val baseVersion = providers.gradleProperty("baseVersion").get().trim()
+    val buildNumber = providers.environmentVariable("GITHUB_RUN_NUMBER").orNull?.trim()?.toInt()
+    val versionString = if (buildNumber == null) {
+        "$baseVersion.local-SNAPSHOT"
+    } else {
+        "$baseVersion.build.$buildNumber"
+    }
+
+    version = versionString
 }
