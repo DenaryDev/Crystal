@@ -1,12 +1,12 @@
-name: Release
+name: Release & Deploy
 
 on:
   push:
     branches:
-      - "master"
+      - "v3"
 
 jobs:
-  release:
+  build:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -20,8 +20,11 @@ jobs:
           java-version: 21
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
-      - name: Build Crystal
-        run: ./gradlew build --no-daemon
+      - name: Build & Publish
+        run: ./gradlew build publish --no-daemon -Dorg.gradle.parallel=true --stacktrace
+        env:
+          ORG_GRADLE_PROJECT_prostocraftUsername: ${{ secrets.DEPLOY_USERNAME }}
+          ORG_GRADLE_PROJECT_prostocraftPassword: ${{ secrets.DEPLOY_PASSWORD }}
       - name: Create Release
         uses: softprops/action-gh-release@v3
         with:
