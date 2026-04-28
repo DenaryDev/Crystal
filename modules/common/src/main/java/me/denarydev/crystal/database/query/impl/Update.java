@@ -12,8 +12,8 @@ import me.denarydev.crystal.database.query.ConditionalQuery;
 import me.denarydev.crystal.database.query.Expression;
 import me.denarydev.crystal.database.util.SQLUtil;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,7 +43,7 @@ public final class Update extends ConditionalQuery<Update> {
      * @param value  Значение.
      * @return Этот объект.
      */
-    public Update value(@NotNull String column, @NotNull Object value) {
+    public Update value(@NonNull String column, @NonNull Object value) {
         SQLUtil.validateIdentifier(column);
         return valueExpr(column, "?", value);
     }
@@ -56,7 +56,7 @@ public final class Update extends ConditionalQuery<Update> {
      * @param params Параметры выражения (для заполнения плейсхолдеров <code>?</code>).
      * @return Этот объект.
      */
-    public Update valueExpr(@NotNull String column, @NotNull String expr, @NotNull Object... params) {
+    public Update valueExpr(@NonNull String column, @NonNull String expr, @NonNull Object... params) {
         SQLUtil.validateIdentifier(column);
         SQLUtil.validatePlaceholderCount(expr, params);
         this.expressions.put(column, new Expression(expr, params));
@@ -70,7 +70,7 @@ public final class Update extends ConditionalQuery<Update> {
      * @param column Имя столбца.
      * @return Этот объект.
      */
-    public Update valueNull(@NotNull String column) {
+    public Update valueNull(@NonNull String column) {
         return valueExpr(column, "NULL");
     }
 
@@ -82,7 +82,7 @@ public final class Update extends ConditionalQuery<Update> {
      * @param value  Допускающее null значение.
      * @return Этот объект.
      */
-    public Update valueNullable(@NotNull String column, @Nullable Object value) {
+    public Update valueNullable(@NonNull String column, @Nullable Object value) {
         return value == null ? valueNull(column) : value(column, value);
     }
 

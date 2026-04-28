@@ -13,7 +13,7 @@ import me.denarydev.crystal.skin.SkinProvider;
 import net.skinsrestorer.api.SkinsRestorer;
 import net.skinsrestorer.api.exception.DataRequestException;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -28,16 +28,16 @@ public final class SkinsRestorerSkinProvider extends SkinProvider {
     }
 
     @Override
-    public Optional<SkinProperty> playerSkin(@NotNull UUID uuid) {
+    public Optional<SkinProperty> playerSkin(@NonNull UUID uuid) {
         return getPlayerSkin0(uuid.toString());
     }
 
     @Override
-    public Optional<SkinProperty> playerSkin(@NotNull String name) {
+    public Optional<SkinProperty> playerSkin(@NonNull String name) {
         return getPlayerSkin0(name);
     }
 
-    private Optional<SkinProperty> getPlayerSkin0(@NotNull String nameOrUniqueId) {
+    private Optional<SkinProperty> getPlayerSkin0(@NonNull String nameOrUniqueId) {
         if (skinsRestorer == null) return Optional.empty();
 
         try {

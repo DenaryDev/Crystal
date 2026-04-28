@@ -7,7 +7,7 @@
  */
 package me.denarydev.crystal.utils.time;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.TimeUnit;
 
@@ -27,7 +27,7 @@ public final class TimeFormatter {
      * @param second локализация для секунд
      * @return отформатированная строка времени
      */
-    public static String timeToString(long time, @NotNull TimeUnit unit, @NotNull String day, @NotNull String hour, @NotNull String minute, @NotNull String second) {
+    public static String timeToString(long time, @NonNull TimeUnit unit, @NonNull String day, @NonNull String hour, @NonNull String minute, @NonNull String second) {
         long millis = unit.toMillis(time);
 
         return millisToString(millis, day, hour, minute, second);
@@ -43,7 +43,7 @@ public final class TimeFormatter {
      * @param second локализация для секунд
      * @return отформатированная строка времени
      */
-    public static String ticksToString(long ticks, @NotNull String day, @NotNull String hour, @NotNull String minute, @NotNull String second) {
+    public static String ticksToString(long ticks, @NonNull String day, @NonNull String hour, @NonNull String minute, @NonNull String second) {
         return millisToString(ticks * 50L, day, hour, minute, second);
     }
 
@@ -57,7 +57,7 @@ public final class TimeFormatter {
      * @param second локализация для секунд
      * @return отформатированная строка времени
      */
-    public static String millisToString(long millis, @NotNull String day, @NotNull String hour, @NotNull String minute, @NotNull String second) {
+    public static String millisToString(long millis, @NonNull String day, @NonNull String hour, @NonNull String minute, @NonNull String second) {
         final StringBuilder builder = new StringBuilder();
 
         final long days = TimeUnit.MILLISECONDS.toDays(millis);

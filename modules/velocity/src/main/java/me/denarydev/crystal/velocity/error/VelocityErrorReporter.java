@@ -16,8 +16,8 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public final class VelocityErrorReporter implements ErrorReporter<Player> {
      * @param logger логгер, в который будут записываться ошибки
      * @return новый экземпляр {@link VelocityErrorReporter}
      */
-    public static VelocityErrorReporter of(@NotNull Logger logger) {
+    public static VelocityErrorReporter of(@NonNull Logger logger) {
         return new VelocityErrorReporter(logger);
     }
 
@@ -52,7 +52,7 @@ public final class VelocityErrorReporter implements ErrorReporter<Player> {
      * @param error  возникшее исключение
      */
     @Override
-    public void report(@NotNull Player target, @NotNull Throwable error) {
+    public void report(@NonNull Player target, @NonNull Throwable error) {
         report(target, error, null);
     }
 
@@ -65,7 +65,7 @@ public final class VelocityErrorReporter implements ErrorReporter<Player> {
      * @param params     аргументы для форматирования сообщения
      */
     @Override
-    public void report(@NotNull Player target, @NotNull Throwable error, @Nullable String logMessage, Object... params) {
+    public void report(@NonNull Player target, @NonNull Throwable error, @Nullable String logMessage, Object... params) {
         final String errorCode = StringGenerator.generateRandomString(8);
 
         {

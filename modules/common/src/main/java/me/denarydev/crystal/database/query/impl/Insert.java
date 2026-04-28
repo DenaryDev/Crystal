@@ -12,8 +12,8 @@ import me.denarydev.crystal.database.query.AbstractQuery;
 import me.denarydev.crystal.database.query.Expression;
 import me.denarydev.crystal.database.util.SQLUtil;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,7 +58,7 @@ public final class Insert extends AbstractQuery {
      * @param value  Значение столбца.
      * @return Этот объект.
      */
-    public Insert value(@NotNull String column, @NotNull Object value) {
+    public Insert value(@NonNull String column, @NonNull Object value) {
         SQLUtil.validateIdentifier(column);
         return valueExpr(column, "?", value);
     }
@@ -71,7 +71,7 @@ public final class Insert extends AbstractQuery {
      * @param params Параметры выражения (для заполнения плейсхолдеров <code>?</code>).
      * @return Этот объект.
      */
-    public Insert valueExpr(@NotNull String column, @NotNull String expr, @NotNull Object... params) {
+    public Insert valueExpr(@NonNull String column, @NonNull String expr, @NonNull Object... params) {
         SQLUtil.validateIdentifier(column);
         SQLUtil.validatePlaceholderCount(expr, params);
         this.insert.put(column, new Expression(expr, params));
@@ -84,7 +84,7 @@ public final class Insert extends AbstractQuery {
      * @param column Имя столбца.
      * @return Этот объект.
      */
-    public Insert valueNull(@NotNull String column) {
+    public Insert valueNull(@NonNull String column) {
         return valueExpr(column, "NULL");
     }
 
@@ -96,7 +96,7 @@ public final class Insert extends AbstractQuery {
      * @param value  Допускающее null значение.
      * @return Этот объект.
      */
-    public Insert valueNullable(@NotNull String column, @Nullable Object value) {
+    public Insert valueNullable(@NonNull String column, @Nullable Object value) {
         return value == null ? valueNull(column) : value(column, value);
     }
 
@@ -107,7 +107,7 @@ public final class Insert extends AbstractQuery {
      * @param keys Ключевые столбцы, которые не должны обновляться.
      * @return Этот объект.
      */
-    public Insert onDuplicateKeyUpdateExcept(@NotNull String... keys) {
+    public Insert onDuplicateKeyUpdateExcept(@NonNull String... keys) {
         this.update.clear();
 
         Set<String> keySet = new HashSet<>();

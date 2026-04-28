@@ -25,8 +25,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 import java.net.URL;
@@ -39,7 +39,7 @@ import java.util.Objects;
 public final class ItemStackSerializer implements TypeSerializer<ItemStack> {
 
     @Override
-    public ItemStack deserialize(@NotNull Type type, ConfigurationNode node) throws SerializationException {
+    public ItemStack deserialize(@NonNull Type type, ConfigurationNode node) throws SerializationException {
         final Material material = node.node("material").get(Material.class);
         if (material == null) throw new SerializationException("Invalid ItemStack material");
 
@@ -94,7 +94,7 @@ public final class ItemStackSerializer implements TypeSerializer<ItemStack> {
 
         if (node.hasChild("enchants")) {
             node.node("enchants").childrenMap().forEach(((key, value) -> {
-                final Registry<@NotNull Enchantment> registry = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT);
+                final Registry<@NonNull Enchantment> registry = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT);
                 final Enchantment ench = registry.get(NamespacedKey.minecraft(key.toString().toLowerCase()));
                 if (ench == null) return;
 
@@ -109,7 +109,7 @@ public final class ItemStackSerializer implements TypeSerializer<ItemStack> {
     }
 
     @Override
-    public void serialize(@NotNull Type type, @Nullable ItemStack item, @NotNull ConfigurationNode node) throws SerializationException {
+    public void serialize(@NonNull Type type, @Nullable ItemStack item, @NonNull ConfigurationNode node) throws SerializationException {
         if (item != null) {
             node.node("material").set(item.getType());
             if (item.getAmount() > 1) node.node("amount").set(item.getAmount());

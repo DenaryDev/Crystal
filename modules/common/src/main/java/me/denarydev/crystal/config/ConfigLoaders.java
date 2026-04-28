@@ -12,7 +12,7 @@ import io.sapphiremc.lib.configurate.hocon.HoconConfigurationLoader;
 import io.sapphiremc.lib.configurate.serialize.TypeSerializerCollection;
 import io.sapphiremc.lib.configurate.yaml.NodeStyle;
 import io.sapphiremc.lib.configurate.yaml.YamlConfigurationLoader;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.nio.file.Path;
 import java.util.function.UnaryOperator;
@@ -52,7 +52,7 @@ public final class ConfigLoaders {
      * @param path Путь к файлу конфигурации
      * @return новый экземпляр загрузчика конфигурации yaml
      */
-    public static YamlConfigurationLoader yaml(@NotNull Path path) {
+    public static YamlConfigurationLoader yaml(@NonNull Path path) {
         return yamlBuilder()
             .path(path)
             .build();
@@ -65,7 +65,7 @@ public final class ConfigLoaders {
      * @param header заголовок конфигурации
      * @return новый экземпляр загрузчика конфигурации yaml
      */
-    public static YamlConfigurationLoader yaml(@NotNull Path path, @NotNull String header) {
+    public static YamlConfigurationLoader yaml(@NonNull Path path, @NonNull String header) {
         return yaml(path, options -> options.header(header));
     }
 
@@ -76,7 +76,7 @@ public final class ConfigLoaders {
      * @param serializers сериализаторы
      * @return новый экземпляр загрузчика конфигурации yaml
      */
-    public static YamlConfigurationLoader yaml(@NotNull Path path, @NotNull TypeSerializerCollection serializers) {
+    public static YamlConfigurationLoader yaml(@NonNull Path path, @NonNull TypeSerializerCollection serializers) {
         return yaml(path, options -> options.serializers(b -> b.registerAll(serializers)));
     }
 
@@ -87,7 +87,7 @@ public final class ConfigLoaders {
      * @param editor редактор настроек загрузчика конфигурации
      * @return новый экземпляр загрузчика конфигурации yaml
      */
-    public static YamlConfigurationLoader yaml(@NotNull Path path, @NotNull UnaryOperator<ConfigurationOptions> editor) {
+    public static YamlConfigurationLoader yaml(@NonNull Path path, @NonNull UnaryOperator<ConfigurationOptions> editor) {
         return yamlBuilder().path(path)
             .defaultOptions(editor)
             .build();
@@ -109,7 +109,7 @@ public final class ConfigLoaders {
      * @param path Путь к файлу конфигурации
      * @return новый экземпляр загрузчика конфигурации hocon
      */
-    public static HoconConfigurationLoader hocon(@NotNull Path path) {
+    public static HoconConfigurationLoader hocon(@NonNull Path path) {
         return hocon(path, options -> options);
     }
 
@@ -120,7 +120,7 @@ public final class ConfigLoaders {
      * @param header заголовок конфигурации
      * @return новый экземпляр загрузчика конфигурации hocon
      */
-    public static HoconConfigurationLoader hocon(@NotNull Path path, @NotNull String header) {
+    public static HoconConfigurationLoader hocon(@NonNull Path path, @NonNull String header) {
         return hocon(path, options -> options.header(header));
     }
 
@@ -131,7 +131,7 @@ public final class ConfigLoaders {
      * @param serializers сериализаторы
      * @return новый экземпляр загрузчика конфигурации hocon
      */
-    public static HoconConfigurationLoader hocon(@NotNull Path path, @NotNull TypeSerializerCollection serializers) {
+    public static HoconConfigurationLoader hocon(@NonNull Path path, @NonNull TypeSerializerCollection serializers) {
         return hocon(path, options -> options.serializers(b -> b.registerAll(serializers)));
     }
 
@@ -142,7 +142,7 @@ public final class ConfigLoaders {
      * @param editor редактор настроек загрузчика конфигурации
      * @return новый экземпляр загрузчика конфигурации yaml
      */
-    public static HoconConfigurationLoader hocon(@NotNull Path path, @NotNull UnaryOperator<ConfigurationOptions> editor) {
+    public static HoconConfigurationLoader hocon(@NonNull Path path, @NonNull UnaryOperator<ConfigurationOptions> editor) {
         return HoconConfigurationLoader.builder()
             .path(path)
             .defaultOptions(editor)

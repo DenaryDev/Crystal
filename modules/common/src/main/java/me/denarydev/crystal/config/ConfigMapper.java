@@ -13,7 +13,7 @@ import io.sapphiremc.lib.configurate.ConfigurationNode;
 import io.sapphiremc.lib.configurate.loader.ConfigurationLoader;
 import io.sapphiremc.lib.configurate.serialize.SerializationException;
 import io.sapphiremc.lib.configurate.util.CheckedFunction;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Получает экземпляры указанных классов из файла.
@@ -32,7 +32,7 @@ public final class ConfigMapper {
      * @param clazz  тип класса конфига
      * @return созданный экземпляр класса конфига
      */
-    public static <T> T load(@NotNull ConfigurationLoader<?> loader, @NotNull Class<T> clazz) throws ConfigurateException {
+    public static <T> T load(@NonNull ConfigurationLoader<?> loader, @NonNull Class<T> clazz) throws ConfigurateException {
         return load(loader, clazz, false);
     }
 
@@ -44,7 +44,7 @@ public final class ConfigMapper {
      * @param refreshNode обновлять ли порядок параметров в файле
      * @return созданный экземпляр класса конфига
      */
-    public static <T> T load(@NotNull ConfigurationLoader<?> loader, @NotNull Class<T> clazz, boolean refreshNode) throws ConfigurateException {
+    public static <T> T load(@NonNull ConfigurationLoader<?> loader, @NonNull Class<T> clazz, boolean refreshNode) throws ConfigurateException {
         final var creator = creator(clazz, refreshNode);
 
         final ConfigurationNode node;
@@ -62,8 +62,8 @@ public final class ConfigMapper {
         return instance;
     }
 
-    @NotNull
-    private static <T> CheckedFunction<ConfigurationNode, T, @NotNull SerializationException> creator(@NotNull Class<T> type, boolean forceRefresh) {
+    @NonNull
+    private static <T> CheckedFunction<ConfigurationNode, T, @NonNull SerializationException> creator(@NonNull Class<T> type, boolean forceRefresh) {
         return node -> {
             T instance = node.require(type);
             if (forceRefresh) {

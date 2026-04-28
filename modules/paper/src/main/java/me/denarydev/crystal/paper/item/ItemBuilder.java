@@ -29,8 +29,8 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  */
 public final class ItemBuilder {
 
-    @NotNull
+    @NonNull
     private ItemStack itemStack;
 
     //region Методы создания билдера
@@ -62,7 +62,7 @@ public final class ItemBuilder {
      *
      * @param material тип предмета
      */
-    public static ItemBuilder fromMaterial(@NotNull Material material) {
+    public static ItemBuilder fromMaterial(@NonNull Material material) {
         return new ItemBuilder(ItemStack.of(material));
     }
 
@@ -73,7 +73,7 @@ public final class ItemBuilder {
      *
      * @param stack другой предмет для основы.
      */
-    public static ItemBuilder fromItem(@NotNull ItemStack stack) {
+    public static ItemBuilder fromItem(@NonNull ItemStack stack) {
         return new ItemBuilder(stack.clone());
     }
 
@@ -84,14 +84,14 @@ public final class ItemBuilder {
      *
      * @param texture текстура скина
      */
-    public static ItemBuilder playerHead(@NotNull String texture) {
+    public static ItemBuilder playerHead(@NonNull String texture) {
         return new ItemBuilder(ItemStack.of(Material.PLAYER_HEAD))
             .texture(texture);
     }
 
     //endregion
 
-    private ItemBuilder(@NotNull ItemStack itemStack) {
+    private ItemBuilder(@NonNull ItemStack itemStack) {
         this.itemStack = itemStack;
     }
 
@@ -102,7 +102,7 @@ public final class ItemBuilder {
      *
      * @param type тип предмета.
      */
-    public ItemBuilder type(@NotNull Material type) {
+    public ItemBuilder type(@NonNull Material type) {
         this.itemStack = this.itemStack.withType(type);
 
         return this;
@@ -115,7 +115,7 @@ public final class ItemBuilder {
      *
      * @param texture текстура для предмета.
      */
-    public ItemBuilder texture(@NotNull String texture) {
+    public ItemBuilder texture(@NonNull String texture) {
         return editMeta(meta -> {
             if (meta instanceof SkullMeta skull) {
                 HeadUtils.setTexture(skull, texture);
@@ -158,7 +158,7 @@ public final class ItemBuilder {
      * @param displayName имя предмета.
      * @param tags        методы для замены тегов.
      */
-    public ItemBuilder displayNameRich(@Nullable String displayName, @NotNull TagResolver... tags) {
+    public ItemBuilder displayNameRich(@Nullable String displayName, @NonNull TagResolver... tags) {
         if (displayName != null) {
             return displayName(MiniMessage.miniMessage().deserialize(displayName, tags));
         }
@@ -202,7 +202,7 @@ public final class ItemBuilder {
      * @param lore описание предмета.
      * @param tags методы для замены тегов.
      */
-    public ItemBuilder loreRich(@Nullable List<String> lore, @NotNull TagResolver... tags) {
+    public ItemBuilder loreRich(@Nullable List<String> lore, @NonNull TagResolver... tags) {
         if (lore != null) {
             return lore(lore.stream()
                 .map(line -> MiniMessage.miniMessage().deserialize(line, tags))
@@ -236,7 +236,7 @@ public final class ItemBuilder {
      *
      * @param flags флаги для добавления.
      */
-    public ItemBuilder itemFlags(@NotNull ItemFlag... flags) {
+    public ItemBuilder itemFlags(@NonNull ItemFlag... flags) {
         return editMeta(meta -> meta.addItemFlags(flags));
     }
 
@@ -245,7 +245,7 @@ public final class ItemBuilder {
      *
      * @param flags флаги для удаления.
      */
-    public ItemBuilder removeFlags(@NotNull ItemFlag... flags) {
+    public ItemBuilder removeFlags(@NonNull ItemFlag... flags) {
         return editMeta(meta -> meta.removeItemFlags(flags));
     }
 
@@ -293,7 +293,7 @@ public final class ItemBuilder {
      *
      * @param model ключ модели предмета
      */
-    public ItemBuilder itemModel(@NotNull NamespacedKey model) {
+    public ItemBuilder itemModel(@NonNull NamespacedKey model) {
         return editMeta(meta -> meta.setItemModel(model));
     }
 
@@ -306,7 +306,7 @@ public final class ItemBuilder {
      * @see CustomModelDataComponent#setFloats(List)
      */
     @SuppressWarnings("UnstableApiUsage")
-    public ItemBuilder customModelDataFloats(@NotNull List<Float> floats) {
+    public ItemBuilder customModelDataFloats(@NonNull List<Float> floats) {
         return editMeta(meta -> {
             final CustomModelDataComponent component = meta.getCustomModelDataComponent();
             component.setFloats(floats);
@@ -323,7 +323,7 @@ public final class ItemBuilder {
      * @see CustomModelDataComponent#setFlags(List)
      */
     @SuppressWarnings("UnstableApiUsage")
-    public ItemBuilder customModelDataFlags(@NotNull List<Boolean> flags) {
+    public ItemBuilder customModelDataFlags(@NonNull List<Boolean> flags) {
         return editMeta(meta -> {
             CustomModelDataComponent component = meta.getCustomModelDataComponent();
             component.setFlags(flags);
@@ -340,7 +340,7 @@ public final class ItemBuilder {
      * @see CustomModelDataComponent#setStrings(List)
      */
     @SuppressWarnings("UnstableApiUsage")
-    public ItemBuilder customModelDataStrings(@NotNull List<String> strings) {
+    public ItemBuilder customModelDataStrings(@NonNull List<String> strings) {
         return editMeta(meta -> {
             final CustomModelDataComponent component = meta.getCustomModelDataComponent();
             component.setStrings(strings);
@@ -357,7 +357,7 @@ public final class ItemBuilder {
      * @see CustomModelDataComponent#setColors(List)
      */
     @SuppressWarnings("UnstableApiUsage")
-    public ItemBuilder customModelDataColors(@NotNull List<Color> colors) {
+    public ItemBuilder customModelDataColors(@NonNull List<Color> colors) {
         return editMeta(meta -> {
             final CustomModelDataComponent component = meta.getCustomModelDataComponent();
             component.setColors(colors);
@@ -388,7 +388,7 @@ public final class ItemBuilder {
      * @param enchantment тип чар для накладывания.
      * @param level       уровень чара.
      */
-    public ItemBuilder enchantment(@NotNull Enchantment enchantment, int level) {
+    public ItemBuilder enchantment(@NonNull Enchantment enchantment, int level) {
         return enchantments(Map.of(enchantment, level));
     }
 
@@ -399,7 +399,7 @@ public final class ItemBuilder {
      *
      * @param enchantments чары для накладывания.
      */
-    public ItemBuilder enchantments(@NotNull Enchantment... enchantments) {
+    public ItemBuilder enchantments(@NonNull Enchantment... enchantments) {
         final Map<Enchantment, Integer> map = new HashMap<>();
 
         for (Enchantment enchantment : enchantments) {
@@ -414,7 +414,7 @@ public final class ItemBuilder {
      *
      * @param enchantments чары для накладывания.
      */
-    public ItemBuilder enchantments(@NotNull Map<Enchantment, Integer> enchantments) {
+    public ItemBuilder enchantments(@NonNull Map<Enchantment, Integer> enchantments) {
         return editMeta(meta -> {
             for (Map.Entry<Enchantment, Integer> enchantment : enchantments.entrySet()) {
                 meta.addEnchant(enchantment.getKey(), enchantment.getValue(), true);
@@ -434,7 +434,7 @@ public final class ItemBuilder {
      *
      * @param type тип зелья.
      */
-    public ItemBuilder potionType(@NotNull PotionType type) {
+    public ItemBuilder potionType(@NonNull PotionType type) {
         return editMeta(meta -> {
             if (meta instanceof PotionMeta potion) {
                 potion.setBasePotionType(type);
@@ -452,7 +452,7 @@ public final class ItemBuilder {
      *
      * @param effects эффекты
      */
-    public ItemBuilder potionEffects(@NotNull PotionEffect... effects) {
+    public ItemBuilder potionEffects(@NonNull PotionEffect... effects) {
         return potionEffects(true, effects);
     }
 
@@ -468,7 +468,7 @@ public final class ItemBuilder {
      * @param overwrite перезаписывать ли эффекты
      * @param effects   эффекты
      */
-    public ItemBuilder potionEffects(boolean overwrite, @NotNull PotionEffect... effects) {
+    public ItemBuilder potionEffects(boolean overwrite, @NonNull PotionEffect... effects) {
         final Map<PotionEffect, Boolean> map = new HashMap<>();
 
         for (PotionEffect effect : effects) {
@@ -490,7 +490,7 @@ public final class ItemBuilder {
      *
      * @param effects эффекты
      */
-    public ItemBuilder potionEffects(@NotNull Map<PotionEffect, Boolean> effects) {
+    public ItemBuilder potionEffects(@NonNull Map<PotionEffect, Boolean> effects) {
         return editMeta(meta -> {
             if (meta instanceof PotionMeta potion) {
                 effects.forEach(potion::addCustomEffect);
@@ -506,7 +506,7 @@ public final class ItemBuilder {
      *
      * @param type тип эффекта для удаления.
      */
-    public ItemBuilder removePotionEffect(@NotNull PotionEffectType type) {
+    public ItemBuilder removePotionEffect(@NonNull PotionEffectType type) {
         return editMeta(meta -> {
             if (meta instanceof PotionMeta potion) {
                 potion.removeCustomEffect(type);
@@ -540,7 +540,7 @@ public final class ItemBuilder {
      * @param enchantment тип чара для сохранения.
      * @param level       уровень чара.
      */
-    public ItemBuilder storedEnchantment(@NotNull Enchantment enchantment, int level) {
+    public ItemBuilder storedEnchantment(@NonNull Enchantment enchantment, int level) {
         return storedEnchantments(Map.of(enchantment, level));
     }
 
@@ -551,7 +551,7 @@ public final class ItemBuilder {
      *
      * @param enchantments типs чар для сохранения.
      */
-    public ItemBuilder storedEnchantments(@NotNull Enchantment... enchantments) {
+    public ItemBuilder storedEnchantments(@NonNull Enchantment... enchantments) {
         final Map<Enchantment, Integer> map = new HashMap<>();
 
         for (Enchantment enchantment : enchantments) {
@@ -568,7 +568,7 @@ public final class ItemBuilder {
      *
      * @param enchantments чары для сохранения.
      */
-    public ItemBuilder storedEnchantments(@NotNull Map<Enchantment, Integer> enchantments) {
+    public ItemBuilder storedEnchantments(@NonNull Map<Enchantment, Integer> enchantments) {
         return editMeta(meta -> {
             if (meta instanceof EnchantmentStorageMeta storage) {
                 for (Map.Entry<Enchantment, Integer> enchantment : enchantments.entrySet()) {
@@ -590,7 +590,7 @@ public final class ItemBuilder {
      * @param key   ключ, по которому сохранится значение.
      * @param value само значение.
      */
-    public ItemBuilder persistentData(@NotNull NamespacedKey key, @NotNull Object value) {
+    public ItemBuilder persistentData(@NonNull NamespacedKey key, @NonNull Object value) {
         return editMeta(meta -> {
             final PersistentDataContainer container = meta.getPersistentDataContainer();
 
@@ -622,7 +622,7 @@ public final class ItemBuilder {
      *
      * @param editor метод редактирования меты предмета.
      */
-    public ItemBuilder editMeta(@NotNull Consumer<? super ItemMeta> editor) {
+    public ItemBuilder editMeta(@NonNull Consumer<? super ItemMeta> editor) {
         this.itemStack.editMeta(editor);
 
         return this;
@@ -631,7 +631,7 @@ public final class ItemBuilder {
     /**
      * Возвращает созданный и настроенный предмет.
      */
-    @NotNull
+    @NonNull
     public ItemStack build() {
         return this.itemStack.clone();
     }
@@ -639,7 +639,7 @@ public final class ItemBuilder {
     /**
      * Клонирует этот билдер.
      */
-    @NotNull
+    @NonNull
     public ItemBuilder duplicate() {
         return new ItemBuilder(this.itemStack.clone());
     }

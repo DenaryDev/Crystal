@@ -12,7 +12,7 @@ import me.denarydev.crystal.database.query.ConditionalQuery;
 import me.denarydev.crystal.database.query.Expression;
 import me.denarydev.crystal.database.util.SQLUtil;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -64,7 +64,7 @@ public final class Select extends ConditionalQuery<Select> {
      * @param name Имя столбца.
      * @return Этот объект.
      */
-    public Select column(@NotNull String name) {
+    public Select column(@NonNull String name) {
         SQLUtil.validateIdentifier(name);
         return expression("`" + name + "`");
     }
@@ -76,7 +76,7 @@ public final class Select extends ConditionalQuery<Select> {
      * @param params Параметры выражения (для заполнения плейсхолдеров <code>?</code>).
      * @return Этот объект.
      */
-    public Select expression(@NotNull String expr, @NotNull Object... params) {
+    public Select expression(@NonNull String expr, @NonNull Object... params) {
         SQLUtil.validatePlaceholderCount(expr, params);
 
         if (this.all) {
@@ -94,7 +94,7 @@ public final class Select extends ConditionalQuery<Select> {
      * @param tableName Имя таблицы.
      * @return Этот объект.
      */
-    public Select from(@NotNull String tableName) {
+    public Select from(@NonNull String tableName) {
         SQLUtil.validateIdentifier(tableName);
         this.table = tableName;
         return this;
@@ -107,7 +107,7 @@ public final class Select extends ConditionalQuery<Select> {
      * @param tableName Имя таблицы.
      * @return Этот объект.
      */
-    public Select from(@NotNull String database, @NotNull String tableName) {
+    public Select from(@NonNull String database, @NonNull String tableName) {
         SQLUtil.validateIdentifier(tableName);
         this.database = database;
         this.table = tableName;
@@ -120,7 +120,7 @@ public final class Select extends ConditionalQuery<Select> {
      * @param column Имя столбца.
      * @return Этот объект.
      */
-    public Select orderBy(@NotNull String column) {
+    public Select orderBy(@NonNull String column) {
         SQLUtil.validateIdentifier(column);
         return orderByExpr("`" + column + "`");
     }
@@ -132,7 +132,7 @@ public final class Select extends ConditionalQuery<Select> {
      * @param params Параметры выражения (для заполнения плейсхолдеров <code>?</code>).
      * @return Этот объект.
      */
-    public Select orderByExpr(@NotNull String expr, @NotNull Object... params) {
+    public Select orderByExpr(@NonNull String expr, @NonNull Object... params) {
         SQLUtil.validatePlaceholderCount(expr, params);
         this.orderBy = expr;
         this.orderByParams = params;

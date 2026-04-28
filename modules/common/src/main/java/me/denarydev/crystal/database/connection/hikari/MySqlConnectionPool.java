@@ -8,7 +8,7 @@
 package me.denarydev.crystal.database.connection.hikari;
 
 import me.denarydev.crystal.database.DatabaseType;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -21,7 +21,7 @@ public final class MySqlConnectionPool extends HikariConnectionPool {
     }
 
     @Override
-    public @NotNull DatabaseType implementationType() {
+    public @NonNull DatabaseType implementationType() {
         return DatabaseType.MYSQL;
     }
 

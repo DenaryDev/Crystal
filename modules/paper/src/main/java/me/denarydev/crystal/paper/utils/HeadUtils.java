@@ -13,8 +13,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Base64;
 import java.util.UUID;
@@ -30,7 +30,7 @@ public final class HeadUtils {
      * @param texture текстура головы
      * @return {@link ItemStack} с текстурой
      */
-    @NotNull
+    @NonNull
     public static ItemStack createHead(final String texture) {
         return createHead(texture, null, 1);
     }
@@ -42,7 +42,7 @@ public final class HeadUtils {
      * @param amount  количество предметов
      * @return {@link ItemStack} с текстурой
      */
-    @NotNull
+    @NonNull
     public static ItemStack createHead(final String texture, final int amount) {
         return createHead(texture, null, amount);
     }
@@ -54,7 +54,7 @@ public final class HeadUtils {
      * @param signature подпись (Не обязательно)
      * @return {@link ItemStack} с текстурой
      */
-    @NotNull
+    @NonNull
     public static ItemStack createHead(final String texture, final String signature) {
         return createHead(texture, signature, 1);
     }
@@ -67,8 +67,8 @@ public final class HeadUtils {
      * @param amount    количество предметов
      * @return {@link ItemStack} с текстурой
      */
-    @NotNull
-    public static ItemStack createHead(@NotNull final String texture, @Nullable final String signature, final int amount) {
+    @NonNull
+    public static ItemStack createHead(@NonNull final String texture, @Nullable final String signature, final int amount) {
         final ItemStack head = new ItemStack(Material.PLAYER_HEAD, Math.max(Math.min(amount, 64), 1));
 
         final SkullMeta meta = (SkullMeta) head.getItemMeta();
@@ -85,7 +85,7 @@ public final class HeadUtils {
      * @param meta    метаданные предмета головы
      * @param texture текстура головы
      */
-    public static void setTexture(@NotNull final SkullMeta meta, @NotNull final String texture) {
+    public static void setTexture(@NonNull final SkullMeta meta, @NonNull final String texture) {
         setTexture(meta, texture, null);
     }
 
@@ -96,7 +96,7 @@ public final class HeadUtils {
      * @param texture   текстура головы
      * @param signature подпись (Не обязательно)
      */
-    public static void setTexture(@NotNull final SkullMeta meta, @NotNull final String texture, @Nullable String signature) {
+    public static void setTexture(@NonNull final SkullMeta meta, @NonNull final String texture, @Nullable String signature) {
         final PlayerProfile profile = Bukkit.createProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "CrystalHead");
 
         if (texture.endsWith("=")) {

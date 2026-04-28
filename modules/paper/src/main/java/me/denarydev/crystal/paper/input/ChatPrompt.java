@@ -20,8 +20,8 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Запрашивает у игрока ответ в виде сообщения в чат.
@@ -68,7 +68,7 @@ public final class ChatPrompt {
      *
      * @param action действие при закрытии запроса
      */
-    public ChatPrompt closeAction(@NotNull CloseAction action) {
+    public ChatPrompt closeAction(@NonNull CloseAction action) {
         this.closeAction = action;
 
         return this;
@@ -79,7 +79,7 @@ public final class ChatPrompt {
      *
      * @param word слово, отменяющее запрос
      */
-    public ChatPrompt cancelWord(@NotNull String word) {
+    public ChatPrompt cancelWord(@NonNull String word) {
         this.cancelWord = word;
 
         return this;

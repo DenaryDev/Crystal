@@ -8,7 +8,7 @@
 package me.denarydev.crystal.skin;
 
 import me.denarydev.crystal.Crystal;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -47,7 +47,7 @@ public abstract class SkinProvider {
      *
      * @param provider провайдер скинов
      */
-    public static void use(@NotNull SkinProvider provider) {
+    public static void use(@NonNull SkinProvider provider) {
         current = provider;
 
         Crystal.instance().logger().info("Using {} as default skin provider", current.getClass().getSimpleName());
@@ -59,7 +59,7 @@ public abstract class SkinProvider {
      * @param uuid уникальный ID игрока
      * @return Optional со скином, или пустой Optional, если скин не найден
      */
-    public abstract Optional<SkinProperty> playerSkin(@NotNull UUID uuid);
+    public abstract Optional<SkinProperty> playerSkin(@NonNull UUID uuid);
 
     /**
      * Получает скин игрока по его никнейму.
@@ -67,5 +67,5 @@ public abstract class SkinProvider {
      * @param name никнейм игрока
      * @return Optional со скином, или пустой Optional, если скин не найден
      */
-    public abstract Optional<SkinProperty> playerSkin(@NotNull String name);
+    public abstract Optional<SkinProperty> playerSkin(@NonNull String name);
 }

@@ -13,8 +13,8 @@ import io.sapphiremc.lib.configurate.objectmapping.meta.PostProcess;
 import io.sapphiremc.lib.configurate.serialize.SerializationException;
 import me.denarydev.crystal.database.DatabaseType;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -87,7 +87,7 @@ public final class PoolsConfig {
         }
     }
 
-    private <T> T valueOrThrow(@NotNull String pool, @NotNull String name, @Nullable T value, @Nullable T def) throws SerializationException {
+    private <T> T valueOrThrow(@NonNull String pool, @NonNull String name, @Nullable T value, @Nullable T def) throws SerializationException {
         if (value == null) {
             if (def == null) {
                 throw new SerializationException("Value '" + name + "' not found in pool '" + pool + "' and not specified in default pool settings!");
@@ -99,7 +99,7 @@ public final class PoolsConfig {
         return value;
     }
 
-    private <T> T valueOrFallback(@Nullable T value, @Nullable T def, @NotNull T fallback) {
+    private <T> T valueOrFallback(@Nullable T value, @Nullable T def, @NonNull T fallback) {
         if (value == null) {
             if (def == null) {
                 return fallback;

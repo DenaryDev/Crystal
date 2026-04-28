@@ -10,8 +10,8 @@ package me.denarydev.crystal.paper.configurate.serializers;
 import io.sapphiremc.lib.configurate.serialize.ScalarSerializer;
 import io.sapphiremc.lib.configurate.serialize.SerializationException;
 import org.bukkit.Material;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
@@ -23,7 +23,7 @@ public final class MaterialSerializer extends ScalarSerializer<Material> {
     }
 
     @Override
-    public @NotNull Material deserialize(@NotNull final Type type, @Nullable final Object obj) throws SerializationException {
+    public @NonNull Material deserialize(@NonNull final Type type, @Nullable final Object obj) throws SerializationException {
         if (obj instanceof String s) {
             final Material material = Material.matchMaterial(s);
             if (material == null) {
@@ -37,8 +37,8 @@ public final class MaterialSerializer extends ScalarSerializer<Material> {
     }
 
     @Override
-    @NotNull
-    protected Object serialize(@NotNull final Material item, @NotNull final Predicate<Class<?>> typeSupported) {
+    @NonNull
+    protected Object serialize(@NonNull final Material item, @NonNull final Predicate<Class<?>> typeSupported) {
         return item.name();
     }
 }

@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    compileOnlyApi(libs.annotations)
+    compileOnlyApi(libs.jspecify)
     api(libs.bundles.configurate)
 
     implementation(libs.hikaricp)

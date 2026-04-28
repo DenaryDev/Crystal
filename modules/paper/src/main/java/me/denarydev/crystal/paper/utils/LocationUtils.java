@@ -10,8 +10,8 @@ package me.denarydev.crystal.paper.utils;
 import com.google.common.base.Preconditions;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Утилиты для работы с местоположением игрока.
@@ -26,7 +26,7 @@ public final class LocationUtils {
      * @param pos2 вторая точка зоны
      * @return true, если указанная точка в зоне, иначе false
      */
-    public static boolean inArea(@NotNull final Location loc, @NotNull final Location pos1, @NotNull final Location pos2) {
+    public static boolean inArea(@NonNull final Location loc, @NonNull final Location pos1, @NonNull final Location pos2) {
         final double x1 = Math.min(pos1.getX(), pos2.getX());
         final double y1 = Math.min(pos1.getY(), pos2.getY());
         final double z1 = Math.min(pos1.getZ(), pos2.getZ());
@@ -46,8 +46,8 @@ public final class LocationUtils {
      * @param location точка
      * @return центральная позиция от этой точки
      */
-    @NotNull
-    public static Location centerLocation(@NotNull final Location location) {
+    @NonNull
+    public static Location centerLocation(@NonNull final Location location) {
         final Location centerLoc = location.clone();
         centerLoc.setX(location.getBlockX() + 0.5);
         centerLoc.setZ(location.getBlockZ() + 0.5);
@@ -66,7 +66,7 @@ public final class LocationUtils {
      * @return Позиция ближайшего к точке блока, или null, если таковой не найден
      */
     @Nullable
-    public static Location findClosestBlock(@NotNull final Location loc, @NotNull final Material type, final int radius) {
+    public static Location findClosestBlock(@NonNull final Location loc, @NonNull final Material type, final int radius) {
         if (loc.getBlock().getType().equals(type)) return loc;
 
         Location closest = null;

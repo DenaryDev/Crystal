@@ -8,6 +8,7 @@ base {
 
 dependencies {
     api(project(":crystal-common"))
+    compileOnlyApi(libs.jspecify)
 
     compileOnly(libs.core)
 }

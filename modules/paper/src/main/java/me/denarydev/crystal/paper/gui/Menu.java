@@ -23,8 +23,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,7 +72,7 @@ public class Menu implements InventoryHolder {
      * @param template шаблон для билдера
      * @return {@link Builder} на основе шаблона.
      */
-    public static Builder builder(@NotNull Template template) {
+    public static Builder builder(@NonNull Template template) {
         return new Builder(template);
     }
 
@@ -84,7 +84,7 @@ public class Menu implements InventoryHolder {
      *
      * @return шаблон меню
      */
-    @NotNull
+    @NonNull
     public Template template() {
         return template;
     }
@@ -119,7 +119,7 @@ public class Menu implements InventoryHolder {
      * @param item  предмет
      * @param slots слот или несколько слотов
      */
-    public void addItem(@NotNull ItemStack item, int... slots) {
+    public void addItem(@NonNull ItemStack item, int... slots) {
         addItemInternal(item, slots);
     }
 
@@ -133,7 +133,7 @@ public class Menu implements InventoryHolder {
      * @param action действие
      * @param slots  слот или несколько слотов
      */
-    public void addItem(@NotNull ItemStack item, @Nullable ClickAction action, int... slots) {
+    public void addItem(@NonNull ItemStack item, @Nullable ClickAction action, int... slots) {
         addItemInternal(item, slots);
         addActionInternal(action, slots);
     }
@@ -155,7 +155,7 @@ public class Menu implements InventoryHolder {
      *
      * @param viewer игрок
      */
-    public void show(@NotNull Player viewer) {
+    public void show(@NonNull Player viewer) {
         this.viewer = viewer;
 
         viewer.openInventory(inventory);
@@ -183,7 +183,7 @@ public class Menu implements InventoryHolder {
      * @see InventoryHolder#getInventory()
      */
     @Override
-    @NotNull
+    @NonNull
     public Inventory getInventory() {
         return inventory;
     }
@@ -290,7 +290,7 @@ public class Menu implements InventoryHolder {
          * @param title     заголовок
          * @param resolvers плейсхолдеры
          */
-        public Builder titleRich(@NotNull String title, @NotNull TagResolver... resolvers) {
+        public Builder titleRich(@NonNull String title, @NonNull TagResolver... resolvers) {
             this.title = MiniMessage.miniMessage().deserialize(title, resolvers);
 
             return this;
@@ -301,7 +301,7 @@ public class Menu implements InventoryHolder {
          *
          * @param title заголовок
          */
-        public Builder titlePlain(@NotNull String title) {
+        public Builder titlePlain(@NonNull String title) {
             this.title = Component.text(title);
 
             return this;
@@ -352,7 +352,7 @@ public class Menu implements InventoryHolder {
          * @param type тип меню
          * @see InventoryType
          */
-        public Builder type(@NotNull InventoryType type) {
+        public Builder type(@NonNull InventoryType type) {
             this.type = type;
 
             return this;
@@ -376,7 +376,7 @@ public class Menu implements InventoryHolder {
          * @param item  предмет
          * @param slots слот или несколько слотов
          */
-        public Builder item(@NotNull ItemStack item, int... slots) {
+        public Builder item(@NonNull ItemStack item, int... slots) {
             Preconditions.checkArgument(slots.length > 0, "You must specify at least one slot!");
 
             for (int slot : slots) {
@@ -397,7 +397,7 @@ public class Menu implements InventoryHolder {
          * @param action действие
          * @param slots  слот или несколько слотов
          */
-        public Builder item(@NotNull ItemStack item, @NotNull ClickAction action, int... slots) {
+        public Builder item(@NonNull ItemStack item, @NonNull ClickAction action, int... slots) {
             Preconditions.checkArgument(slots.length > 0, "You must specify at least one slot!");
 
             for (int slot : slots) {
@@ -428,7 +428,7 @@ public class Menu implements InventoryHolder {
          * @param action действие
          * @param slots  слот или несколько слотов
          */
-        public Builder action(@NotNull ClickAction action, int... slots) {
+        public Builder action(@NonNull ClickAction action, int... slots) {
             Preconditions.checkArgument(slots.length > 0, "You must specify at least one slot!");
 
             for (int slot : slots) {

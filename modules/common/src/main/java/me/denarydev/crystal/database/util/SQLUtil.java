@@ -8,7 +8,7 @@
 package me.denarydev.crystal.database.util;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Внутренний класс, не используйте напрямую.
@@ -22,7 +22,7 @@ public final class SQLUtil {
      * @param value значение
      * @return строка, отформатированная для SQL.
      */
-    public static String valueToSqlString(@NotNull Object value) {
+    public static String valueToSqlString(@NonNull Object value) {
         if (value instanceof Boolean bool) {
             return bool ? "1" : "0";
         } else if (value instanceof Number num) {
@@ -37,7 +37,7 @@ public final class SQLUtil {
      *
      * @param s Строка для проверки.
      */
-    public static void validateIdentifier(@NotNull String s) {
+    public static void validateIdentifier(@NonNull String s) {
         if (s.isEmpty()) {
             throw new IllegalArgumentException("An empty string can't be an identifier");
         }
@@ -53,7 +53,7 @@ public final class SQLUtil {
      * @param expr   Строка для проверки.
      * @param values Массив значений.
      */
-    public static void validatePlaceholderCount(@NotNull String expr, @NotNull Object[] values) {
+    public static void validatePlaceholderCount(@NonNull String expr, @NonNull Object[] values) {
         int count = placeholderCount(expr);
 
         if (count != values.length) {
@@ -61,7 +61,7 @@ public final class SQLUtil {
         }
     }
 
-    private static int placeholderCount(@NotNull String expr) {
+    private static int placeholderCount(@NonNull String expr) {
         int count = 0;
 
         for (int i = 0; i < expr.length(); i++) {

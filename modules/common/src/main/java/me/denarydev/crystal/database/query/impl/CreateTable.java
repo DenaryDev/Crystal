@@ -12,7 +12,7 @@ import me.denarydev.crystal.database.query.AbstractQuery;
 import me.denarydev.crystal.database.query.Dialect;
 import me.denarydev.crystal.database.util.SQLUtil;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,7 +53,7 @@ public final class CreateTable extends AbstractQuery {
      * @param type Тип столбца.
      * @return Этот объект.
      */
-    public CreateTable column(@NotNull String name, @NotNull String type) {
+    public CreateTable column(@NonNull String name, @NonNull String type) {
         SQLUtil.validateIdentifier(name);
 
         if (this.columns.stream().anyMatch(c -> c.name.equals(name))) {
@@ -71,7 +71,7 @@ public final class CreateTable extends AbstractQuery {
      * @param name Имя столбца.
      * @return Этот объект.
      */
-    public CreateTable integer(@NotNull String name) {
+    public CreateTable integer(@NonNull String name) {
         return column(name, "INT");
     }
 
@@ -81,7 +81,7 @@ public final class CreateTable extends AbstractQuery {
      * @param name Имя столбца.
      * @return Этот объект.
      */
-    public CreateTable bigint(@NotNull String name) {
+    public CreateTable bigint(@NonNull String name) {
         return column(name, "BIGINT");
     }
 
@@ -91,7 +91,7 @@ public final class CreateTable extends AbstractQuery {
      * @param name Имя столбца.
      * @return Этот объект.
      */
-    public CreateTable bool(@NotNull String name) {
+    public CreateTable bool(@NonNull String name) {
         return column(name, "TINYINT(1)");
     }
 
@@ -102,7 +102,7 @@ public final class CreateTable extends AbstractQuery {
      * @param size Максимальное количество символов.
      * @return Этот объект.
      */
-    public CreateTable varchar(@NotNull String name, int size) {
+    public CreateTable varchar(@NonNull String name, int size) {
         return column(name, "VARCHAR(" + size + ")");
     }
 
@@ -113,7 +113,7 @@ public final class CreateTable extends AbstractQuery {
      * @param size Максимальное количество символов.
      * @return Этот объект.
      */
-    public CreateTable character(@NotNull String name, int size) {
+    public CreateTable character(@NonNull String name, int size) {
         return column(name, "CHAR(" + size + ")");
     }
 
@@ -123,7 +123,7 @@ public final class CreateTable extends AbstractQuery {
      * @param name Имя столбца.
      * @return Этот объект.
      */
-    public CreateTable text(@NotNull String name) {
+    public CreateTable text(@NonNull String name) {
         return column(name, "TEXT");
     }
 
@@ -135,7 +135,7 @@ public final class CreateTable extends AbstractQuery {
      * @param name Имя столбца
      * @return Этот объект.
      */
-    public CreateTable serial(@NotNull String name) {
+    public CreateTable serial(@NonNull String name) {
         return column(name, "SERIAL");
     }
 
@@ -147,7 +147,7 @@ public final class CreateTable extends AbstractQuery {
      * @param name Имя столбца
      * @return Этот объект.
      */
-    public CreateTable bigSerial(@NotNull String name) {
+    public CreateTable bigSerial(@NonNull String name) {
         return column(name, "BIGSERIAL");
     }
 
@@ -187,7 +187,7 @@ public final class CreateTable extends AbstractQuery {
      * @param value Устанавливаемое значение, не должно быть null.
      * @return Этот объект.
      */
-    public CreateTable defaultValue(@NotNull Object value) {
+    public CreateTable defaultValue(@NonNull Object value) {
         lastColumn().defaultValue = value;
         return this;
     }
@@ -198,7 +198,7 @@ public final class CreateTable extends AbstractQuery {
      * @param name Имя столбца.
      * @return Этот объект.
      */
-    public CreateTable intKey(@NotNull String name) {
+    public CreateTable intKey(@NonNull String name) {
         return integer(name).autoIncrement().primaryKey();
     }
 

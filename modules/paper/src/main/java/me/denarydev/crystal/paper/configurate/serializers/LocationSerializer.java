@@ -14,15 +14,15 @@ import me.denarydev.crystal.paper.utils.LocationUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
 public final class LocationSerializer implements TypeSerializer<Location> {
 
     @Override
-    public Location deserialize(@NotNull Type type, ConfigurationNode node) throws SerializationException {
+    public Location deserialize(@NonNull Type type, ConfigurationNode node) throws SerializationException {
         final String s = node.getString();
         if (s != null) {
             final String[] loc = s.split(";");
@@ -70,7 +70,7 @@ public final class LocationSerializer implements TypeSerializer<Location> {
     }
 
     @Override
-    public void serialize(@NotNull final Type type, @Nullable final Location loc, @NotNull final ConfigurationNode node) throws SerializationException {
+    public void serialize(@NonNull final Type type, @Nullable final Location loc, @NonNull final ConfigurationNode node) throws SerializationException {
         if (loc != null) {
             node.set(LocationUtils.locationToString(loc));
         }

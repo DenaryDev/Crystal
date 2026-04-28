@@ -10,7 +10,7 @@ package me.denarydev.crystal.database.query.batch;
 import me.denarydev.crystal.database.connection.ConnectionPool;
 import me.denarydev.crystal.database.query.AbstractQuery;
 import me.denarydev.crystal.database.query.impl.Raw;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -49,7 +49,7 @@ public final class BatchBuilder {
      * @param query Добавляемый запрос.
      * @return Этот объект.
      */
-    public BatchBuilder add(@NotNull AbstractQuery query) {
+    public BatchBuilder add(@NonNull AbstractQuery query) {
         final AbstractQuery raw = new Raw(pool, query.getSQL(), query.getParams());
 
         if (!this.queries.isEmpty()) {

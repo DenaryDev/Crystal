@@ -14,7 +14,7 @@ import me.denarydev.crystal.database.connection.hikari.HikariConnectionPool;
 import me.denarydev.crystal.database.query.QueryBuilder;
 import me.denarydev.crystal.database.query.batch.BatchBuilder;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 
 import javax.sql.DataSource;
@@ -31,7 +31,7 @@ public sealed abstract class ConnectionPool permits FlatfileConnectionPool, Hika
      *
      * @return {@link DatabaseType}
      */
-    @NotNull
+    @NonNull
     public abstract DatabaseType implementationType();
 
     /**
@@ -77,7 +77,7 @@ public sealed abstract class ConnectionPool permits FlatfileConnectionPool, Hika
      * @return Источник подключений к БД.
      * @throws SQLException если не удалось соединиться с БД.
      */
-    @NotNull
+    @NonNull
     public abstract DataSource dataSource() throws SQLException;
 
     /**
@@ -86,7 +86,7 @@ public sealed abstract class ConnectionPool permits FlatfileConnectionPool, Hika
      * @return Новое подключение к БД.
      * @throws SQLException когда соединение не может быть получено.
      */
-    @NotNull
+    @NonNull
     public final Connection connection() throws SQLException {
         if (!isInitialized()) {
             throw new SQLException("Unable to get a connection from the pool. (ConnectionPool not initialized)");
@@ -112,7 +112,7 @@ public sealed abstract class ConnectionPool permits FlatfileConnectionPool, Hika
      *
      * @param callback Обратный вызов, который будет выполнен при успешном соединении.
      */
-    public abstract void connect(@NotNull final ConnectionCallback callback);
+    public abstract void connect(@NonNull final ConnectionCallback callback);
 
     @ApiStatus.Internal
     public abstract Function<String, String> statementProcessor();
@@ -121,7 +121,7 @@ public sealed abstract class ConnectionPool permits FlatfileConnectionPool, Hika
      * Оборачивает соединение в обратный вызов, который автоматически обрабатывает перехват ошибок SQL.
      */
     public interface ConnectionCallback {
-        void accept(@NotNull final Connection connection) throws SQLException;
+        void accept(@NonNull final Connection connection) throws SQLException;
     }
 
     public static abstract sealed class Builder<T extends ConnectionPool> permits FlatfileConnectionPool.Builder, HikariConnectionPool.Builder {

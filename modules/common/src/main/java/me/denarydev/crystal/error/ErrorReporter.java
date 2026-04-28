@@ -7,8 +7,8 @@
  */
 package me.denarydev.crystal.error;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Универсальный интерфейс для обработки и регистрации ошибок в экосистеме Crystal.
@@ -24,7 +24,7 @@ public interface ErrorReporter<T> {
      * @param target получатель уведомления об ошибке
      * @param error  возникшее исключение
      */
-    void report(@NotNull T target, @NotNull Throwable error);
+    void report(@NonNull T target, @NonNull Throwable error);
 
     /**
      * Регистрирует ошибку с дополнительным контекстом и отправляет уведомление пользователю.
@@ -34,5 +34,5 @@ public interface ErrorReporter<T> {
      * @param logMessage сообщение для логгера (поддерживает плейсхолдеры {})
      * @param params     аргументы для форматирования сообщения
      */
-    void report(@NotNull T target, @NotNull Throwable error, @Nullable String logMessage, Object... params);
+    void report(@NonNull T target, @NonNull Throwable error, @Nullable String logMessage, Object... params);
 }

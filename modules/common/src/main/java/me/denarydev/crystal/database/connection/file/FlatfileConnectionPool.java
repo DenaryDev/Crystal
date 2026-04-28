@@ -8,7 +8,7 @@
 package me.denarydev.crystal.database.connection.file;
 
 import me.denarydev.crystal.database.connection.ConnectionPool;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import javax.sql.DataSource;
 import java.nio.file.Path;
@@ -30,7 +30,7 @@ public sealed abstract class FlatfileConnectionPool extends ConnectionPool permi
     }
 
     @Override
-    public final @NotNull DataSource dataSource() throws SQLException {
+    public final @NonNull DataSource dataSource() throws SQLException {
         if (this.dataSource == null) {
             throw new SQLException("DataSource not initialized");
         }
@@ -43,7 +43,7 @@ public sealed abstract class FlatfileConnectionPool extends ConnectionPool permi
     }
 
     @Override
-    public void connect(@NotNull ConnectionCallback callback) {
+    public void connect(@NonNull ConnectionCallback callback) {
         try {
             callback.accept(connection());
         } catch (Exception ex) {
@@ -61,7 +61,7 @@ public sealed abstract class FlatfileConnectionPool extends ConnectionPool permi
          *
          * @param file файл хранения базы данных
          */
-        public Builder<T> file(@NotNull Path file) {
+        public Builder<T> file(@NonNull Path file) {
             this.file = file;
 
             return this;

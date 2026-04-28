@@ -13,8 +13,8 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +35,7 @@ public final class NameAndLore {
         value = "_ -> new",
         pure = true
     )
-    public static @NotNull NameAndLore of(@NotNull String name) {
+    public static @NonNull NameAndLore of(@NonNull String name) {
         return new NameAndLore(name, null);
     }
 
@@ -50,7 +50,7 @@ public final class NameAndLore {
         value = "_, _ -> new",
         pure = true
     )
-    public static @NotNull NameAndLore of(@NotNull String name, @NotNull String... lore) {
+    public static @NonNull NameAndLore of(@NonNull String name, @NonNull String... lore) {
         return new NameAndLore(name, Arrays.asList(lore));
     }
 
@@ -65,7 +65,7 @@ public final class NameAndLore {
         value = "_, _ -> new",
         pure = true
     )
-    public static @NotNull NameAndLore of(@NotNull String name, @NotNull List<String> lore) {
+    public static @NonNull NameAndLore of(@NonNull String name, @NonNull List<String> lore) {
         return new NameAndLore(name, lore);
     }
 
@@ -86,7 +86,7 @@ public final class NameAndLore {
      * @return название предмета
      * @see NameAndLore#name(TagResolver...)
      */
-    @NotNull
+    @NonNull
     public String rawName() {
         return name;
     }
@@ -98,8 +98,8 @@ public final class NameAndLore {
      * @param placeholders заполнители
      * @return форматированное название
      */
-    @NotNull
-    public Component name(@NotNull TagResolver... placeholders) {
+    @NonNull
+    public Component name(@NonNull TagResolver... placeholders) {
         return MiniMessage.miniMessage().deserialize(name, placeholders);
     }
 
@@ -122,7 +122,7 @@ public final class NameAndLore {
      * @return форматированное описание или null, если описание не указано
      */
     @Nullable
-    public List<Component> lore(@NotNull TagResolver... tags) {
+    public List<Component> lore(@NonNull TagResolver... tags) {
         if (lore == null) return null;
 
         return lore.stream()
@@ -137,8 +137,8 @@ public final class NameAndLore {
      * @param placeholders заполнители, применяемые к названию и описанию
      * @return Этот же предмет, но с изменённым именем и описанием
      */
-    @NotNull
-    public ItemStack apply(@NotNull ItemStack item, @NotNull TagResolver... placeholders) {
+    @NonNull
+    public ItemStack apply(@NonNull ItemStack item, @NonNull TagResolver... placeholders) {
         item.editMeta(meta -> {
             meta.displayName(MiniMessage.miniMessage().deserialize(name, placeholders));
             if (lore != null) {

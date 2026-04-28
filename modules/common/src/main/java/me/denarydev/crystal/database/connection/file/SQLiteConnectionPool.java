@@ -8,7 +8,7 @@
 package me.denarydev.crystal.database.connection.file;
 
 import me.denarydev.crystal.database.DatabaseType;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.sqlite.SQLiteDataSource;
 
 import java.nio.charset.StandardCharsets;
@@ -22,7 +22,7 @@ public final class SQLiteConnectionPool extends FlatfileConnectionPool {
     }
 
     @Override
-    public @NotNull DatabaseType implementationType() {
+    public @NonNull DatabaseType implementationType() {
         return DatabaseType.SQLITE;
     }
 

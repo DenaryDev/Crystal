@@ -9,7 +9,7 @@ package me.denarydev.crystal.database.connection.file;
 
 import me.denarydev.crystal.database.DatabaseType;
 import org.h2.jdbcx.JdbcDataSource;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.nio.file.Path;
 import java.util.function.Function;
@@ -21,7 +21,7 @@ public final class H2ConnectionPool extends FlatfileConnectionPool {
     }
 
     @Override
-    public @NotNull DatabaseType implementationType() {
+    public @NonNull DatabaseType implementationType() {
         return DatabaseType.H2;
     }
 

@@ -7,7 +7,7 @@
  */
 package me.denarydev.crystal.utils;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.regex.Pattern;
 
@@ -20,7 +20,7 @@ public final class Wildcards {
      * @param string   строка
      * @return true, если строка соответствует шаблону, в ином случае false
      */
-    public static boolean matches(@NotNull String wildcard, @NotNull String string) {
+    public static boolean matches(@NonNull String wildcard, @NonNull String string) {
         if (wildcard.isEmpty()) {
             return string.isEmpty();
         }
@@ -32,7 +32,7 @@ public final class Wildcards {
         return matchesRegex(wildcard, string);
     }
 
-    private static boolean matchesRegex(@NotNull String wildcard, @NotNull String s) {
+    private static boolean matchesRegex(@NonNull String wildcard, @NonNull String s) {
         final String regex = "\\Q" + wildcard
             .replace("\\E", "\\E\\\\E\\Q")
             .replace("?", "\\E.\\Q")
@@ -41,7 +41,7 @@ public final class Wildcards {
         return Pattern.compile(regex).matcher(s).matches();
     }
 
-    private static boolean matches(@NotNull String wildcard, @NotNull String s, int wcIdx, int sIdx) {
+    private static boolean matches(@NonNull String wildcard, @NonNull String s, int wcIdx, int sIdx) {
         for (; wcIdx < wildcard.length(); wcIdx++) {
             final char wcChar = wildcard.charAt(wcIdx);
 

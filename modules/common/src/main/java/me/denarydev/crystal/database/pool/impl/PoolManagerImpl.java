@@ -19,7 +19,7 @@ import me.denarydev.crystal.database.connection.hikari.HikariConnectionPool;
 import me.denarydev.crystal.database.pool.PoolManager;
 import me.denarydev.crystal.database.util.LazyValue;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -105,7 +105,7 @@ public final class PoolManagerImpl extends PoolManager {
     }
 
     @Override
-    public Optional<ConnectionPool> getPool(@NotNull String poolName) {
+    public Optional<ConnectionPool> getPool(@NonNull String poolName) {
         if (this.disabled) {
             throw new IllegalStateException("PoolManager is disabled!");
         }
@@ -125,7 +125,7 @@ public final class PoolManagerImpl extends PoolManager {
     }
 
     @Override
-    public ConnectionPool requirePool(@NotNull String poolName) {
+    public ConnectionPool requirePool(@NonNull String poolName) {
         return getPool(poolName).orElseThrow(() -> new IllegalStateException("Pool '" + poolName + "' was not found, check Crystal pools configuration!"));
     }
 

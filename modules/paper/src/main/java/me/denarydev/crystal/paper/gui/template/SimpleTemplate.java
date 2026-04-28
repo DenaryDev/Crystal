@@ -12,8 +12,8 @@ import me.denarydev.crystal.paper.gui.Template;
 import net.kyori.adventure.text.Component;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -119,7 +119,7 @@ public final class SimpleTemplate extends Template {
          * @param type тип меню
          * @see InventoryType
          */
-        public Builder type(@NotNull InventoryType type) {
+        public Builder type(@NonNull InventoryType type) {
             this.type = type;
 
             return this;
@@ -143,7 +143,7 @@ public final class SimpleTemplate extends Template {
          * @param item  предмет
          * @param slots слот или несколько слотов
          */
-        public Builder item(@NotNull ItemStack item, int... slots) {
+        public Builder item(@NonNull ItemStack item, int... slots) {
             Preconditions.checkArgument(slots.length > 0, "you must specify at least one slot");
 
             for (int slot : slots) {

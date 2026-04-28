@@ -11,8 +11,8 @@ import io.sapphiremc.lib.configurate.serialize.ScalarSerializer;
 import io.sapphiremc.lib.configurate.serialize.SerializationException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
@@ -26,7 +26,7 @@ public class ComponentSerializer extends ScalarSerializer<Component> {
 
     @Override
     @Nullable
-    public Component deserialize(@NotNull final Type type, @Nullable final Object obj) throws SerializationException {
+    public Component deserialize(@NonNull final Type type, @Nullable final Object obj) throws SerializationException {
         if (obj instanceof String s) {
             return MINI_MESSAGE.deserialize(s);
         } else {
@@ -35,8 +35,8 @@ public class ComponentSerializer extends ScalarSerializer<Component> {
     }
 
     @Override
-    @NotNull
-    protected Object serialize(@NotNull final Component item, @NotNull final Predicate<Class<?>> typeSupported) {
+    @NonNull
+    protected Object serialize(@NonNull final Component item, @NonNull final Predicate<Class<?>> typeSupported) {
         return MINI_MESSAGE.serialize(item);
     }
 }

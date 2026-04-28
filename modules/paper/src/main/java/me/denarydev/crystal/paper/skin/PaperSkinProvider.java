@@ -13,7 +13,7 @@ import me.denarydev.crystal.skin.SkinProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Optional;
 import java.util.Set;
@@ -23,7 +23,7 @@ import java.util.UUID;
 public final class PaperSkinProvider extends SkinProvider {
 
     @Override
-    public @NotNull Optional<SkinProperty> playerSkin(@NotNull UUID uuid) {
+    public @NonNull Optional<SkinProperty> playerSkin(@NonNull UUID uuid) {
         final Player player = Bukkit.getPlayer(uuid);
         if (player == null) return Optional.empty();
 
@@ -31,14 +31,14 @@ public final class PaperSkinProvider extends SkinProvider {
     }
 
     @Override
-    public Optional<SkinProperty> playerSkin(@NotNull String name) {
+    public Optional<SkinProperty> playerSkin(@NonNull String name) {
         final Player player = Bukkit.getPlayer(name);
         if (player == null) return Optional.empty();
 
         return playerSKin(player);
     }
 
-    private Optional<SkinProperty> playerSKin(@NotNull Player player) {
+    private Optional<SkinProperty> playerSKin(@NonNull Player player) {
         final Set<ProfileProperty> properties = player.getPlayerProfile().getProperties();
         for (ProfileProperty property : properties) {
             if (property.getName().equals("textures")) {

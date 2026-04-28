@@ -10,8 +10,8 @@ package me.denarydev.crystal.database.query;
 import me.denarydev.crystal.database.connection.ConnectionPool;
 import me.denarydev.crystal.database.util.SQLUtil;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ public abstract class ConditionalQuery<T extends ConditionalQuery<T>> extends Ab
      * @param value  Значение.
      * @return Этот объект.
      */
-    public final T where(@NotNull String column, @NotNull Object value) {
+    public final T where(@NonNull String column, @NonNull Object value) {
         SQLUtil.validateIdentifier(column);
         return whereExpr("`" + column + "` = ?", value);
     }
@@ -50,7 +50,7 @@ public abstract class ConditionalQuery<T extends ConditionalQuery<T>> extends Ab
      * @return Этот объект.
      */
     @SuppressWarnings("unchecked")
-    public final T whereExpr(@NotNull String expr, @NotNull Object... params) {
+    public final T whereExpr(@NonNull String expr, @NonNull Object... params) {
         SQLUtil.validatePlaceholderCount(expr, params);
         this.conditions.add(new Expression(expr, params));
         return (T) this;
@@ -63,7 +63,7 @@ public abstract class ConditionalQuery<T extends ConditionalQuery<T>> extends Ab
      * @param column Имя столбца.
      * @return Этот объект.
      */
-    public final T whereNull(@NotNull String column) {
+    public final T whereNull(@NonNull String column) {
         return whereExpr("`" + column + "` IS NULL");
     }
 
@@ -76,11 +76,11 @@ public abstract class ConditionalQuery<T extends ConditionalQuery<T>> extends Ab
      * @param value  Добавляемое значение.
      * @return Этот объект.
      */
-    public final T whereNullable(@NotNull String column, @Nullable Object value) {
+    public final T whereNullable(@NonNull String column, @Nullable Object value) {
         return value == null ? whereNull(column) : where(column, value);
     }
 
-    protected void appendConditions(@NotNull StringBuilder builder) {
+    protected void appendConditions(@NonNull StringBuilder builder) {
         if (this.conditions.isEmpty()) {
             return;
         }

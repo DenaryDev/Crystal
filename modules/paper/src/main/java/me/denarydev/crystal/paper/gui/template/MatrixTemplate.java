@@ -12,8 +12,8 @@ import me.denarydev.crystal.paper.gui.Template;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,7 +56,7 @@ public final class MatrixTemplate extends Template {
      *
      * @return матрица в виде списка строк
      */
-    @NotNull
+    @NonNull
     public List<String> matrix() {
         return Collections.unmodifiableList(matrix);
     }
@@ -66,7 +66,7 @@ public final class MatrixTemplate extends Template {
      *
      * @return элементы матрицы
      */
-    @NotNull
+    @NonNull
     public Map<Character, ItemStack> elements() {
         return Collections.unmodifiableMap(elements);
     }
@@ -141,7 +141,7 @@ public final class MatrixTemplate extends Template {
          *
          * @param matrix матрица
          */
-        public Builder matrix(@NotNull String matrix) {
+        public Builder matrix(@NonNull String matrix) {
             final List<String> rows = List.of(matrix.split("\n"));
 
             return this.matrix(rows);
@@ -155,7 +155,7 @@ public final class MatrixTemplate extends Template {
          *
          * @param matrix матрица
          */
-        public Builder matrix(@NotNull List<String> matrix) {
+        public Builder matrix(@NonNull List<String> matrix) {
             Preconditions.checkArgument(!matrix.isEmpty(), "matrix cannot be empty");
             Preconditions.checkArgument(matrix.size() <= 6, "matrix cannot contain more than 6 rows");
             final boolean validateRows = matrix.stream().noneMatch(row -> row.length() != 9);
@@ -171,7 +171,7 @@ public final class MatrixTemplate extends Template {
          *
          * @return элементы матрицы
          */
-        @NotNull
+        @NonNull
         public Map<Character, ItemStack> elements() {
             return elements;
         }
@@ -184,7 +184,7 @@ public final class MatrixTemplate extends Template {
          * @param character символ
          * @param item      предмет
          */
-        public Builder element(char character, @NotNull ItemStack item) {
+        public Builder element(char character, @NonNull ItemStack item) {
             this.elements.put(character, item);
 
             return this;

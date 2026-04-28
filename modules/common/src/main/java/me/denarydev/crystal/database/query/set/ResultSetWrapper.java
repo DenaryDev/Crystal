@@ -7,7 +7,7 @@
  */
 package me.denarydev.crystal.database.query.set;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,7 +34,7 @@ public record ResultSetWrapper(ResultSet set) implements AutoCloseable {
      * @return Optional, содержащий преобразованную строку.
      * @throws SQLException При ошибке SQL.
      */
-    public <T> Optional<T> map(@NotNull ResultSetMapper<T> mapper) throws SQLException {
+    public <T> Optional<T> map(@NonNull ResultSetMapper<T> mapper) throws SQLException {
         try (final ResultSet set = this.set) {
             return set.next() ? Optional.ofNullable(mapper.map(set)) : Optional.empty();
         }
@@ -49,7 +49,7 @@ public record ResultSetWrapper(ResultSet set) implements AutoCloseable {
      * @return Список преобразованных строк.
      * @throws SQLException При ошибке SQL.
      */
-    public <T> List<T> mapAll(@NotNull ResultSetMapper<T> mapper) throws SQLException {
+    public <T> List<T> mapAll(@NonNull ResultSetMapper<T> mapper) throws SQLException {
         final List<T> list = new ArrayList<>();
 
         try (final ResultSet set = this.set) {

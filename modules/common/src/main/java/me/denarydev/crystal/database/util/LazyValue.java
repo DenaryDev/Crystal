@@ -8,7 +8,7 @@
 package me.denarydev.crystal.database.util;
 
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -44,7 +44,7 @@ public final class LazyValue<T> {
         return value;
     }
 
-    public void ifPresent(@NotNull Consumer<T> consumer) {
+    public void ifPresent(@NonNull Consumer<T> consumer) {
         final T value = this.value;
 
         if (value != null) {

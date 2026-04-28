@@ -23,7 +23,6 @@ postgresql = "42.7.10"
 # Shared
 slf4j = "2.0.17"
 jspecify = "1.0.0"
-annotations = "26.0.2-1"
 
 # Tests
 mockbukkit = "4.108.0"
@@ -59,7 +58,7 @@ driver-postgresql = { module = "org.postgresql:postgresql", version.ref = "postg
 
 # Shared
 slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
-annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
+jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 
 # Tests
 mockbukkit = { module = "org.mockbukkit.mockbukkit:mockbukkit-v1.21", version.ref = "mockbukkit" }

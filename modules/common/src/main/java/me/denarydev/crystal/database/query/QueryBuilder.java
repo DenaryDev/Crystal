@@ -15,7 +15,7 @@ import me.denarydev.crystal.database.query.impl.Raw;
 import me.denarydev.crystal.database.query.impl.Select;
 import me.denarydev.crystal.database.query.impl.Update;
 import me.denarydev.crystal.database.util.SQLUtil;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Arrays;
 
@@ -44,7 +44,7 @@ public final class QueryBuilder {
      * @param tableName Название таблицы, которая будет создана.
      * @return Запрос <code>CREATE TABLE</code>.
      */
-    public CreateTable createTable(@NotNull String tableName) {
+    public CreateTable createTable(@NonNull String tableName) {
         SQLUtil.validateIdentifier(tableName);
         return new CreateTable(pool, tableName);
     }
@@ -53,7 +53,7 @@ public final class QueryBuilder {
      * @param tableName Название таблицы, в которую будет добавлена запись.
      * @return Запрос <code>INSERT</code>.
      */
-    public Insert insertInto(@NotNull String tableName) {
+    public Insert insertInto(@NonNull String tableName) {
         SQLUtil.validateIdentifier(tableName);
         return new Insert(pool, tableName);
     }
@@ -62,7 +62,7 @@ public final class QueryBuilder {
      * @param tableName Название таблицы, которая будет обновлена.
      * @return Запрос <code>UPDATE</code>.
      */
-    public Update update(@NotNull String tableName) {
+    public Update update(@NonNull String tableName) {
         SQLUtil.validateIdentifier(tableName);
         return new Update(pool, tableName);
     }
@@ -71,7 +71,7 @@ public final class QueryBuilder {
      * @param tableName Название таблицы, из которой будут удалены записи.
      * @return Запрос <code>DELETE</code>.
      */
-    public Delete deleteFrom(@NotNull String tableName) {
+    public Delete deleteFrom(@NonNull String tableName) {
         SQLUtil.validateIdentifier(tableName);
         return new Delete(pool, tableName);
     }
@@ -81,7 +81,7 @@ public final class QueryBuilder {
      *                самостоятельно указать выбираемые столбцы или выражения.
      * @return Запрос <code>SELECT</code>.
      */
-    public Select select(@NotNull String... columns) {
+    public Select select(@NonNull String... columns) {
         Select select = new Select(pool);
 
         for (String column : columns) {
@@ -98,7 +98,7 @@ public final class QueryBuilder {
      * @param params Параметры (для заполнения плейсхолдеров <code>?</code>).
      * @return Запрос.
      */
-    public AbstractQuery raw(@NotNull String sql, @NotNull Object... params) {
+    public AbstractQuery raw(@NonNull String sql, @NonNull Object... params) {
         SQLUtil.validatePlaceholderCount(sql, params);
 
         return new Raw(pool, sql, Arrays.asList(params));

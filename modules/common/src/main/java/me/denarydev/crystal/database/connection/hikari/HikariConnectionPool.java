@@ -11,7 +11,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import me.denarydev.crystal.database.connection.ConnectionPool;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -178,7 +178,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
     }
 
     @Override
-    public @NotNull DataSource dataSource() throws SQLException {
+    public @NonNull DataSource dataSource() throws SQLException {
         if (this.dataSource == null) {
             throw new SQLException("DataSource not initialized");
         }
@@ -187,7 +187,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
     }
 
     @Override
-    public void connect(@NotNull ConnectionCallback callback) {
+    public void connect(@NonNull ConnectionCallback callback) {
         try (final Connection connection = connection()) {
             callback.accept(connection);
         } catch (SQLException ex) {
@@ -219,7 +219,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
          * <p>
          * <u>Лучше всего использовать название вашего плагина в качестве префикса имени пула.
          */
-        public final Builder<T> poolPrefix(@NotNull final String pluginName) {
+        public final Builder<T> poolPrefix(@NonNull final String pluginName) {
             this.poolPrefix = pluginName;
 
             return this;
@@ -228,7 +228,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         /**
          * IP или адрес базы данных без порта.
          */
-        public Builder<T> address(@NotNull String address) {
+        public Builder<T> address(@NonNull String address) {
             this.address = address;
 
             return this;
@@ -239,7 +239,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
          * <p>
          * По умолчанию: 3306 для MySQL и MariaDB, 5432 для PostgreSQL
          */
-        public Builder<T> port(@NotNull Integer port) {
+        public Builder<T> port(@NonNull Integer port) {
             this.port = port;
 
             return this;
@@ -248,7 +248,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         /**
          * Название базы данных для использования.
          */
-        public Builder<T> database(@NotNull String database) {
+        public Builder<T> database(@NonNull String database) {
             this.database = database;
 
             return this;
@@ -257,7 +257,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         /**
          * Имя пользователя для аутентификации.
          */
-        public Builder<T> username(@NotNull String username) {
+        public Builder<T> username(@NonNull String username) {
             this.username = username;
 
             return this;
@@ -266,7 +266,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         /**
          * Пароль для аутентификации.
          */
-        public Builder<T> password(@NotNull String password) {
+        public Builder<T> password(@NonNull String password) {
             this.password = password;
 
             return this;
@@ -371,7 +371,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
          * <p>
          * <i>Недоступно на PostgreSQL</i>
          */
-        public Builder<T> characterEncoding(@NotNull String characterEncoding) {
+        public Builder<T> characterEncoding(@NonNull String characterEncoding) {
             this.properties.put("characterEncoding", characterEncoding);
 
             return this;
@@ -383,7 +383,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
          * @param key   название свойства
          * @param value значение свойства
          */
-        public Builder<T> property(@NotNull String key, @NotNull String value) {
+        public Builder<T> property(@NonNull String key, @NonNull String value) {
             this.properties.put(key, value);
 
             return this;
@@ -394,7 +394,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
          *
          * @param properties свойства соединения
          */
-        public Builder<T> properties(@NotNull Map<String, String> properties) {
+        public Builder<T> properties(@NonNull Map<String, String> properties) {
             this.properties.putAll(properties);
 
             return this;

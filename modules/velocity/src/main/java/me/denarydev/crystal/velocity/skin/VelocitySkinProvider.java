@@ -13,7 +13,7 @@ import com.velocitypowered.api.util.GameProfile;
 import me.denarydev.crystal.skin.SkinProperty;
 import me.denarydev.crystal.skin.SkinProvider;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,7 +29,7 @@ public final class VelocitySkinProvider extends SkinProvider {
     }
 
     @Override
-    public Optional<SkinProperty> playerSkin(@NotNull UUID uuid) {
+    public Optional<SkinProperty> playerSkin(@NonNull UUID uuid) {
         final Optional<Player> opt = proxy.getPlayer(uuid);
         if (opt.isEmpty()) return Optional.empty();
 
@@ -37,14 +37,14 @@ public final class VelocitySkinProvider extends SkinProvider {
     }
 
     @Override
-    public Optional<SkinProperty> playerSkin(@NotNull String name) {
+    public Optional<SkinProperty> playerSkin(@NonNull String name) {
         final Optional<Player> opt = proxy.getPlayer(name);
         if (opt.isEmpty()) return Optional.empty();
 
         return playerSkin(opt.get());
     }
 
-    private Optional<SkinProperty> playerSkin(@NotNull Player player) {
+    private Optional<SkinProperty> playerSkin(@NonNull Player player) {
         final List<GameProfile.Property> properties = player.getGameProfile().getProperties();
         for (GameProfile.Property property : properties) {
             if (property.getName().equals("textures")) {

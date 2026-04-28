@@ -10,8 +10,8 @@ package me.denarydev.crystal.paper.configurate.serializers;
 import io.sapphiremc.lib.configurate.serialize.ScalarSerializer;
 import io.sapphiremc.lib.configurate.serialize.SerializationException;
 import org.bukkit.NamespacedKey;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
@@ -23,7 +23,7 @@ public final class NamespacedKeySerializer extends ScalarSerializer<NamespacedKe
     }
 
     @Override
-    public NamespacedKey deserialize(@NotNull final Type type, @Nullable final Object obj) throws SerializationException {
+    public NamespacedKey deserialize(@NonNull final Type type, @Nullable final Object obj) throws SerializationException {
         if (obj instanceof String s) {
             final NamespacedKey key = NamespacedKey.fromString(s);
             if (key == null) {
@@ -37,8 +37,8 @@ public final class NamespacedKeySerializer extends ScalarSerializer<NamespacedKe
     }
 
     @Override
-    @NotNull
-    protected Object serialize(@NotNull final NamespacedKey item, @NotNull final Predicate<Class<?>> typeSupported) {
+    @NonNull
+    protected Object serialize(@NonNull final NamespacedKey item, @NonNull final Predicate<Class<?>> typeSupported) {
         return item.toString();
     }
 }

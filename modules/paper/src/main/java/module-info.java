@@ -12,6 +12,7 @@ module crystal.paper {
     requires crystal.common;
     requires org.slf4j;
     requires com.mojang.brigadier;
+    requires org.jspecify;
 
     exports me.denarydev.crystal.paper;
     exports me.denarydev.crystal.paper.command;

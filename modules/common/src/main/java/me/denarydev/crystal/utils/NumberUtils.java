@@ -7,7 +7,7 @@
  */
 package me.denarydev.crystal.utils;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -31,7 +31,7 @@ public final class NumberUtils {
      * @param number число для форматирования
      * @return форматированное число в виде строки
      */
-    @NotNull
+    @NonNull
     public static String formatNumber(final double number) {
         final DecimalFormat format = new DecimalFormat(number == Math.ceil(number) ? "#,###" : "#,###.00");
 
@@ -45,8 +45,8 @@ public final class NumberUtils {
      * @param format формат {@link DecimalFormat}
      * @return форматированное число в виде строки
      */
-    @NotNull
-    public static String formatNumber(final double number, @NotNull final DecimalFormat format) {
+    @NonNull
+    public static String formatNumber(final double number, @NonNull final DecimalFormat format) {
         // This is done to specifically prevent the NBSP character from printing in foreign languages.
         final DecimalFormatSymbols symbols = format.getDecimalFormatSymbols();
         symbols.setGroupingSeparator(',');
@@ -65,7 +65,7 @@ public final class NumberUtils {
      * @param string строка для проверки
      * @return true, если является, в ином случае false
      */
-    public static boolean isInteger(@NotNull final String string) {
+    public static boolean isInteger(@NonNull final String string) {
         try {
             Integer.parseInt(string);
 
@@ -83,7 +83,7 @@ public final class NumberUtils {
      * @param string строка для проверки
      * @return true, если является, в ином случае false
      */
-    public static boolean isNumeric(@NotNull final String string) {
+    public static boolean isNumeric(@NonNull final String string) {
         return string.matches(NUMBER_REGEX);
     }
 
@@ -99,8 +99,8 @@ public final class NumberUtils {
      * @param <T> тип значения
      * @return случайное значение
      */
-    @NotNull
-    public static <T> T randomValue(@NotNull final Map<Integer, T> map) {
+    @NonNull
+    public static <T> T randomValue(@NonNull final Map<Integer, T> map) {
         final List<T> list = new ArrayList<>();
 
         for (Map.Entry<Integer, T> entry : map.entrySet()) {

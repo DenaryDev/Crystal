@@ -7,7 +7,7 @@
  */
 package me.denarydev.crystal.random;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -35,7 +35,7 @@ public final class StringGenerator {
      * @param length длина строки
      * @return случайная строка указанной длины
      */
-    public static String generateRandomString(@NotNull String characters, int length) {
+    public static String generateRandomString(@NonNull String characters, int length) {
         if (length < 1) throw new IllegalArgumentException("Length must be positive");
 
         final ThreadLocalRandom random = ThreadLocalRandom.current();

@@ -7,7 +7,7 @@
  */
 package me.denarydev.crystal.utils;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,8 +25,8 @@ public final class TextUtils {
      * @param string строка со строчной буквы
      * @return Строка с заглавной буквы
      */
-    @NotNull
-    public static String capitalize(@NotNull final String string) {
+    @NonNull
+    public static String capitalize(@NonNull final String string) {
         return string.substring(0, 1).toUpperCase() + string.substring(1);
     }
 
@@ -36,8 +36,8 @@ public final class TextUtils {
      * @param strings список строк со строчной буквы
      * @return список Строк с заглавной буквы
      */
-    @NotNull
-    public static List<String> capitalizeAll(@NotNull final List<String> strings) {
+    @NonNull
+    public static List<String> capitalizeAll(@NonNull final List<String> strings) {
         return strings.stream().map(TextUtils::capitalize).toList();
     }
 
@@ -47,8 +47,8 @@ public final class TextUtils {
      * @param text массив строк со строчной буквы
      * @return массив Строк с заглавной буквы
      */
-    @NotNull
-    public static String[] capitalizeAll(@NotNull final String... text) {
+    @NonNull
+    public static String[] capitalizeAll(@NonNull final String... text) {
         return Arrays.stream(text).map(TextUtils::capitalize).toArray(String[]::new);
     }
 
@@ -59,8 +59,8 @@ public final class TextUtils {
      * @param maxLength максимальная длина строки в символах
      * @return список строк
      */
-    @NotNull
-    public static List<String> wrapText(@NotNull String text, int maxLength) {
+    @NonNull
+    public static List<String> wrapText(@NonNull String text, int maxLength) {
         if (text.isEmpty()) return Collections.emptyList();
 
         final List<String> result = new ArrayList<>();

@@ -15,8 +15,8 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -164,7 +164,7 @@ public sealed abstract class Template permits SimpleTemplate, MatrixTemplate {
          * @param title     заголовок
          * @param resolvers плейсхолдеры
          */
-        public final B titleRich(@NotNull String title, @NotNull TagResolver... resolvers) {
+        public final B titleRich(@NonNull String title, @NonNull TagResolver... resolvers) {
             this.title = MiniMessage.miniMessage().deserialize(title, resolvers);
 
             return self();
@@ -175,7 +175,7 @@ public sealed abstract class Template permits SimpleTemplate, MatrixTemplate {
          *
          * @param title заголовок
          */
-        public final B titlePlain(@NotNull String title) {
+        public final B titlePlain(@NonNull String title) {
             this.title = Component.text(title);
 
             return self();
