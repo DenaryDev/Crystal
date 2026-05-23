@@ -146,6 +146,10 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         // to setup the schema anyways
         config.setInitializationFailTimeout(-1);
 
+        // Class.forName() only runs the static initializer once, so if a previous pool already loaded
+        // and then deregistered this driver, it won't be in DriverManager — re-register it explicitly.
+        registerDriverIfAbsent(driverClassName());
+
         this.dataSource = new HikariDataSource(config);
 
         // Calling Class.forName("<driver class name>") is enough to call the static initializer
@@ -156,6 +160,21 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         initialized = true;
     }
 
+    private static void registerDriverIfAbsent(String driverClassName) {
+        final Enumeration<Driver> drivers = DriverManager.getDrivers();
+        while (drivers.hasMoreElements()) {
+            if (drivers.nextElement().getClass().getName().equals(driverClassName)) {
+                return;
+            }
+        }
+
+        try {
+            final Driver driver = (Driver) Class.forName(driverClassName).getDeclaredConstructor().newInstance();
+            DriverManager.registerDriver(driver);
+        } catch (Exception ignored) {
+        }
+    }
+
     private static void deregisterDriver(String driverClassName) {
         final Enumeration<Driver> drivers = DriverManager.getDrivers();
         while (drivers.hasMoreElements()) {
@@ -163,8 +182,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
             if (driver.getClass().getName().equals(driverClassName)) {
                 try {
                     DriverManager.deregisterDriver(driver);
-                } catch (SQLException e) {
-                    // ignore
+                } catch (SQLException ignored) {
                 }
             }
         }
