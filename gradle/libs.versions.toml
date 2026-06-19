@@ -1,6 +1,6 @@
 [versions]
 # Platforms
-paper = "1.21.11-R0.1-SNAPSHOT"
+paper = "26.1.2.build.+"
 velocity = "3.5.0-SNAPSHOT"
 core = "1.2.0-SNAPSHOT"
 
@@ -11,24 +11,24 @@ configurate = "4.3.0-DEV-SNAPSHOT" # Версия из нашего репози
 skinsrestorer = "15.7.7"
 
 # SQL
-hikari = "7.0.2"
+hikari = "7.1.0"
 ## Local
-sqlite = "3.53.0.0"
+sqlite = "3.53.2.0"
 h2 = "2.4.240"
 ## Remote
 mysql = "9.7.0"
-mariadb = "3.5.8"
-postgresql = "42.7.10"
+mariadb = "3.5.9"
+postgresql = "42.7.11"
 
 # Shared
-slf4j = "2.0.17"
+slf4j = "2.0.18"
 jspecify = "1.0.0"
 
 # Tests
-mockbukkit = "4.108.0"
+mockbukkit = "4.113.2"
 
 # Plugins
-buildconfig = "6.0.9"
+buildconfig = "6.0.10"
 plugin-yml = "0.9.0"
 run-task = "3.0.2"
 
@@ -61,7 +61,7 @@ slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 
 # Tests
-mockbukkit = { module = "org.mockbukkit.mockbukkit:mockbukkit-v1.21", version.ref = "mockbukkit" }
+mockbukkit = { module = "org.mockbukkit.mockbukkit:mockbukkit-v26.1.2", version.ref = "mockbukkit" }
 
 [bundles]
 sql-drivers = ["driver-sqlite", "driver-h2", "driver-mysql", "driver-mariadb", "driver-postgresql"]

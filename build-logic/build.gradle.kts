@@ -16,21 +16,21 @@ dependencies {
 }
 
 java {
-    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    toolchain.languageVersion = JavaLanguageVersion.of(25)
 }
 
 kotlin {
-    jvmToolchain(21)
+    jvmToolchain(25)
 }
 
 tasks {
     withType<JavaCompile>().configureEach {
-        options.release = 21
+        options.release = 25
     }
 
     withType<KotlinCompile>().configureEach {
         compilerOptions {
-            jvmTarget = JvmTarget.JVM_21
+            jvmTarget = JvmTarget.JVM_25
         }
     }
 }

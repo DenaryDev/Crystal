@@ -7,8 +7,6 @@
  */
 package me.denarydev.crystal;
 
-import org.jetbrains.annotations.ApiStatus;
-
 /**
  * Перечисление поддерживаемых платформ для работы Crystal.
  * <p>

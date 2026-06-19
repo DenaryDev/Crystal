@@ -371,7 +371,7 @@ public final class ItemBuilder {
      * Обычно используется в связке с текстурпаком.
      *
      * @param data кастомдата модельки предмета.
-     * @deprecated используйте {@link #customModelDataFloats(List)}
+     * @deprecated устарело начиная с версии Minecraft 1.21.5, используйте {@link #customModelDataFloats(List)} в качестве замены этого метода.
      */
     @Deprecated(since = "3.0.0")
     public ItemBuilder customModelData(@Nullable Integer data) {

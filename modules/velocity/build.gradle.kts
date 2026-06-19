@@ -27,7 +27,7 @@ tasks {
     }
 
     runVelocity {
-        velocityVersion("3.4.0-SNAPSHOT")
+        velocityVersion(libs.versions.velocity.get())
         runDirectory(rootProject.projectDir.resolve("run/velocity"))
 
         val file = rootProject.projectDir.resolve("run/velocity/velocity.jar")

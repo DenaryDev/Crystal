@@ -37,7 +37,7 @@ tasks {
         dependsOn(spotlessApply)
 
         options.encoding = Charsets.UTF_8.name()
-        options.release = 21
+        options.release = 25
         options.compilerArgs.addAll(
             listOf(
                 "-parameters",

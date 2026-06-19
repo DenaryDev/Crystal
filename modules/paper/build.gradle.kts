@@ -46,7 +46,7 @@ tasks {
     }
 
     runServer {
-        minecraftVersion("1.21.10")
+        minecraftVersion("26.1.2")
         runDirectory(rootProject.projectDir.resolve("run/paper"))
 
         val file = rootProject.projectDir.resolve("run/paper/paper.jar")
