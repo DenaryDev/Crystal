@@ -30,6 +30,8 @@ tasks {
         velocityVersion(libs.versions.velocity.get())
         runDirectory(rootProject.projectDir.resolve("run/velocity"))
 
+        jvmArgs("--enable-native-access=ALL-UNNAMED")
+
         val file = rootProject.projectDir.resolve("run/velocity/velocity.jar")
         if (file.exists()) runJar(file)
     }

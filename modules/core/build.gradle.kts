@@ -37,6 +37,7 @@ tasks {
     }
 
     register<JavaExec>("runCore") {
+        description = "Runs ProstoCraft Core with this plugin"
         group = "crystal"
         dependsOn(shadowJar)
 
@@ -50,6 +51,8 @@ tasks {
 
         classpath(coreJar)
         standardInput = System.`in`
+
+        jvmArgs("--enable-native-access=ALL-UNNAMED")
 
         doFirst {
             if (!workingDir.exists()) {
