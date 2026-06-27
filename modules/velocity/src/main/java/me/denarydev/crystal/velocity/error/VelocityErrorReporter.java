@@ -37,6 +37,14 @@ public final class VelocityErrorReporter implements ErrorReporter<Player> {
      * @param logger логгер, в который будут записываться ошибки
      * @return новый экземпляр {@link VelocityErrorReporter}
      */
+    public static VelocityErrorReporter create(@NonNull Logger logger) {
+        return new VelocityErrorReporter(logger);
+    }
+
+    /**
+     * @deprecated Renamed to {@link #create(Logger)}
+     */
+    @Deprecated(forRemoval = true)
     public static VelocityErrorReporter of(@NonNull Logger logger) {
         return new VelocityErrorReporter(logger);
     }

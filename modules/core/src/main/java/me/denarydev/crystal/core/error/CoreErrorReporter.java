@@ -5,51 +5,38 @@
  * license that can be found in the LICENSE file or at
  * https://opensource.org/licenses/MIT.
  */
-package me.denarydev.crystal.paper.error;
+package me.denarydev.crystal.core.error;
 
 import me.denarydev.crystal.Crystal;
 import me.denarydev.crystal.error.ErrorReporter;
 import me.denarydev.crystal.random.StringGenerator;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
-import org.bukkit.entity.Player;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
+import ru.prostocraft.core.data.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * Обработчик ошибок для платформы Paper.
+ * Обработчик ошибок для платформы Core.
  * Регистрирует инцидент в логах и отправляет игроку сообщение с уникальным кодом ошибки.
  */
-public final class PaperErrorReporter implements ErrorReporter<Player> {
+public final class CoreErrorReporter implements ErrorReporter<Player> {
     private final Logger logger;
 
     /**
      * Создает новый экземпляр репортера для указанного логгера.
      *
      * @param logger логгер, в который будут записываться ошибки
-     * @return новый экземпляр {@link PaperErrorReporter}
+     * @return новый экземпляр {@link CoreErrorReporter}
      */
-    public static PaperErrorReporter create(@NonNull Logger logger) {
-        return new PaperErrorReporter(logger);
+    public static CoreErrorReporter create(@NonNull Logger logger) {
+        return new CoreErrorReporter(logger);
     }
 
-    /**
-     * @deprecated Renamed to {@link #create(Logger)}
-     */
-    @Deprecated(forRemoval = true)
-    public static PaperErrorReporter of(@NonNull Logger logger) {
-        return new PaperErrorReporter(logger);
-    }
-
-    private PaperErrorReporter(Logger logger) {
+    private CoreErrorReporter(Logger logger) {
         this.logger = logger;
     }
 
@@ -86,13 +73,11 @@ public final class PaperErrorReporter implements ErrorReporter<Player> {
         }
 
         {
-            final Component playerMessage = MiniMessage.miniMessage().deserialize(
-                Crystal.instance().messages().errors().errorWithCode(),
-                Placeholder.unparsed("code", errorCode)
-            ).hoverEvent(HoverEvent.showText(MiniMessage.miniMessage().deserialize(
-                    Crystal.instance().messages().errors().errorCodeHover()
-                ))
-            ).clickEvent(ClickEvent.copyToClipboard(errorCode));
+            final String playerMessage = "<hover:show_text:'%s'><click:copy_to_clipboard:'%s'>%s</click></hover>".formatted(
+                Crystal.instance().messages().errors().errorCodeHover(),
+                errorCode,
+                Crystal.instance().messages().errors().errorWithCode()
+            );
 
             target.sendMessage(playerMessage);
         }

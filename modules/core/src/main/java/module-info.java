@@ -3,4 +3,5 @@ module crystal.core {
     requires crystal.common;
     requires org.jetbrains.annotations;
     requires org.slf4j;
+    requires org.jspecify;
 }
