@@ -7,14 +7,14 @@ base {
 }
 
 dependencies {
-    implementation(project(":crystal-core"))
+    findProject(":crystal-core")?.also { implementation(it) }
     implementation(project(":crystal-paper"))
     implementation(project(":crystal-velocity"))
 }
 
 tasks {
     compileJava {
-        dependsOn(":crystal-core:shadowJar")
+        if (findProject(":crystal-core") != null) dependsOn(":crystal-core:shadowJar")
         dependsOn(":crystal-paper:shadowJar")
         dependsOn(":crystal-velocity:shadowJar")
     }

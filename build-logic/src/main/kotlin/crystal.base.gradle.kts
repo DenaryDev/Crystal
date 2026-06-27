@@ -7,10 +7,7 @@ repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/") { name = "papermc" }
     maven("https://repo.codemc.org/repository/maven-public/") { name = "codemc" }
-    maven("https://repo.prostocraft.ru/private/") {
-        name = "prostocraft"
-        credentials(PasswordCredentials::class)
-    }
+    maven("https://repo.prostocraft.ru/public/") { name = "prostocraft-public" }
 }
 
 java {

@@ -64,9 +64,11 @@ java {
     withSourcesJar()
 }
 
+val repository = if (project.name.endsWith("-core")) "private" else "snapshots"
+
 publishing {
     repositories {
-        maven("https://repo.prostocraft.ru/private/") {
+        maven("https://repo.prostocraft.ru/$repository/") {
             name = "prostocraft"
             credentials(PasswordCredentials::class)
         }

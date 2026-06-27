@@ -9,7 +9,12 @@ includeBuild("build-logic")
 submodule("common")
 submodule("paper")
 submodule("velocity")
-submodule("core")
+
+val includeCore = providers.gradleProperty("includeCore").map { it.toBoolean() }.orElse(false).get()
+if (includeCore) {
+    submodule("core")
+}
+
 submodule("universal")
 
 fun submodule(name: String) {

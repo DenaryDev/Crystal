@@ -2,6 +2,13 @@ plugins {
     id("crystal.common")
 }
 
+repositories {
+    maven("https://repo.prostocraft.ru/private/") {
+        name = "prostocraft"
+        credentials(PasswordCredentials::class)
+    }
+}
+
 base {
     archivesName = "Crystal-Core"
 }
@@ -41,7 +48,7 @@ tasks {
         group = "crystal"
         dependsOn(shadowJar)
 
-        val workingDir = rootProject.projectDir.resolve("run/core");
+        val workingDir = rootProject.projectDir.resolve("run/core")
         workingDir(workingDir)
 
         val coreJar = workingDir.resolve("core.jar")
