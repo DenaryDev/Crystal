@@ -40,10 +40,7 @@ public abstract class Crystal {
 
         try {
             this.config = ConfigMapper.load(ConfigLoaders.yaml(dataFolder().resolve("config.yml"), CrystalConfig.HEADER), CrystalConfig.class);
-
-            if (Platform.current() != Platform.CORE) { // На коре сообщения попросту не нужны
-                this.messages = ConfigMapper.load(ConfigLoaders.yaml(config.messagesPath(), MessagesConfig.HEADER), MessagesConfig.class);
-            }
+            this.messages = ConfigMapper.load(ConfigLoaders.yaml(config.messagesPath(), MessagesConfig.HEADER), MessagesConfig.class);
 
             poolManager.initialize();
         } catch (ConfigurateException e) {
