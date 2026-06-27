@@ -11,6 +11,10 @@ import org.jspecify.annotations.NonNull;
 
 import java.util.regex.Pattern;
 
+/**
+ * Утилиты для сопоставления строк с wildcard-шаблонами,
+ * где {@code *} заменяет любое количество символов, а {@code ?} — ровно один.
+ */
 public final class Wildcards {
 
     /**

@@ -37,7 +37,7 @@ public final class CreateTable extends AbstractQuery {
     }
 
     /**
-     * Adds <code>IF NOT EXISTS</code> clause to the query.
+     * Добавляет предложение <code>IF NOT EXISTS</code> в запрос.
      *
      * @return Этот объект.
      */

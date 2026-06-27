@@ -7,5 +7,11 @@
  */
 package me.denarydev.crystal.skin;
 
+/**
+ * Свойство скина игрока — пара из Base64-значения текстуры и её подписи.
+ *
+ * @param value     Base64-закодированные данные текстуры
+ * @param signature криптографическая подпись Mojang для данной текстуры
+ */
 public record SkinProperty(String value, String signature) {
 }

@@ -13,6 +13,9 @@ import org.jspecify.annotations.NonNull;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Пул соединений для базы данных MySQL.
+ */
 public final class MySqlConnectionPool extends HikariConnectionPool {
 
     public MySqlConnectionPool(String poolPrefix, String address, Integer port, String database, String username, String password,

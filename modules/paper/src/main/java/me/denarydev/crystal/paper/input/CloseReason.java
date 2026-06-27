@@ -7,6 +7,9 @@
  */
 package me.denarydev.crystal.paper.input;
 
+/**
+ * Причина закрытия {@link ChatPrompt}.
+ */
 public enum CloseReason {
     /**
      * От игрока успешно получен ответ на запрос.

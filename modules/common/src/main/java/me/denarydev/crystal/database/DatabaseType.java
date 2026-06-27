@@ -9,6 +9,9 @@ package me.denarydev.crystal.database;
 
 import me.denarydev.crystal.database.query.Dialect;
 
+/**
+ * Поддерживаемые типы баз данных.
+ */
 public enum DatabaseType {
     SQLITE(false),
     H2(false),
@@ -23,6 +26,8 @@ public enum DatabaseType {
     }
 
     /**
+     * Проверяет, использует ли данный тип БД удалённое сетевое подключение.
+     *
      * @return true, если база данных использует удалённое подключение
      */
     public boolean remote() {

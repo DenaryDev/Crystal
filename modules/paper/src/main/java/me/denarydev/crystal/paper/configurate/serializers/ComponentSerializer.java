@@ -17,6 +17,10 @@ import org.jspecify.annotations.Nullable;
 import java.lang.reflect.Type;
 import java.util.function.Predicate;
 
+/**
+ * Сериализатор для {@link net.kyori.adventure.text.Component} в Configurate.
+ * Сериализует компоненты в строку формата MiniMessage и обратно.
+ */
 public class ComponentSerializer extends ScalarSerializer<Component> {
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
 

@@ -13,38 +13,51 @@ import me.denarydev.crystal.database.connection.hikari.MariaDBConnectionPool;
 import me.denarydev.crystal.database.connection.hikari.MySqlConnectionPool;
 import me.denarydev.crystal.database.connection.hikari.PostgresConnectionPool;
 
+/**
+ * Фабрика билдеров пулов соединений с базами данных.
+ */
 public final class ConnectionPoolBuilders {
 
     /**
-     * Создаёт новый билдер фабрики соединений SQLite
+     * Создаёт новый билдер пула соединений SQLite.
+     *
+     * @return билдер пула соединений SQLite
      */
     public static SQLiteConnectionPool.Builder sqlite() {
         return new SQLiteConnectionPool.Builder();
     }
 
     /**
-     * Создаёт новый билдер фабрики соединений H2
+     * Создаёт новый билдер пула соединений H2.
+     *
+     * @return билдер пула соединений H2
      */
     public static H2ConnectionPool.Builder h2() {
         return new H2ConnectionPool.Builder();
     }
 
     /**
-     * Создаёт новый билдер фабрики соединений MySQL
+     * Создаёт новый билдер пула соединений MySQL.
+     *
+     * @return билдер пула соединений MySQL
      */
     public static MySqlConnectionPool.Builder mysql() {
         return new MySqlConnectionPool.Builder();
     }
 
     /**
-     * Создаёт новый билдер фабрики соединений MariaDB
+     * Создаёт новый билдер пула соединений MariaDB.
+     *
+     * @return билдер пула соединений MariaDB
      */
     public static MariaDBConnectionPool.Builder mariadb() {
         return new MariaDBConnectionPool.Builder();
     }
 
     /**
-     * Создаёт новый билдер фабрики соединений PostgreSQL
+     * Создаёт новый билдер пула соединений PostgreSQL.
+     *
+     * @return билдер пула соединений PostgreSQL
      */
     public static PostgresConnectionPool.Builder postgresql() {
         return new PostgresConnectionPool.Builder();

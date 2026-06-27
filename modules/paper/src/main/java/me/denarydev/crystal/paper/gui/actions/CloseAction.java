@@ -9,7 +9,16 @@ package me.denarydev.crystal.paper.gui.actions;
 
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
+/**
+ * Действие, выполняемое при закрытии меню игроком.
+ */
 @FunctionalInterface
 public interface CloseAction {
+
+    /**
+     * Вызывается при закрытии меню.
+     *
+     * @param event событие закрытия инвентаря
+     */
     void close(final InventoryCloseEvent event);
 }

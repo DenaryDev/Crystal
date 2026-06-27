@@ -85,6 +85,14 @@ public final class LocationUtils {
         return closest;
     }
 
+    /**
+     * Преобразует {@link Location} в строку вида {@code мир;x;y;z} или {@code мир;x;y;z;yaw;pitch}.
+     * <p>
+     * Если мир не загружен, он не включается в строку.
+     *
+     * @param location локация для сериализации
+     * @return строковое представление локации
+     */
     public static String locationToString(Location location) {
         Preconditions.checkNotNull(location, "location cannot be null");
 

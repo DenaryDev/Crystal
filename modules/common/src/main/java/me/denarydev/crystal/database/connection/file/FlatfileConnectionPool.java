@@ -14,6 +14,10 @@ import javax.sql.DataSource;
 import java.nio.file.Path;
 import java.sql.SQLException;
 
+/**
+ * Базовый класс для файловых пулов соединений (SQLite, H2),
+ * хранящих данные локально в файле на диске.
+ */
 public sealed abstract class FlatfileConnectionPool extends ConnectionPool permits H2ConnectionPool, SQLiteConnectionPool {
 
     protected final Path file;

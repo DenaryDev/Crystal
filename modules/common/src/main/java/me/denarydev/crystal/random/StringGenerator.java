@@ -32,7 +32,8 @@ public final class StringGenerator {
      * Создаёт случайную строку указанной длины, которая может содержать
      * любые символы из указанной строки.
      *
-     * @param length длина строки
+     * @param characters строка допустимых символов
+     * @param length     длина строки
      * @return случайная строка указанной длины
      */
     public static String generateRandomString(@NonNull String characters, int length) {

@@ -24,6 +24,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Базовый класс для сетевых пулов соединений на основе HikariCP
+ * (MySQL, MariaDB, PostgreSQL).
+ */
 public abstract sealed class HikariConnectionPool extends ConnectionPool permits MySqlConnectionPool, MariaDBConnectionPool, PostgresConnectionPool {
 
     private final String poolPrefix;

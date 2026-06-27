@@ -13,6 +13,9 @@ import org.jspecify.annotations.NonNull;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Пул соединений для базы данных PostgreSQL.
+ */
 public final class PostgresConnectionPool extends HikariConnectionPool {
 
     public PostgresConnectionPool(String poolPrefix, String address, Integer port, String database, String username, String password,

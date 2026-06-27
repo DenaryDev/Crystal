@@ -14,6 +14,9 @@ import org.jspecify.annotations.NonNull;
 import java.nio.file.Path;
 import java.util.function.Function;
 
+/**
+ * Пул соединений для встроенной базы данных H2.
+ */
 public final class H2ConnectionPool extends FlatfileConnectionPool {
 
     H2ConnectionPool(Path file) {

@@ -14,10 +14,20 @@ import org.jspecify.annotations.NonNull;
 import javax.sql.DataSource;
 import java.util.Optional;
 
+/**
+ * Менеджер пулов соединений с базами данных.
+ * Предоставляет доступ к пулам, зарегистрированным в конфигурации Crystal.
+ */
 public abstract class PoolManager {
 
     private static PoolManager impl;
 
+    /**
+     * Возвращает текущий экземпляр менеджера пулов.
+     *
+     * @return текущий экземпляр {@link PoolManager}
+     * @throws IllegalStateException если менеджер ещё не инициализирован
+     */
     public static PoolManager get() {
         if (impl == null) {
             throw new IllegalStateException("PoolManager has not been initialized");

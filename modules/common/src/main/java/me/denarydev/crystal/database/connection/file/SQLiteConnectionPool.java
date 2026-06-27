@@ -15,6 +15,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.function.Function;
 
+/**
+ * Пул соединений для встроенной базы данных SQLite.
+ */
 public final class SQLiteConnectionPool extends FlatfileConnectionPool {
 
     SQLiteConnectionPool(Path file) {
