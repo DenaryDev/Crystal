@@ -74,8 +74,8 @@ val repository: String = if (project.name.endsWith("-core")) {
 
 publishing {
     repositories {
-        maven("https://repo.prostocraft.ru/$repository/") {
-            name = "prostocraft"
+        maven("https://repo.rafaelkauwu.me/$repository/") {
+            name = "rafaelkauwu"
             credentials(PasswordCredentials::class)
         }
     }

@@ -17,17 +17,17 @@ import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Набор кастомных сериализаторов для некоторых объектов из ядра Paper.
+ * A collection of custom serializers for common Paper objects.
  * <p>
- * <b>Обязательно используйте Configurate из пути <code>io.sapphiremc.lib.configurate</code>,
- * не <code>org.spongepowered.configurate</code></b>
+ * <b>You must use Configurate from <code>io.sapphiremc.lib.configurate</code>,
+ * not <code>org.spongepowered.configurate</code>.</b>
  */
 public final class PaperSerializers {
 
     /**
-     * Возвращает коллекцию сериализаторов для Configurate.
+     * Returns the serializer collection for Configurate.
      *
-     * @return {@link TypeSerializerCollection}
+     * @return a {@link TypeSerializerCollection} containing all registered serializers.
      */
     public static TypeSerializerCollection get() {
         return TypeSerializerCollection.builder()
@@ -41,9 +41,9 @@ public final class PaperSerializers {
     }
 
     /**
-     * Применяет все имеющиеся сериализаторы к указанному билдеру коллекции.
+     * Registers all available serializers into the given collection builder.
      *
-     * @param builder {@link TypeSerializerCollection.Builder}
+     * @param builder the {@link TypeSerializerCollection.Builder} to populate.
      */
     public static void apply(TypeSerializerCollection.Builder builder) {
         builder

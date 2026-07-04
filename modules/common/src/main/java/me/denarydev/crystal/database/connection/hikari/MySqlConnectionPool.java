@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * Пул соединений для базы данных MySQL.
+ * Connection pool for the MySQL database.
  */
 public final class MySqlConnectionPool extends HikariConnectionPool {
 

@@ -8,21 +8,21 @@
 package me.denarydev.crystal.database.query;
 
 /**
- * Перечисление поддерживаемых диалектов SQL.
+ * Enumeration of supported SQL dialects.
  */
 public enum Dialect {
     /**
-     * Стандартный диалект SQL (обычно MySQL/MariaDB).
+     * The standard SQL dialect (typically MySQL/MariaDB).
      */
     DEFAULT,
 
     /**
-     * Диалект для базы данных SQLite.
+     * The SQL dialect for SQLite.
      */
     SQLITE,
 
     /**
-     * Диалект для базы данных PostgreSQL.
+     * The SQL dialect for PostgreSQL.
      */
     POSTGRES
 }

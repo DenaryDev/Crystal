@@ -25,7 +25,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Базовый класс для сетевых пулов соединений на основе HikariCP
+ * Base class for network-based connection pools using HikariCP
  * (MySQL, MariaDB, PostgreSQL).
  */
 public abstract sealed class HikariConnectionPool extends ConnectionPool permits MySqlConnectionPool, MariaDBConnectionPool, PostgresConnectionPool {
@@ -72,30 +72,31 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
     }
 
     /**
-     * Возвращает порт по умолчанию для данного типа БД.
+     * Returns the default port for this database type.
      *
-     * @return порт по умолчанию
+     * @return the default port
      */
     protected abstract Integer defaultPort();
 
     /**
-     * Название класса драйвера для данного типа БД.
+     * Returns the JDBC driver class name for this database type.
      *
-     * @return название класса драйвера
+     * @return the driver class name
      */
     protected abstract String driverClassName();
 
     /**
-     * Идентификатор типа бд для JDBC-ссылки (jdbc:айди://...)
+     * Returns the JDBC URL identifier for this database type (e.g. jdbc:&lt;id&gt;://...).
      *
-     * @return идентификатор типа бд
+     * @return the JDBC type identifier
      */
     protected abstract String driverJdbcIdentifier();
 
     /**
-     * Позволяет экземпляру фабрики подключений переопределять определенные свойства до их установки.
+     * Allows connection pool implementations to override or modify connection properties
+     * before they are applied.
      *
-     * @param properties текущие свойства
+     * @param properties the current connection properties
      */
     protected void overrideProperties(Map<String, Object> properties) {
         // https://github.com/brettwooldridge/HikariCP/wiki/Rapid-Recovery
@@ -103,10 +104,10 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
     }
 
     /**
-     * Устанавливает заданные свойства соединения в конфигурацию.
+     * Applies the given connection properties to the HikariCP configuration.
      *
-     * @param config     конфигурация hikari
-     * @param properties свойства
+     * @param config     the HikariCP configuration
+     * @param properties the properties to apply
      */
     protected void setProperties(HikariConfig config, Map<String, Object> properties) {
         for (Map.Entry<String, Object> property : properties.entrySet()) {
@@ -235,11 +236,12 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         protected final Map<String, String> properties = new HashMap<>();
 
         /**
-         * Префикс для имён пулов в hikari.
+         * The prefix for pool names in HikariCP.
          * <p>
-         * Уникальный префикс позволит вам отличать логи hikari этого плагина от логов hikari других плагинов.
+         * A unique prefix helps distinguish the HikariCP log output of this plugin
+         * from that of other plugins.
          * <p>
-         * <u>Лучше всего использовать название вашего плагина в качестве префикса имени пула.
+         * <u>It is recommended to use your plugin's name as the pool name prefix.</u>
          */
         public final Builder<T> poolPrefix(@NonNull final String pluginName) {
             this.poolPrefix = pluginName;
@@ -248,7 +250,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         }
 
         /**
-         * IP или адрес базы данных без порта.
+         * The IP address or hostname of the database server, without the port.
          */
         public Builder<T> address(@NonNull String address) {
             this.address = address;
@@ -257,9 +259,9 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         }
 
         /**
-         * Порт для подключения.
+         * The port to connect on.
          * <p>
-         * По умолчанию: 3306 для MySQL и MariaDB, 5432 для PostgreSQL
+         * Default: 3306 for MySQL and MariaDB, 5432 for PostgreSQL.
          */
         public Builder<T> port(@NonNull Integer port) {
             this.port = port;
@@ -268,7 +270,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         }
 
         /**
-         * Название базы данных для использования.
+         * The name of the database to use.
          */
         public Builder<T> database(@NonNull String database) {
             this.database = database;
@@ -277,7 +279,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         }
 
         /**
-         * Имя пользователя для аутентификации.
+         * The username for authentication.
          */
         public Builder<T> username(@NonNull String username) {
             this.username = username;
@@ -286,7 +288,7 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         }
 
         /**
-         * Пароль для аутентификации.
+         * The password for authentication.
          */
         public Builder<T> password(@NonNull String password) {
             this.password = password;
@@ -295,10 +297,10 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         }
 
         /**
-         * Максимальное количество одновременных подключений.
-         * Должно быть столько же, сколько у вас ядер.
+         * The maximum number of simultaneous connections.
+         * Should match the number of CPU cores available.
          * <p>
-         * По умолчанию: 6
+         * Default: 6
          */
         public Builder<T> maxPoolSize(int maxPoolSize) {
             this.maxPoolSize = maxPoolSize;
@@ -307,10 +309,10 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         }
 
         /**
-         * Количество соединений, которые всегда должны быть открыты.
-         * Чтобы избежать проблем, установите для этого параметра то же значение, что и для maxPoolSize.
+         * The minimum number of connections that should always remain open.
+         * To avoid issues, set this to the same value as maxPoolSize.
          * <p>
-         * По умолчанию: 6
+         * Default: 6
          */
         public Builder<T> minimumIdle(int minimumIdle) {
             this.minimumIdle = minimumIdle;
@@ -319,9 +321,9 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         }
 
         /**
-         * Количество миллисекунд, в течение которых одно соединение должно оставаться открытым.
+         * The maximum number of milliseconds a single connection should remain open.
          * <p>
-         * По умолчанию: 1800000 (30 минут)
+         * Default: 1800000 (30 minutes)
          */
         public Builder<T> maxLifetime(int maxLifetime) {
             this.maxLifetime = maxLifetime;
@@ -330,9 +332,9 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         }
 
         /**
-         * Установка интервала, в течение которого нужно «пинговать» базу данных. Установите 0, чтобы отключить.
+         * The interval at which to ping the database to keep connections alive. Set to 0 to disable.
          * <p>
-         * По умолчанию: 0
+         * Default: 0
          */
         public Builder<T> keepAliveTime(int keepAliveTime) {
             this.keepAliveTime = keepAliveTime;
@@ -341,9 +343,9 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         }
 
         /**
-         * Количество секунд, в течение которых мы ждем ответа от базы данных, прежде чем истечет время ожидания.
+         * The number of milliseconds to wait for a response from the database before timing out.
          * <p>
-         * По умолчанию: 5000
+         * Default: 5000
          */
         public Builder<T> connectionTimeout(int connectionTimeout) {
             this.connectionTimeout = connectionTimeout;
@@ -352,9 +354,9 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         }
 
         /**
-         * Использовать ли SSL.
+         * Whether to use SSL.
          * <p>
-         * По умолчанию: true
+         * Default: true
          */
         public Builder<T> useSSL(boolean useSSL) {
             this.properties.put("useSSL", Boolean.toString(useSSL));
@@ -363,9 +365,9 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         }
 
         /**
-         * Проверять ли сертификат сервера.
+         * Whether to verify the server certificate.
          * <p>
-         * По умолчанию: true
+         * Default: true
          */
         public Builder<T> verifyServerCertificate(boolean verifyServerCertificate) {
             this.properties.put("verifyServerCertificate", Boolean.toString(verifyServerCertificate));
@@ -374,11 +376,11 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         }
 
         /**
-         * Использовать ли Unicode.
+         * Whether to use Unicode.
          * <p>
-         * По умолчанию: true
+         * Default: true
          * <p>
-         * <i>Недоступно на PostgreSQL</i>
+         * <i>Not available for PostgreSQL</i>
          */
         public Builder<T> useUnicode(boolean useUnicode) {
             this.properties.put("useUnicode", Boolean.toString(useUnicode));
@@ -387,11 +389,11 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         }
 
         /**
-         * Используемая кодировка символов.
+         * The character encoding to use.
          * <p>
-         * По умолчанию: utf8
+         * Default: utf8
          * <p>
-         * <i>Недоступно на PostgreSQL</i>
+         * <i>Not available for PostgreSQL</i>
          */
         public Builder<T> characterEncoding(@NonNull String characterEncoding) {
             this.properties.put("characterEncoding", characterEncoding);
@@ -400,10 +402,10 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         }
 
         /**
-         * Устанавливает дополнительное свойство соединения.
+         * Sets an additional connection property.
          *
-         * @param key   название свойства
-         * @param value значение свойства
+         * @param key   the property name
+         * @param value the property value
          */
         public Builder<T> property(@NonNull String key, @NonNull String value) {
             this.properties.put(key, value);
@@ -412,9 +414,9 @@ public abstract sealed class HikariConnectionPool extends ConnectionPool permits
         }
 
         /**
-         * Устанавливает дополнительные свойства соединения.
+         * Sets additional connection properties.
          *
-         * @param properties свойства соединения
+         * @param properties the connection properties to apply
          */
         public Builder<T> properties(@NonNull Map<String, String> properties) {
             this.properties.putAll(properties);

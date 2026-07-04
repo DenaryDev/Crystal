@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Запрос <code>DELETE</code>.
+ * A <code>DELETE</code> query.
  */
 public final class Delete extends ConditionalQuery<Delete> {
 

@@ -11,16 +11,16 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 
 /**
- * Внутренний класс, не используйте напрямую.
+ * Internal class; do not use directly.
  */
 @ApiStatus.Internal
 public final class SQLUtil {
 
     /**
-     * Преобразует переданный объект в строку, подходящую для использования в SQL-запросах.
+     * Converts the given object to a string suitable for use in SQL queries.
      *
-     * @param value значение
-     * @return строка, отформатированная для SQL.
+     * @param value the value.
+     * @return the SQL-formatted string.
      */
     public static String valueToSqlString(@NonNull Object value) {
         if (value instanceof Boolean bool) {
@@ -33,9 +33,9 @@ public final class SQLUtil {
     }
 
     /**
-     * Проверяет, что указанная строка не пуста и не содержит символов <code>`</code>.
+     * Validates that the given string is not empty and does not contain <code>`</code> characters.
      *
-     * @param s Строка для проверки.
+     * @param s the string to validate.
      */
     public static void validateIdentifier(@NonNull String s) {
         if (s.isEmpty()) {
@@ -48,10 +48,11 @@ public final class SQLUtil {
     }
 
     /**
-     * Проверяет, что количество символов <code>?</code> в строке совпадает с длиной массива значений.
+     * Validates that the number of <code>?</code> placeholder characters in the expression matches the
+     * length of the values array.
      *
-     * @param expr   Строка для проверки.
-     * @param values Массив значений.
+     * @param expr   the expression to check.
+     * @param values the values array.
      */
     public static void validatePlaceholderCount(@NonNull String expr, @NonNull Object[] values) {
         int count = placeholderCount(expr);

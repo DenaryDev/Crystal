@@ -39,50 +39,46 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
- * Класс для создания ItemStack'ов.
+ * A fluent builder for constructing {@link ItemStack}s.
  */
 public final class ItemBuilder {
 
     @NonNull
     private ItemStack itemStack;
 
-    //region Методы создания билдера
+    //region Builder factory methods
 
     /**
-     * Создает {@link ItemBuilder} для создания предмета.
-     * <p>
-     * Тип по умолчанию - воздух
+     * Creates an {@link ItemBuilder} for an air item (default type).
      */
     public static ItemBuilder empty() {
         return new ItemBuilder(ItemStack.of(Material.AIR));
     }
 
     /**
-     * Создает {@link ItemBuilder} для создания предмета указанного типа.
+     * Creates an {@link ItemBuilder} for the given material type.
      *
-     * @param material тип предмета
+     * @param material the item material.
      */
     public static ItemBuilder fromMaterial(@NonNull Material material) {
         return new ItemBuilder(ItemStack.of(material));
     }
 
     /**
-     * Создает {@link ItemBuilder} для создания предмета на основе другого предмета.
+     * Creates an {@link ItemBuilder} based on an existing item.
      * <p>
-     * Оригинальный предмет никак не изменяется.
+     * The original item is not modified.
      *
-     * @param stack другой предмет для основы.
+     * @param stack the item to copy.
      */
     public static ItemBuilder fromItem(@NonNull ItemStack stack) {
         return new ItemBuilder(stack.clone());
     }
 
     /**
-     * Создает {@link ItemBuilder} для создания головы с текстурой.
-     * <p>
-     * Оригинальный предмет никак не изменяется.
+     * Creates an {@link ItemBuilder} for a player head with the given skin texture.
      *
-     * @param texture текстура скина
+     * @param texture the Base64-encoded skin texture.
      */
     public static ItemBuilder playerHead(@NonNull String texture) {
         return new ItemBuilder(ItemStack.of(Material.PLAYER_HEAD))
@@ -95,12 +91,12 @@ public final class ItemBuilder {
         this.itemStack = itemStack;
     }
 
-    //region Тип, название, описание
+    //region Type, display name, lore
 
     /**
-     * Устанавливает тип предмета.
+     * Sets the item material type.
      *
-     * @param type тип предмета.
+     * @param type the material type.
      */
     public ItemBuilder type(@NonNull Material type) {
         this.itemStack = this.itemStack.withType(type);
@@ -109,11 +105,11 @@ public final class ItemBuilder {
     }
 
     /**
-     * Устанавливает текстуру для предмета с типом {@link Material#PLAYER_HEAD}
+     * Sets the skin texture for a {@link Material#PLAYER_HEAD} item.
      * <p>
-     * Перед этим обязательно задайте тип через {@link #type(Material)}
+     * Ensure the item type is set to {@link Material#PLAYER_HEAD} before calling this method.
      *
-     * @param texture текстура для предмета.
+     * @param texture the Base64-encoded skin texture.
      */
     public ItemBuilder texture(@NonNull String texture) {
         return editMeta(meta -> {
@@ -124,9 +120,9 @@ public final class ItemBuilder {
     }
 
     /**
-     * Устанавливает количество предметов.
+     * Sets the stack size.
      *
-     * @param amount количество предметов.
+     * @param amount the number of items (1–64).
      */
     public ItemBuilder amount(int amount) {
         Preconditions.checkArgument(amount > 0, "amount less than 1");
@@ -138,25 +134,23 @@ public final class ItemBuilder {
     }
 
     /**
-     * Устанавливает имя предмета в виде {@link Component}.
+     * Sets the display name from a {@link Component}.
      * <p>
-     * Если будет передано null, название предмета не изменится.
+     * Passing {@code null} leaves the display name unchanged.
      *
-     * @param displayName имя предмета.
+     * @param displayName the display name.
      */
     public ItemBuilder displayName(@Nullable Component displayName) {
         return editMeta(meta -> meta.displayName(displayName));
     }
 
     /**
-     * Устанавливает имя предмета, используя формат MiniMessage
+     * Sets the display name from a MiniMessage-formatted string with optional tag resolvers.
      * <p>
-     * Так же поддерживает методы для замены тегов.
-     * <p>
-     * Если будет передано null, название предмета не изменится.
+     * Passing {@code null} leaves the display name unchanged.
      *
-     * @param displayName имя предмета.
-     * @param tags        методы для замены тегов.
+     * @param displayName the MiniMessage string.
+     * @param tags        tag resolvers for placeholder substitution.
      */
     public ItemBuilder displayNameRich(@Nullable String displayName, @NonNull TagResolver... tags) {
         if (displayName != null) {
@@ -167,11 +161,11 @@ public final class ItemBuilder {
     }
 
     /**
-     * Устанавливает имя предмета, не применяя никакие форматы.
+     * Sets the display name from a plain (unformatted) string.
      * <p>
-     * Если будет передано null, название предмета не изменится.
+     * Passing {@code null} leaves the display name unchanged.
      *
-     * @param displayName имя предмета.
+     * @param displayName the plain string.
      */
     public ItemBuilder displayNamePlain(@Nullable String displayName) {
         if (displayName != null) {
@@ -182,25 +176,23 @@ public final class ItemBuilder {
     }
 
     /**
-     * Устанавливает описание предмета из списка {@link Component}.
+     * Sets the lore from a list of {@link Component}s.
      * <p>
-     * Если будет передано null, описание предмета не изменится.
+     * Passing {@code null} leaves the lore unchanged.
      *
-     * @param lore описание предмета.
+     * @param lore the lore lines.
      */
     public ItemBuilder lore(@Nullable List<Component> lore) {
         return editMeta(meta -> meta.lore(lore));
     }
 
     /**
-     * Устанавливает описание предмета, используя формат MiniMessage
+     * Sets the lore from a list of MiniMessage-formatted strings with optional tag resolvers.
      * <p>
-     * Так же поддерживает методы для замены тегов.
-     * <p>
-     * Если будет передано null, описание предмета не изменится.
+     * Passing {@code null} leaves the lore unchanged.
      *
-     * @param lore описание предмета.
-     * @param tags методы для замены тегов.
+     * @param lore the lore lines.
+     * @param tags tag resolvers for placeholder substitution.
      */
     public ItemBuilder loreRich(@Nullable List<String> lore, @NonNull TagResolver... tags) {
         if (lore != null) {
@@ -213,11 +205,11 @@ public final class ItemBuilder {
     }
 
     /**
-     * Устанавливает описание предмета, не применяя никакие форматы.
+     * Sets the lore from a list of plain (unformatted) strings.
      * <p>
-     * Если будет передано null, описание предмета не изменится.
+     * Passing {@code null} leaves the lore unchanged.
      *
-     * @param lore описание предмета.
+     * @param lore the plain lore lines.
      */
     public ItemBuilder lorePlain(@Nullable List<String> lore) {
         if (lore != null) {
@@ -229,52 +221,52 @@ public final class ItemBuilder {
 
     //endregion
 
-    //region Флаги, нерушимость, степень разрушения
+    //region Flags, unbreakability, damage
 
     /**
-     * Добавляет к предмету указанные флаги.
+     * Adds the given item flags to the item.
      *
-     * @param flags флаги для добавления.
+     * @param flags the flags to add.
      */
     public ItemBuilder itemFlags(@NonNull ItemFlag... flags) {
         return editMeta(meta -> meta.addItemFlags(flags));
     }
 
     /**
-     * Удаляет указанные флаги у предмета.
+     * Removes the given item flags from the item.
      *
-     * @param flags флаги для удаления.
+     * @param flags the flags to remove.
      */
     public ItemBuilder removeFlags(@NonNull ItemFlag... flags) {
         return editMeta(meta -> meta.removeItemFlags(flags));
     }
 
     /**
-     * Делает предмет нерушимым.
+     * Makes the item unbreakable.
      * <p>
-     * Работает только на предметах, которые имеют прочность.
+     * Only applies to items that have durability.
      */
     public ItemBuilder unbreakable() {
         return unbreakable(true);
     }
 
     /**
-     * Устанавливает, может ли предмет разрушаться.
+     * Sets whether the item can take durability damage.
      * <p>
-     * Работает только на предметах, которые имеют прочность.
+     * Only applies to items that have durability.
      *
-     * @param unbreakable может ли предмет разрушаться.
+     * @param unbreakable {@code true} to make the item unbreakable.
      */
     public ItemBuilder unbreakable(boolean unbreakable) {
         return editMeta(meta -> meta.setUnbreakable(unbreakable));
     }
 
     /**
-     * Устанавливает степень повреждений предмета.
+     * Sets the item's damage value.
      * <p>
-     * Работает только на предметах, которые имеют прочность.
+     * Only applies to items that have durability.
      *
-     * @param damage степень повреждений предмета.
+     * @param damage the damage value.
      */
     public ItemBuilder damage(int damage) {
         return editMeta(meta -> {
@@ -286,23 +278,23 @@ public final class ItemBuilder {
 
     //endregion
 
-    //region Управление моделькой и кастомдатой предмета
+    //region Item model and custom data
 
     /**
-     * Устанавливает предмету указанную модель.
+     * Sets the item model key.
      *
-     * @param model ключ модели предмета
+     * @param model the namespaced key of the item model.
      */
     public ItemBuilder itemModel(@NonNull NamespacedKey model) {
         return editMeta(meta -> meta.setItemModel(model));
     }
 
     /**
-     * Добавляет список указанных чисел с плавающей запятой в компонент кастомдаты предмета.
+     * Sets the float list on the custom model data component.
      * <p>
-     * Обычно используется в связке с текстурпаком.
+     * Typically used in conjunction with a resource pack.
      *
-     * @param floats список чисел с плавающей запятой
+     * @param floats the list of floats.
      * @see CustomModelDataComponent#setFloats(List)
      */
     @SuppressWarnings("UnstableApiUsage")
@@ -315,11 +307,11 @@ public final class ItemBuilder {
     }
 
     /**
-     * Добавляет список указанных флагов в компонент кастомдаты предмета.
+     * Sets the boolean flag list on the custom model data component.
      * <p>
-     * Обычно используется в связке с текстурпаком.
+     * Typically used in conjunction with a resource pack.
      *
-     * @param flags список флагов
+     * @param flags the list of flags.
      * @see CustomModelDataComponent#setFlags(List)
      */
     @SuppressWarnings("UnstableApiUsage")
@@ -332,11 +324,11 @@ public final class ItemBuilder {
     }
 
     /**
-     * Добавляет список указанных строк в компонент кастомдаты предмета.
+     * Sets the string list on the custom model data component.
      * <p>
-     * Обычно используется в связке с текстурпаком.
+     * Typically used in conjunction with a resource pack.
      *
-     * @param strings список строк
+     * @param strings the list of strings.
      * @see CustomModelDataComponent#setStrings(List)
      */
     @SuppressWarnings("UnstableApiUsage")
@@ -349,11 +341,11 @@ public final class ItemBuilder {
     }
 
     /**
-     * Добавляет список указанных цветов в компонент кастомдаты предмета.
+     * Sets the color list on the custom model data component.
      * <p>
-     * Обычно используется в связке с текстурпаком.
+     * Typically used in conjunction with a resource pack.
      *
-     * @param colors список цветов
+     * @param colors the list of colors.
      * @see CustomModelDataComponent#setColors(List)
      */
     @SuppressWarnings("UnstableApiUsage")
@@ -366,12 +358,12 @@ public final class ItemBuilder {
     }
 
     /**
-     * Устанавливает кастомдату, по которой определяют модельку предмета.
+     * Sets the legacy custom model data integer used for resource-pack model selection.
      * <p>
-     * Обычно используется в связке с текстурпаком.
+     * Typically used in conjunction with a resource pack.
      *
-     * @param data кастомдата модельки предмета.
-     * @deprecated устарело начиная с версии Minecraft 1.21.5, используйте {@link #customModelDataFloats(List)} в качестве замены этого метода.
+     * @param data the custom model data value.
+     * @deprecated Deprecated as of Minecraft 1.21.5. Use {@link #customModelDataFloats(List)} instead.
      */
     @Deprecated(since = "3.0.0")
     public ItemBuilder customModelData(@Nullable Integer data) {
@@ -380,24 +372,22 @@ public final class ItemBuilder {
 
     //endregion
 
-    //region Наложение чаров на предмет
+    //region Enchantments
 
     /**
-     * Накладывает чару на предмет с указанным уровнем.
+     * Adds the given enchantment at the given level.
      *
-     * @param enchantment тип чар для накладывания.
-     * @param level       уровень чара.
+     * @param enchantment the enchantment to apply.
+     * @param level       the enchantment level.
      */
     public ItemBuilder enchantment(@NonNull Enchantment enchantment, int level) {
         return enchantments(Map.of(enchantment, level));
     }
 
     /**
-     * Накладывает на предмет указанные чары.
-     * <p>
-     * Уровень каждой чары ставится на 1.
+     * Adds the given enchantments, each at level 1.
      *
-     * @param enchantments чары для накладывания.
+     * @param enchantments the enchantments to apply.
      */
     public ItemBuilder enchantments(@NonNull Enchantment... enchantments) {
         final Map<Enchantment, Integer> map = new HashMap<>();
@@ -410,9 +400,9 @@ public final class ItemBuilder {
     }
 
     /**
-     * Накладывает на предмет указанные чары с указанными уровнями.
+     * Adds the given enchantments at their specified levels.
      *
-     * @param enchantments чары для накладывания.
+     * @param enchantments a map of enchantments to levels.
      */
     public ItemBuilder enchantments(@NonNull Map<Enchantment, Integer> enchantments) {
         return editMeta(meta -> {
@@ -424,15 +414,15 @@ public final class ItemBuilder {
 
     //endregion
 
-    //region Добавление эффектов к зельям
+    //region Potion effects
 
     /**
-     * Устанавливает тип зелья.
+     * Sets the base potion type.
      * <p>
-     * Работает только если тип предмета {@link Material#POTION},
-     * {@link Material#SPLASH_POTION} или {@link Material#LINGERING_POTION}.
+     * Only applies to {@link Material#POTION}, {@link Material#SPLASH_POTION},
+     * and {@link Material#LINGERING_POTION} items.
      *
-     * @param type тип зелья.
+     * @param type the potion type.
      */
     public ItemBuilder potionType(@NonNull PotionType type) {
         return editMeta(meta -> {
@@ -443,30 +433,25 @@ public final class ItemBuilder {
     }
 
     /**
-     * Добавляет эффекты к предмету зелья.
+     * Adds potion effects, overwriting any existing effects of the same type.
      * <p>
-     * Если уже есть эффект такого же типа, он перезапишется.
-     * <p>
-     * Работает только если тип предмета {@link Material#POTION},
-     * {@link Material#SPLASH_POTION} или {@link Material#LINGERING_POTION}.
+     * Only applies to {@link Material#POTION}, {@link Material#SPLASH_POTION},
+     * and {@link Material#LINGERING_POTION} items.
      *
-     * @param effects эффекты
+     * @param effects the effects to add.
      */
     public ItemBuilder potionEffects(@NonNull PotionEffect... effects) {
         return potionEffects(true, effects);
     }
 
     /**
-     * Добавляет эффекты к предмету зелья.
+     * Adds potion effects with control over whether existing effects of the same type are overwritten.
      * <p>
-     * Если overwrite установить на true, то эффект перезапишет другой
-     * эффект такого же типа, если он был.
-     * <p>
-     * Работает только если тип предмета {@link Material#POTION},
-     * {@link Material#SPLASH_POTION} или {@link Material#LINGERING_POTION}.
+     * Only applies to {@link Material#POTION}, {@link Material#SPLASH_POTION},
+     * and {@link Material#LINGERING_POTION} items.
      *
-     * @param overwrite перезаписывать ли эффекты
-     * @param effects   эффекты
+     * @param overwrite whether to overwrite existing effects of the same type.
+     * @param effects   the effects to add.
      */
     public ItemBuilder potionEffects(boolean overwrite, @NonNull PotionEffect... effects) {
         final Map<PotionEffect, Boolean> map = new HashMap<>();
@@ -479,16 +464,14 @@ public final class ItemBuilder {
     }
 
     /**
-     * Добавляет эффекты к предмету зелья.
+     * Adds potion effects with per-effect overwrite control.
+     * Each map entry pairs a {@link PotionEffect} with a boolean indicating whether
+     * an existing effect of the same type should be overwritten.
      * <p>
-     * Для каждого эффекта указывается значение overwrite.
-     * <p>
-     * Если overwrite = true, то эффект перезапишет предыдущий с таким же типом
-     * <p>
-     * Работает только если тип предмета {@link Material#POTION},
-     * {@link Material#SPLASH_POTION} или {@link Material#LINGERING_POTION}.
+     * Only applies to {@link Material#POTION}, {@link Material#SPLASH_POTION},
+     * and {@link Material#LINGERING_POTION} items.
      *
-     * @param effects эффекты
+     * @param effects a map of effects to their overwrite flags.
      */
     public ItemBuilder potionEffects(@NonNull Map<PotionEffect, Boolean> effects) {
         return editMeta(meta -> {
@@ -499,12 +482,12 @@ public final class ItemBuilder {
     }
 
     /**
-     * Удаляет эффекты из предмета зелья.
+     * Removes the custom effect of the given type from the potion item.
      * <p>
-     * Работает только если тип предмета {@link Material#POTION},
-     * {@link Material#SPLASH_POTION} или {@link Material#LINGERING_POTION}.
+     * Only applies to {@link Material#POTION}, {@link Material#SPLASH_POTION},
+     * and {@link Material#LINGERING_POTION} items.
      *
-     * @param type тип эффекта для удаления.
+     * @param type the effect type to remove.
      */
     public ItemBuilder removePotionEffect(@NonNull PotionEffectType type) {
         return editMeta(meta -> {
@@ -515,10 +498,10 @@ public final class ItemBuilder {
     }
 
     /**
-     * Удаляет все эффекты из предмета зелья.
+     * Removes all custom effects from the potion item.
      * <p>
-     * Работает только если тип предмета {@link Material#POTION},
-     * {@link Material#SPLASH_POTION} или {@link Material#LINGERING_POTION}.
+     * Only applies to {@link Material#POTION}, {@link Material#SPLASH_POTION},
+     * and {@link Material#LINGERING_POTION} items.
      */
     public ItemBuilder clearPotionEffects() {
         return editMeta(meta -> {
@@ -530,26 +513,26 @@ public final class ItemBuilder {
 
     //endregion
 
-    //region Сохранение чар в книгу зачарований
+    //region Stored enchantments (enchanted books)
 
     /**
-     * Сохраняет в предмет указанную чару с указанным уровнем.
+     * Stores the given enchantment at the given level in the item.
      * <p>
-     * Применяется только к предмету с типом {@link Material#ENCHANTED_BOOK}
+     * Only applies to {@link Material#ENCHANTED_BOOK} items.
      *
-     * @param enchantment тип чара для сохранения.
-     * @param level       уровень чара.
+     * @param enchantment the enchantment to store.
+     * @param level       the enchantment level.
      */
     public ItemBuilder storedEnchantment(@NonNull Enchantment enchantment, int level) {
         return storedEnchantments(Map.of(enchantment, level));
     }
 
     /**
-     * Сохраняет в предмет указанные чары с первым уровнем для каждой.
+     * Stores the given enchantments at level 1 each in the item.
      * <p>
-     * Применяется только к предмету с типом {@link Material#ENCHANTED_BOOK}
+     * Only applies to {@link Material#ENCHANTED_BOOK} items.
      *
-     * @param enchantments типs чар для сохранения.
+     * @param enchantments the enchantments to store.
      */
     public ItemBuilder storedEnchantments(@NonNull Enchantment... enchantments) {
         final Map<Enchantment, Integer> map = new HashMap<>();
@@ -562,11 +545,11 @@ public final class ItemBuilder {
     }
 
     /**
-     * Сохраняет в предмет указанные чары с указанными уровнями.
+     * Stores the given enchantments at their specified levels in the item.
      * <p>
-     * Применяется только к предмету с типом {@link Material#ENCHANTED_BOOK}
+     * Only applies to {@link Material#ENCHANTED_BOOK} items.
      *
-     * @param enchantments чары для сохранения.
+     * @param enchantments a map of enchantments to levels.
      */
     public ItemBuilder storedEnchantments(@NonNull Map<Enchantment, Integer> enchantments) {
         return editMeta(meta -> {
@@ -580,15 +563,15 @@ public final class ItemBuilder {
 
     //endregion
 
-    //region Контейнер кастомных данных предмета
+    //region Persistent data container
 
     /**
-     * Добавляет значение по указанному ключу в контейнер кастомных данных предмета.
+     * Writes a value to the item's persistent data container under the given key.
      * <p>
-     * Поддерживаемые типы ключей: {@link PersistentDataType}
+     * Supported value types correspond to the constants in {@link PersistentDataType}.
      *
-     * @param key   ключ, по которому сохранится значение.
-     * @param value само значение.
+     * @param key   the key to store the value under.
+     * @param value the value to store.
      */
     public ItemBuilder persistentData(@NonNull NamespacedKey key, @NonNull Object value) {
         return editMeta(meta -> {
@@ -616,11 +599,11 @@ public final class ItemBuilder {
     //endregion
 
     /**
-     * Редактирует метаданные предметы.
+     * Applies the given consumer to the item's metadata directly.
      * <p>
-     * Используйте, если вам не хватает методов этого билдера.
+     * Use this for modifications not covered by the other builder methods.
      *
-     * @param editor метод редактирования меты предмета.
+     * @param editor the metadata editor.
      */
     public ItemBuilder editMeta(@NonNull Consumer<? super ItemMeta> editor) {
         this.itemStack.editMeta(editor);
@@ -629,7 +612,7 @@ public final class ItemBuilder {
     }
 
     /**
-     * Возвращает созданный и настроенный предмет.
+     * Builds and returns the configured item stack.
      */
     @NonNull
     public ItemStack build() {
@@ -637,7 +620,7 @@ public final class ItemBuilder {
     }
 
     /**
-     * Клонирует этот билдер.
+     * Returns a copy of this builder.
      */
     @NonNull
     public ItemBuilder duplicate() {

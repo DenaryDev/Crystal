@@ -22,12 +22,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Реализация шаблона меню на основе символьной матрицы.
+ * A menu template that defines the layout via a character matrix.
  * <p>
- * Позволяет визуально проектировать интерфейс, используя текстовую маску (строки по 9 символов),
- * где каждый символ сопоставляется с определенным предметом.
+ * Lets you visually design the interface using a text mask (rows of 9 characters),
+ * where each character maps to a specific item.
  * <p>
- * Идеально подходит для создания рамок, паттернов и сложных макетов инвентаря.
+ * Well-suited for borders, patterns, and complex inventory layouts.
  */
 @ApiStatus.Experimental
 public final class MatrixTemplate extends Template {
@@ -36,10 +36,10 @@ public final class MatrixTemplate extends Template {
     private final Map<Character, ItemStack> elements;
 
     /**
-     * Создает новый билдер для настройки матричного шаблона.
-     * Позволяет задавать структуру меню с помощью символьной маски.
+     * Creates a new builder for a matrix template.
+     * Allows defining the menu layout using a character mask.
      *
-     * @return экземпляр {@link MatrixTemplate.Builder}
+     * @return a {@link MatrixTemplate.Builder} instance.
      */
     public static Builder builder() {
         return new Builder();
@@ -52,9 +52,9 @@ public final class MatrixTemplate extends Template {
     }
 
     /**
-     * Возвращает матрицу, указанную в этом шаблоне
+     * Returns the character matrix defined in this template.
      *
-     * @return матрица в виде списка строк
+     * @return the matrix as an immutable list of row strings.
      */
     @NonNull
     public List<String> matrix() {
@@ -62,9 +62,9 @@ public final class MatrixTemplate extends Template {
     }
 
     /**
-     * Возвращает все привязки предметов к символам матрицы (элементы матрицы).
+     * Returns the character-to-item mappings (matrix elements).
      *
-     * @return элементы матрицы
+     * @return an immutable map of characters to items.
      */
     @NonNull
     public Map<Character, ItemStack> elements() {
@@ -72,10 +72,10 @@ public final class MatrixTemplate extends Template {
     }
 
     /**
-     * Возвращает массив всех слотов, в которых находится указанный символ.
+     * Returns all slot indices where the given character appears in the matrix.
      *
-     * @param character символ
-     * @return массив слотов
+     * @param character the character to look up.
+     * @return an array of matching slot indices.
      */
     public int[] slotsByCharacter(char character) {
         final List<Integer> slots = new ArrayList<>();
@@ -126,9 +126,9 @@ public final class MatrixTemplate extends Template {
         }
 
         /**
-         * Возвращает матрицу, указанную в этом создателе
+         * Returns the matrix currently set in this builder, or {@code null} if not yet set.
          *
-         * @return матрица в виде списка строк, если указана, иначе null
+         * @return the matrix rows, or {@code null}.
          */
         @Nullable
         public List<String> matrix() {
@@ -136,10 +136,9 @@ public final class MatrixTemplate extends Template {
         }
 
         /**
-         * Устанавливает матрицу из текста, разделённого на строки
-         * символом новой строки (\n)
+         * Sets the matrix from a newline-delimited string.
          *
-         * @param matrix матрица
+         * @param matrix the matrix string with rows separated by {@code \n}.
          */
         public Builder matrix(@NonNull String matrix) {
             final List<String> rows = List.of(matrix.split("\n"));
@@ -148,12 +147,12 @@ public final class MatrixTemplate extends Template {
         }
 
         /**
-         * Устанавливает матрицу в виде списка строк к шаблону.
+         * Sets the matrix from a list of rows.
          * <p>
-         * Матрица должна содержать от 1 до 6 строк,
-         * и каждая строка матрицы должна быть длиной строго 9 символов.
+         * The matrix must have between 1 and 6 rows,
+         * and each row must be exactly 9 characters long.
          *
-         * @param matrix матрица
+         * @param matrix the list of row strings.
          */
         public Builder matrix(@NonNull List<String> matrix) {
             Preconditions.checkArgument(!matrix.isEmpty(), "matrix cannot be empty");
@@ -167,9 +166,9 @@ public final class MatrixTemplate extends Template {
         }
 
         /**
-         * Возвращает все элементы матрицы.
+         * Returns all character-to-item mappings currently configured in this builder.
          *
-         * @return элементы матрицы
+         * @return the element map.
          */
         @NonNull
         public Map<Character, ItemStack> elements() {
@@ -177,12 +176,12 @@ public final class MatrixTemplate extends Template {
         }
 
         /**
-         * Привязывает предмет к символу матрицы.
+         * Maps an item to a matrix character.
          * <p>
-         * Если к указанному символу уже привязан предмет, перезаписывает его.
+         * Overwrites any item already mapped to the given character.
          *
-         * @param character символ
-         * @param item      предмет
+         * @param character the character.
+         * @param item      the item.
          */
         public Builder element(char character, @NonNull ItemStack item) {
             this.elements.put(character, item);
@@ -191,11 +190,11 @@ public final class MatrixTemplate extends Template {
         }
 
         /**
-         * Добавляет все указанные привязки предметов к символам матрицы.
+         * Adds all the given character-to-item mappings to this builder.
          * <p>
-         * Если к какому-либо символу уже есть привязанный предмет, он перезапишется.
+         * Overwrites any existing mappings for conflicting characters.
          *
-         * @param elements элементы
+         * @param elements the mappings to add.
          */
         public Builder elements(Map<Character, ItemStack> elements) {
             if (!elements.isEmpty()) {
@@ -206,10 +205,9 @@ public final class MatrixTemplate extends Template {
         }
 
         /**
-         * Собирает указанные параметры "до кучи" и
-         * создаёт из них шаблон.
+         * Builds and returns a {@link MatrixTemplate} from the configured parameters.
          *
-         * @return созданный шаблон
+         * @return the created template.
          */
         @Override
         public MatrixTemplate build() {

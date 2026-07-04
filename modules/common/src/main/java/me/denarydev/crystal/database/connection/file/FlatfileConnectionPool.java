@@ -15,8 +15,8 @@ import java.nio.file.Path;
 import java.sql.SQLException;
 
 /**
- * Базовый класс для файловых пулов соединений (SQLite, H2),
- * хранящих данные локально в файле на диске.
+ * Base class for file-based connection pools (SQLite, H2)
+ * that store data locally in a file on disk.
  */
 public sealed abstract class FlatfileConnectionPool extends ConnectionPool permits H2ConnectionPool, SQLiteConnectionPool {
 
@@ -59,11 +59,11 @@ public sealed abstract class FlatfileConnectionPool extends ConnectionPool permi
         protected Path file;
 
         /**
-         * Файл, в котором будет храниться база данных.
+         * The file in which the database will be stored.
          * <p>
-         * <i>Должен иметь расширение .db, например: storage.db</i>
+         * <i>Must have a .db extension, for example: storage.db</i>
          *
-         * @param file файл хранения базы данных
+         * @param file the database storage file
          */
         public Builder<T> file(@NonNull Path file) {
             this.file = file;

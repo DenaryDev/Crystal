@@ -8,23 +8,23 @@
 package me.denarydev.crystal.function;
 
 /**
- * Исполняемая функция, которая может выкинуть отслеживаемое исключение.
+ * A runnable that may throw a checked exception.
  */
 @FunctionalInterface
 public interface CheckedRunnable<E extends Exception> {
 
     /**
-     * Выполняет действие.
+     * Executes the action.
      *
-     * @throws E может выкинуть указанное исключение
+     * @throws E if an error occurs.
      */
     void run() throws E;
 
     /**
-     * Оборачивает {@link Runnable} из JDK в проверяемый вариант.
+     * Wraps a standard JDK {@link Runnable} into a checked runnable.
      *
-     * @param runnable исполняемая функция
-     * @return проверяемая исполняемая функция
+     * @param runnable the runnable to wrap.
+     * @return a checked runnable backed by the given runnable.
      */
     static CheckedRunnable<RuntimeException> from(Runnable runnable) {
         return runnable::run;

@@ -14,7 +14,7 @@ import org.jetbrains.annotations.ApiStatus;
 import java.util.List;
 
 /**
- * Необработанный (raw) запрос с произвольным SQL-кодом.
+ * A raw query wrapping arbitrary SQL text.
  */
 public final class Raw extends AbstractQuery {
 

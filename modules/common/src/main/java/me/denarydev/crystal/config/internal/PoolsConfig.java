@@ -28,23 +28,23 @@ public final class PoolsConfig {
         |             Crystal            |
         |          by DenaryDev          |
         +--------------------------------+
-        |- В этом конфиге настраиваются пулы подключений к БД.
-        |- Все параметры, у которых указано значение по умолчанию, можно удалить из
-        |  конфига, и тогда плагин будет использовать их значения по умолчанию.
+        |- This config defines database connection pools.
+        |- Any parameter that has a default value can be omitted from the config;
+        |  the plugin will fall back to its default in that case.
         """;
 
-    @Comment("Если true, плагин сразу после старта подключится ко всем БД, не ожидая, пока кто-то их попросит.")
+    @Comment("If true, the plugin will connect to all databases immediately on startup instead of lazily on first access.")
     private boolean eagerConnect = false;
 
     @Comment("""
-        Настройки, базовые для любого пула.
-        Если в пуле что-то не определено, это будет взято отсюда.
+        Default settings applied to every pool.
+        Any value not explicitly set in a pool entry is inherited from here.
         """)
     private PoolConfig defaultSettings = new PoolConfig(6, 6, 1800000, 0, 5000);
 
     @Comment("""
-        Пулы соединений.
-        Основной ID пула - название секции с ним.
+        Connection pool definitions.
+        The primary pool ID is the name of its config section.
         """)
     private Map<String, PoolConfig> pools = Map.of(
         "local", new PoolConfig(Path.of("storage.db")),
@@ -113,65 +113,65 @@ public final class PoolsConfig {
 
     @ConfigSerializable
     public static final class PoolConfig {
-        @Comment("Доступные типы: H2, SQLITE, MYSQL, MARIADB, POSTGRESQL")
+        @Comment("Available types: H2, SQLITE, MYSQL, MARIADB, POSTGRESQL")
         private DatabaseType type;
 
         @Comment("""
-            Файл, в котором будет храниться база данных.
-            Для локальных БД указывается ТОЛЬКО этот параметр.
+            File where the database will be stored.
+            For file-based databases, this is the ONLY required parameter.
             """)
         private Path file;
 
-        @Comment("IP или адрес базы данных без порта.")
+        @Comment("Database host address (without port).")
         private String address;
         @Comment("""
-            Порт для подключения.
-            По умолчанию: 3306 для MySQL и MariaDB, 5432 для PostgreSQL.
+            Connection port.
+            Defaults: 3306 for MySQL and MariaDB, 5432 for PostgreSQL.
             """)
         private Integer port;
-        @Comment("Название базы данных.")
+        @Comment("Database name.")
         private String database;
-        @Comment("Имя пользователя.")
+        @Comment("Database username.")
         private String username;
-        @Comment("Пароль.")
+        @Comment("Database password.")
         private String password;
 
         @Comment("""
-            Максимальное количество одновременных подключений.
-            Должно быть столько же, сколько у вас ядер.
-            По умолчанию: 6.
+            Maximum number of concurrent connections.
+            Recommended value: number of CPU cores.
+            Default: 6.
             """)
         private Integer maxPoolSize;
         @Comment("""
-            Количество соединений, которые всегда должны быть открыты.
-            Чтобы избежать проблем, установите для этого параметра то же значение, что и для maxPoolSize.
-            По умолчанию: 6.
+            Number of connections kept open at all times.
+            To avoid issues, set this to the same value as maxPoolSize.
+            Default: 6.
             """)
         private Integer minimumIdle;
         @Comment("""
-            Количество миллисекунд, в течение которых одно соединение должно оставаться открытым.
-            По умолчанию: 1800000 (30 минут).
+            Maximum lifetime of a single connection in milliseconds.
+            Default: 1800000 (30 minutes).
             """)
         private Integer maxLifetime;
         @Comment("""
-            Установка интервала, в течение которого нужно «пинговать» базу данных. Установите 0, чтобы отключить.
-            По умолчанию: 0.
+            Interval for keepalive pings to the database, in milliseconds. Set to 0 to disable.
+            Default: 0.
             """)
         private Integer keepAliveTime;
         @Comment("""
-            Количество секунд, в течение которых мы ждем ответа от базы данных, прежде чем истечет время ожидания.
-            По умолчанию: 5000.
+            Time in milliseconds to wait for a response from the database before timing out.
+            Default: 5000.
             """)
         private Integer connectionTimeout;
-        @Comment("Дополнительные свойства соединения.")
+        @Comment("Additional connection properties.")
         private Map<String, String> properties;
 
-        @Comment("Дополнительные ID этого пула, по которым плагины могут получать его.")
+        @Comment("Additional IDs (aliases) by which plugins can look up this pool.")
         private List<String> aliases;
 
         @SuppressWarnings("unused")
         private PoolConfig() {
-            // Пустой конструктор для работы ObjectMapping
+            // Required no-arg constructor for ObjectMapping
         }
 
         private PoolConfig(Path file) {

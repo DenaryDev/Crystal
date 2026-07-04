@@ -5,7 +5,7 @@ velocity = "3.5.0-SNAPSHOT"
 core = "1.2.0-SNAPSHOT"
 
 # Configs
-configurate = "4.3.0-DEV-SNAPSHOT" # Версия из нашего репозитория с поддержкой комментариев в yaml файлах
+configurate = "4.3.0-DEV-SNAPSHOT" # Version from our repository with YAML comment support
 
 # Plugins
 skinsrestorer = "15.7.7"

@@ -10,7 +10,7 @@ package me.denarydev.crystal.database.query;
 import org.jetbrains.annotations.ApiStatus;
 
 /**
- * Внутренний класс, не используйте напрямую.
+ * Internal class; do not use directly.
  */
 @ApiStatus.Internal
 public record Expression(String expr, Object[] params) {

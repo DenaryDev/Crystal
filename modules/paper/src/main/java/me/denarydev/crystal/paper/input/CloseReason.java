@@ -8,23 +8,23 @@
 package me.denarydev.crystal.paper.input;
 
 /**
- * Причина закрытия {@link ChatPrompt}.
+ * The reason a {@link ChatPrompt} was closed.
  */
 public enum CloseReason {
     /**
-     * От игрока успешно получен ответ на запрос.
+     * The player successfully submitted a response.
      */
     SUCCESS,
     /**
-     * Запрос отменён игроком.
+     * The prompt was cancelled by the player.
      */
     CANCELLED,
     /**
-     * Истекло время ожидания ответа на запрос.
+     * The prompt timed out before the player responded.
      */
     TIMEOUT,
     /**
-     * При попытке обработать ответ на запрос произошла ошибка.
+     * An error occurred while processing the player's response.
      */
     ERROR
 }

@@ -19,12 +19,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Реализация шаблона меню на основе прямого распределения слотов.
+ * A menu template that assigns items to slots by direct index.
  * <p>
- * Позволяет точно настраивать размер инвентаря, тип контейнера (например, HOPPER или DISPENSER)
- * и привязывать предметы к конкретным числовым индексам слотов.
+ * Allows fine-grained control over inventory size, container type (e.g., HOPPER or DISPENSER),
+ * and maps items to specific numeric slot indices.
  * <p>
- * Оптимален для создания стандартных сундуков или меню с фиксированной структурой элементов.
+ * Best suited for standard chest-style menus or menus with a fixed item layout.
  */
 public final class SimpleTemplate extends Template {
 
@@ -32,11 +32,11 @@ public final class SimpleTemplate extends Template {
     private final InventoryType type;
 
     /**
-     * Создаёт новый билдер для настройки простого шаблона.
-     * Позволяет создать меню с заданным типом, разместить предметы в конкретных
-     * слотах и настроить заголовок меню и кулдаун кликов по предметам в нём.
+     * Creates a new builder for a simple template.
+     * Allows setting an inventory type, placing items in specific slots,
+     * and configuring the title and click cooldown.
      *
-     * @return экземпляр {@link SimpleTemplate.Builder}
+     * @return a {@link SimpleTemplate.Builder} instance.
      */
     public static Builder builder() {
         return new Builder();
@@ -48,18 +48,18 @@ public final class SimpleTemplate extends Template {
     }
 
     /**
-     * Проверяет, указан ли в шаблоне тип меню.
+     * Returns whether this template has an inventory type set.
      *
-     * @return true, если тип указан, иначе false
+     * @return {@code true} if a type is set; {@code false} otherwise.
      */
     public boolean hasType() {
         return type != null;
     }
 
     /**
-     * Возвращает тип инвентаря, если он был указан.
+     * Returns the inventory type, or {@code null} if not set.
      *
-     * @return тип меню или null, если не указан
+     * @return the inventory type, or {@code null}.
      */
     @Nullable
     public InventoryType type() {
@@ -75,22 +75,22 @@ public final class SimpleTemplate extends Template {
         }
 
         /**
-         * Возвращает размер меню в количестве слотов.
+         * Returns the menu size in slots.
          *
-         * @return размер меню, или 0, если не указано
+         * @return the slot count, or {@code 0} if not set.
          */
         public int size() {
             return size;
         }
 
         /**
-         * Устанавливает размер меню в количестве слотов.
+         * Sets the menu size in slots.
          * <p>
-         * Указанное значение должно быть кратно 9 и в диапазоне от 9 до 54!
+         * The value must be a multiple of 9 and between 9 and 54 inclusive.
          * <p>
-         * Игнорируется, если указан тип меню через {@link Builder#type(InventoryType)}!
+         * Ignored if an inventory type is set via {@link Builder#type(InventoryType)}.
          *
-         * @param size кол-во слотов
+         * @param size the number of slots.
          */
         public Builder size(int size) {
             Preconditions.checkArgument(size % 9 == 0, "size must be multiple of 9");
@@ -102,9 +102,9 @@ public final class SimpleTemplate extends Template {
         }
 
         /**
-         * Возвращает тип инвентаря, если установлен.
+         * Returns the inventory type, or {@code null} if not set.
          *
-         * @return тип меню или null, если не установлен
+         * @return the inventory type, or {@code null}.
          */
         @Nullable
         public InventoryType type() {
@@ -112,11 +112,11 @@ public final class SimpleTemplate extends Template {
         }
 
         /**
-         * Устанавливает тип меню.
+         * Sets the inventory type for this menu.
          * <p>
-         * Установка типа меню игнорирует указанный методом {@link Builder#size(int)} размер меню.
+         * Setting a type overrides any size set via {@link Builder#size(int)}.
          *
-         * @param type тип меню
+         * @param type the inventory type.
          * @see InventoryType
          */
         public Builder type(@NonNull InventoryType type) {
@@ -126,22 +126,21 @@ public final class SimpleTemplate extends Template {
         }
 
         /**
-         * Возвращает все указанные предметы, привязанные к слотам.
+         * Returns all items currently configured in this builder, keyed by slot.
          *
-         * @return все указанные в этом создателе предметы.
+         * @return a map of slot indices to items.
          */
         public Map<Integer, ItemStack> items() {
             return items;
         }
 
         /**
-         * Добавляет предмет в указанные слоты.
+         * Places an item in the given slot(s).
          * <p>
-         * Если в каком-то из указанных слотов уже есть предмет,
-         * перезаписывает его.
+         * Overwrites any item already set in the specified slots.
          *
-         * @param item  предмет
-         * @param slots слот или несколько слотов
+         * @param item  the item to place.
+         * @param slots the slot or slots to place it in.
          */
         public Builder item(@NonNull ItemStack item, int... slots) {
             Preconditions.checkArgument(slots.length > 0, "you must specify at least one slot");
@@ -154,9 +153,9 @@ public final class SimpleTemplate extends Template {
         }
 
         /**
-         * Добавляет все указанные предметы в этот создатель шаблона.
+         * Adds all given items to this builder.
          *
-         * @param items предметы
+         * @param items a map of slot indices to items.
          */
         public Builder items(Map<Integer, ItemStack> items) {
             this.items.putAll(items);
@@ -165,10 +164,9 @@ public final class SimpleTemplate extends Template {
         }
 
         /**
-         * Собирает указанные параметры "до кучи" и
-         * создаёт из них шаблон.
+         * Builds and returns a {@link SimpleTemplate} from the configured parameters.
          *
-         * @return созданный шаблон
+         * @return the created template.
          */
         @Override
         public SimpleTemplate build() {

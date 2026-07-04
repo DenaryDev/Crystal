@@ -1,48 +1,48 @@
 # Crystal — GUI Module
 
-Модуль для создания инвентарных меню на платформе Paper. Предоставляет fluent API для описания структуры меню, привязки предметов к слотам и обработки кликов/закрытия.
+A module for creating inventory menus on the Paper platform. Provides a fluent API for defining menu structure, placing items in slots, and handling click/close events.
 
 ---
 
-## Основные концепции
+## Core concepts
 
-**`Menu`** — живой экземпляр меню, привязанный к конкретному Bukkit-инвентарю. Создаётся через `Menu.builder()` и отображается игроку через `menu.show(player)`.
+**`Menu`** — a live menu instance bound to a specific Bukkit inventory. Created via `Menu.builder()` and shown to a player via `menu.show(player)`.
 
-**`Template`** — неизменяемое описание структуры меню (заголовок, размер, предметы, кулдаун). Шаблоны удобно кешировать и переиспользовать: один шаблон → много меню для разных игроков.
+**`Template`** — an immutable description of a menu's structure (title, size, items, cooldown). Templates are designed to be cached and reused: one template → many menus for different players.
 
-Использование шаблонов **необязательно** — для простых или полностью динамических меню достаточно `Menu.builder()` без шаблона.
+Using templates is **optional** — for simple or fully dynamic menus, `Menu.builder()` without a template is enough.
 
 ---
 
-## Создание меню
+## Creating a menu
 
-### Без шаблона
+### Without a template
 
 ```java
 Menu menu = Menu.builder()
-    .titleRich("<dark_gray>Настройки")
+    .titleRich("<dark_gray>Settings")
     .size(27)
     .item(settingsItem, event -> openSettings(player), 13)
-    .closeAction(event -> player.sendMessage("Меню закрыто"))
+    .closeAction(event -> player.sendMessage("Menu closed"))
     .build();
 
 menu.show(player);
 ```
 
-### С SimpleTemplate
+### With SimpleTemplate
 
-`SimpleTemplate` — шаблон на основе прямой нумерации слотов. Подходит для фиксированных меню и стандартных сундуков.
+`SimpleTemplate` is a slot-number-based template. Suitable for fixed menus and standard chest layouts.
 
 ```java
-// Создать шаблон один раз (например, при загрузке плагина)
+// Create the template once (e.g. on plugin load)
 SimpleTemplate template = Template.simpleBuilder()
-    .titlePlain("Магазин")
+    .titlePlain("Shop")
     .size(54)
     .item(borderItem, 0, 1, 2, 3, 4, 5, 6, 7, 8)
     .cooldown(200L)
     .build();
 
-// Создать меню по шаблону, добавив динамические элементы
+// Build a menu from the template, adding dynamic elements
 Menu menu = Menu.builder(template)
     .item(shopItem, event -> buyItem(player), 26)
     .build();
@@ -50,15 +50,15 @@ Menu menu = Menu.builder(template)
 menu.show(player);
 ```
 
-### С MatrixTemplate
+### With MatrixTemplate
 
-> **Экспериментально (`@ApiStatus.Experimental`)**
+> **Experimental (`@ApiStatus.Experimental`)**
 
-`MatrixTemplate` — шаблон на основе символьной маски. Каждая строка маски — ровно 9 символов (одна строка инвентаря); каждый символ сопоставляется с предметом через `element(char, item)`.
+`MatrixTemplate` is a character-mask-based template. Each line of the mask is exactly 9 characters (one row of the inventory); each character maps to an item via `element(char, item)`.
 
 ```java
 MatrixTemplate template = Template.matrixBuilder()
-    .titlePlain("Инвентарь")
+    .titlePlain("Inventory")
     .matrix(
         "BBBBBBBBB\n" +
         "B       B\n" +
@@ -71,7 +71,7 @@ MatrixTemplate template = Template.matrixBuilder()
     .cooldown(100L)
     .build();
 
-// Получить все слоты символа (для привязки действий)
+// Get all slots for a character (to bind actions)
 int[] infoSlots = template.slotsByCharacter('I');
 
 Menu menu = Menu.builder(template)
@@ -81,130 +81,130 @@ Menu menu = Menu.builder(template)
 menu.show(player);
 ```
 
-Матрица принимает от 1 до 6 строк. Символы, для которых не задан `element`, считаются пустыми слотами.
+The matrix accepts 1 to 6 rows. Characters with no `element` binding are treated as empty slots.
 
 ---
 
-## Управление открытым меню
+## Managing an open menu
 
 ```java
-// Открыть
+// Show to a player
 menu.show(player);
 
-// Обновить содержимое после show()
+// Update content after show()
 menu.addItem(updatedItem, 13);
 menu.update();
 
-// Программно закрыть
+// Close programmatically
 menu.close();
 
-// Проверить, есть ли предмет в слоте
+// Check whether a slot has an item
 boolean occupied = menu.hasItem(13);
 
-// Узнать, кому открыто меню (null, если никому)
+// Get the current viewer (null if nobody is viewing)
 Player viewer = menu.viewer();
 ```
 
-> Методы `addItem` и `addAction` вступают в силу **только после вызова `update()`**, если меню уже открыто игроку.
+> `addItem` and `addAction` take effect **only after calling `update()`** when the menu is already open.
 
-> `addAction` регистрирует действие на слот, но оно сработает только если в этом слоте есть предмет.
+> `addAction` registers an action on a slot, but it only fires if that slot contains an item.
 
 ---
 
-## Действия
+## Actions
 
 ### ClickAction
 
-Функциональный интерфейс для обработки кликов по слоту.
+A functional interface for handling slot clicks.
 
 ```java
 ClickAction action = event -> {
-    // event уже отменён — вызывать setCancelled(true) не нужно
+    // The event is already cancelled — no need to call setCancelled(true)
     Player player = (Player) event.getWhoClicked();
-    player.sendMessage("Вы нажали на слот " + event.getSlot());
+    player.sendMessage("You clicked slot " + event.getSlot());
 };
 ```
 
-> `InventoryClickEvent` **уже отменён** к моменту вызова `ClickAction`: слушатель отменяет его на приоритете `LOWEST`, и повторно — на `MONITOR` (перед самым вызовом действия), чтобы исключить вмешательство других плагинов.
+> `InventoryClickEvent` is **already cancelled** when `ClickAction` is invoked: the listener cancels it at `LOWEST` priority and again at `MONITOR` (just before the action fires) to prevent interference from other plugins.
 
-> `ClickAction` срабатывает **только для слотов с предметом**. Клики по пустым слотам игнорируются слушателем независимо от того, зарегистрировано ли на них действие.
+> `ClickAction` fires **only for slots that contain an item**. Clicks on empty slots are ignored by the listener regardless of whether an action is registered on them.
 
 ### CloseAction
 
-Функциональный интерфейс для обработки закрытия меню.
+A functional interface for handling menu close events.
 
 ```java
 CloseAction onClose = event -> {
     Player player = (Player) event.getPlayer();
-    player.sendMessage("Меню закрыто");
+    player.sendMessage("Menu closed");
 };
 ```
 
 ---
 
-## Builder — справочник методов
+## Builder reference
 
-### Menu.Builder (через `Menu.builder()` или `Menu.builder(template)`)
+### Menu.Builder (via `Menu.builder()` or `Menu.builder(template)`)
 
-| Метод | Описание |
+| Method | Description |
 |---|---|
-| `title(Component)` | Заголовок через Adventure `Component` |
-| `titleRich(String, resolvers...)` | Заголовок с MiniMessage-форматированием |
-| `titlePlain(String)` | Заголовок как обычный текст без форматирования |
-| `size(int)` | Размер инвентаря (кратно 9, от 9 до 54) |
-| `type(InventoryType)` | Тип инвентаря (HOPPER, DISPENSER и т.д.); перекрывает `size` |
-| `item(item, slots...)` | Добавить предмет в слоты |
-| `item(item, action, slots...)` | Добавить предмет с действием в слоты |
-| `action(action, slots...)` | Добавить действие на слоты; срабатывает только если в слоте есть предмет |
-| `cooldown(long)` | Задержка между обработкой кликов (мс) |
-| `closeAction(action)` | Действие при закрытии меню |
-| `build()` | Создать экземпляр `Menu` |
+| `title(Component)` | Title as an Adventure `Component` |
+| `titleRich(String, resolvers...)` | Title with MiniMessage formatting |
+| `titlePlain(String)` | Plain-text title without formatting |
+| `size(int)` | Inventory size (multiple of 9, from 9 to 54) |
+| `type(InventoryType)` | Inventory type (HOPPER, DISPENSER, etc.); overrides `size` |
+| `item(item, slots...)` | Place an item in the given slots |
+| `item(item, action, slots...)` | Place an item with a click action in the given slots |
+| `action(action, slots...)` | Register a click action on slots; fires only if the slot contains an item |
+| `cooldown(long)` | Delay between click handling (ms) |
+| `closeAction(action)` | Action to run when the menu is closed |
+| `build()` | Create the `Menu` instance |
 
-### Template.Builder (общие методы для SimpleTemplate и MatrixTemplate)
+### Template.Builder (shared by SimpleTemplate and MatrixTemplate)
 
-| Метод | Описание |
+| Method | Description |
 |---|---|
-| `title(Component)` | Заголовок через Adventure `Component` |
-| `titleRich(String, resolvers...)` | Заголовок с MiniMessage-форматированием |
-| `titlePlain(String)` | Заголовок как обычный текст |
-| `cooldown(long)` | Задержка между кликами (мс, ≥ 0) |
+| `title(Component)` | Title as an Adventure `Component` |
+| `titleRich(String, resolvers...)` | Title with MiniMessage formatting |
+| `titlePlain(String)` | Plain-text title |
+| `cooldown(long)` | Delay between clicks (ms, ≥ 0) |
 
-### SimpleTemplate.Builder (через `Template.simpleBuilder()`)
+### SimpleTemplate.Builder (via `Template.simpleBuilder()`)
 
-Наследует методы `Template.Builder`, плюс:
+Inherits `Template.Builder` methods, plus:
 
-| Метод | Описание |
+| Method | Description |
 |---|---|
-| `size(int)` | Размер инвентаря (кратно 9, от 9 до 54) |
-| `type(InventoryType)` | Тип инвентаря; перекрывает `size` |
-| `item(item, slots...)` | Добавить предмет в слоты |
-| `items(Map<Integer, ItemStack>)` | Добавить несколько предметов сразу |
-| `build()` | Создать `SimpleTemplate` |
+| `size(int)` | Inventory size (multiple of 9, from 9 to 54) |
+| `type(InventoryType)` | Inventory type; overrides `size` |
+| `item(item, slots...)` | Place an item in the given slots |
+| `items(Map<Integer, ItemStack>)` | Place multiple items at once |
+| `build()` | Create the `SimpleTemplate` |
 
-### MatrixTemplate.Builder (через `Template.matrixBuilder()`) `@Experimental`
+### MatrixTemplate.Builder (via `Template.matrixBuilder()`) `@Experimental`
 
-Наследует методы `Template.Builder`, плюс:
+Inherits `Template.Builder` methods, plus:
 
-| Метод | Описание |
+| Method | Description |
 |---|---|
-| `matrix(String)` | Задать маску строкой, разделённой `\n` |
-| `matrix(List<String>)` | Задать маску списком строк (1–6 строк по 9 символов) |
-| `element(char, item)` | Привязать предмет к символу |
-| `elements(Map<Character, ItemStack>)` | Привязать несколько символов сразу |
-| `build()` | Создать `MatrixTemplate` (требует `matrix` и хотя бы один `element`) |
+| `matrix(String)` | Define the mask as a `\n`-delimited string |
+| `matrix(List<String>)` | Define the mask as a list of strings (1–6 rows of 9 characters each) |
+| `element(char, item)` | Bind an item to a character |
+| `elements(Map<Character, ItemStack>)` | Bind multiple characters at once |
+| `build()` | Create the `MatrixTemplate` (requires `matrix` and at least one `element`) |
 
 ---
 
-## Структура пакета
+## Package structure
 
 ```
 me.denarydev.crystal.paper.gui
-├── Menu                       — экземпляр меню и его Builder
-├── Template                   — абстрактный базовый класс шаблона и его Builder
+├── Menu                       — menu instance and its Builder
+├── Template                   — abstract base class for templates and its Builder
 ├── template
-│   ├── SimpleTemplate         — шаблон по номерам слотов
-│   └── MatrixTemplate         — шаблон по символьной маске (@Experimental)
+│   ├── SimpleTemplate         — slot-number-based template
+│   └── MatrixTemplate         — character-mask-based template (@Experimental)
 └── actions
-    ├── ClickAction            — @FunctionalInterface: обработка клика по слоту
-    └── CloseAction            — @FunctionalInterface: обработка закрытия меню
+    ├── ClickAction            — @FunctionalInterface: handles a slot click
+    └── CloseAction            — @FunctionalInterface: handles menu close
 ```

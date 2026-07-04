@@ -3,8 +3,8 @@ plugins {
 }
 
 repositories {
-    maven("https://repo.prostocraft.ru/private/") {
-        name = "prostocraft"
+    maven("https://repo.rafaelkauwu.me/private/") {
+        name = "rafaelkauwu"
         credentials(PasswordCredentials::class)
     }
 }

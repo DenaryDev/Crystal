@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Запрос <code>UPDATE</code>.
+ * An <code>UPDATE</code> query.
  */
 public final class Update extends ConditionalQuery<Update> {
 
@@ -37,11 +37,11 @@ public final class Update extends ConditionalQuery<Update> {
     }
 
     /**
-     * Добавляет значение, которое будет установлено для указанного столбца.
+     * Sets the value for the given column.
      *
-     * @param column Имя столбца.
-     * @param value  Значение.
-     * @return Этот объект.
+     * @param column the column name.
+     * @param value  the value.
+     * @return this object.
      */
     public Update value(@NonNull String column, @NonNull Object value) {
         SQLUtil.validateIdentifier(column);
@@ -49,12 +49,12 @@ public final class Update extends ConditionalQuery<Update> {
     }
 
     /**
-     * Добавляет значение в виде SQL-выражения, которое будет установлено для указанного столбца.
+     * Sets a SQL expression as the value for the given column.
      *
-     * @param column Имя столбца.
-     * @param expr   SQL-выражение.
-     * @param params Параметры выражения (для заполнения плейсхолдеров <code>?</code>).
-     * @return Этот объект.
+     * @param column the column name.
+     * @param expr   the SQL expression.
+     * @param params the expression parameters (substituted in place of <code>?</code> placeholders).
+     * @return this object.
      */
     public Update valueExpr(@NonNull String column, @NonNull String expr, @NonNull Object... params) {
         SQLUtil.validateIdentifier(column);
@@ -65,22 +65,22 @@ public final class Update extends ConditionalQuery<Update> {
     }
 
     /**
-     * Добавляет значение <code>NULL</code> для указанного столбца.
+     * Sets <code>NULL</code> as the value for the given column.
      *
-     * @param column Имя столбца.
-     * @return Этот объект.
+     * @param column the column name.
+     * @return this object.
      */
     public Update valueNull(@NonNull String column) {
         return valueExpr(column, "NULL");
     }
 
     /**
-     * Если указанное значение равно null, добавляет значение <code>NULL</code> для указанного столбца,
-     * в противном случае устанавливает указанное значение.
+     * Sets either <code>NULL</code> or the given value for the given column,
+     * depending on whether the value is null.
      *
-     * @param column Имя столбца.
-     * @param value  Допускающее null значение.
-     * @return Этот объект.
+     * @param column the column name.
+     * @param value  the nullable value.
+     * @return this object.
      */
     public Update valueNullable(@NonNull String column, @Nullable Object value) {
         return value == null ? valueNull(column) : value(column, value);

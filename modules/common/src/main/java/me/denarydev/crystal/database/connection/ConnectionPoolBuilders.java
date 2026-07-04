@@ -14,50 +14,50 @@ import me.denarydev.crystal.database.connection.hikari.MySqlConnectionPool;
 import me.denarydev.crystal.database.connection.hikari.PostgresConnectionPool;
 
 /**
- * Фабрика билдеров пулов соединений с базами данных.
+ * Factory for connection pool builders.
  */
 public final class ConnectionPoolBuilders {
 
     /**
-     * Создаёт новый билдер пула соединений SQLite.
+     * Creates a new SQLite connection pool builder.
      *
-     * @return билдер пула соединений SQLite
+     * @return an SQLite connection pool builder
      */
     public static SQLiteConnectionPool.Builder sqlite() {
         return new SQLiteConnectionPool.Builder();
     }
 
     /**
-     * Создаёт новый билдер пула соединений H2.
+     * Creates a new H2 connection pool builder.
      *
-     * @return билдер пула соединений H2
+     * @return an H2 connection pool builder
      */
     public static H2ConnectionPool.Builder h2() {
         return new H2ConnectionPool.Builder();
     }
 
     /**
-     * Создаёт новый билдер пула соединений MySQL.
+     * Creates a new MySQL connection pool builder.
      *
-     * @return билдер пула соединений MySQL
+     * @return a MySQL connection pool builder
      */
     public static MySqlConnectionPool.Builder mysql() {
         return new MySqlConnectionPool.Builder();
     }
 
     /**
-     * Создаёт новый билдер пула соединений MariaDB.
+     * Creates a new MariaDB connection pool builder.
      *
-     * @return билдер пула соединений MariaDB
+     * @return a MariaDB connection pool builder
      */
     public static MariaDBConnectionPool.Builder mariadb() {
         return new MariaDBConnectionPool.Builder();
     }
 
     /**
-     * Создаёт новый билдер пула соединений PostgreSQL.
+     * Creates a new PostgreSQL connection pool builder.
      *
-     * @return билдер пула соединений PostgreSQL
+     * @return a PostgreSQL connection pool builder
      */
     public static PostgresConnectionPool.Builder postgresql() {
         return new PostgresConnectionPool.Builder();

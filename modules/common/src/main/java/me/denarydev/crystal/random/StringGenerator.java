@@ -12,29 +12,28 @@ import org.jspecify.annotations.NonNull;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Класс для генерации случайных строк
+ * Utility class for generating random strings.
  */
 public final class StringGenerator {
     private static final String DEFAULT_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
     /**
-     * Создаёт случайную строку указанной длины, которая может содержать
-     * только заглавные и строчные английские символы, а так же цифры.
+     * Generates a random string of the given length using only uppercase letters,
+     * lowercase letters, and digits.
      *
-     * @param length длина строки
-     * @return случайная строка указанной длины
+     * @param length the length of the string.
+     * @return a random string of the given length.
      */
     public static String generateRandomString(int length) {
         return generateRandomString(DEFAULT_CHARACTERS, length);
     }
 
     /**
-     * Создаёт случайную строку указанной длины, которая может содержать
-     * любые символы из указанной строки.
+     * Generates a random string of the given length using characters drawn from the given character set.
      *
-     * @param characters строка допустимых символов
-     * @param length     длина строки
-     * @return случайная строка указанной длины
+     * @param characters the pool of allowed characters.
+     * @param length     the length of the string.
+     * @return a random string of the given length.
      */
     public static String generateRandomString(@NonNull String characters, int length) {
         if (length < 1) throw new IllegalArgumentException("Length must be positive");

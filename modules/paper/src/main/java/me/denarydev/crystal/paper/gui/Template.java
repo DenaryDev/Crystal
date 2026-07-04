@@ -21,14 +21,13 @@ import org.jspecify.annotations.Nullable;
 import java.util.Map;
 
 /**
- * Базовый класс для шаблонов меню в системе Crystal.
+ * Base class for menu templates in the Crystal GUI system.
  * <p>
- * Шаблоны позволяют предварительно настроить структуру и содержимое меню,
- * что удобно для кеширования параметров и упрощения кода отображения.
+ * Templates let you pre-configure the structure and contents of a menu,
+ * which is useful for caching parameters and simplifying display code.
  * <p>
- * <b>Примечание:</b> Использование шаблонов не является обязательным.
- * Для динамических или простых меню можно создавать меню напрямую
- * через {@code Menu.builder()}.
+ * <b>Note:</b> Templates are optional.
+ * For dynamic or simple menus, you can create menus directly via {@code Menu.builder()}.
  */
 public sealed abstract class Template permits SimpleTemplate, MatrixTemplate {
 
@@ -39,21 +38,21 @@ public sealed abstract class Template permits SimpleTemplate, MatrixTemplate {
     protected final long cooldown;
 
     /**
-     * Создаёт новый билдер для настройки простого шаблона.
-     * Позволяет создать меню с заданным типом, разместить предметы в конкретных
-     * слотах и настроить заголовок меню и кулдаун кликов по предметам в нём.
+     * Creates a new builder for a simple template.
+     * Allows setting an inventory type, placing items in specific slots,
+     * and configuring the title and click cooldown.
      *
-     * @return экземпляр {@link SimpleTemplate.Builder}
+     * @return a {@link SimpleTemplate.Builder} instance.
      */
     public static SimpleTemplate.Builder simpleBuilder() {
         return SimpleTemplate.builder();
     }
 
     /**
-     * Создает новый билдер для настройки матричного шаблона.
-     * Позволяет задавать структуру меню с помощью символьной маски.
+     * Creates a new builder for a matrix template.
+     * Allows defining the menu layout using a character mask.
      *
-     * @return экземпляр {@link MatrixTemplate.Builder}
+     * @return a {@link MatrixTemplate.Builder} instance.
      */
     public static MatrixTemplate.Builder matrixBuilder() {
         return MatrixTemplate.builder();
@@ -67,18 +66,18 @@ public sealed abstract class Template permits SimpleTemplate, MatrixTemplate {
     }
 
     /**
-     * Проверяет, указан-ли в шаблоне заголовок меню.
+     * Returns whether this template has a title set.
      *
-     * @return true, если заголовок указан, иначе false
+     * @return {@code true} if a title is set; {@code false} otherwise.
      */
     public boolean hasTitle() {
         return title != null;
     }
 
     /**
-     * Возвращает заголовок меню, если он был указан.
+     * Returns the menu title, or {@code null} if not set.
      *
-     * @return заголовок меню или null, если не указан
+     * @return the title, or {@code null}.
      */
     @Nullable
     public Component title() {
@@ -86,45 +85,45 @@ public sealed abstract class Template permits SimpleTemplate, MatrixTemplate {
     }
 
     /**
-     * Проверяет, указан-ли в шаблоне размер меню.
+     * Returns whether this template has a size set.
      *
-     * @return true, если размер указан, иначе false
+     * @return {@code true} if a size is set; {@code false} otherwise.
      */
     public boolean hasSize() {
         return size > 0;
     }
 
     /**
-     * Возвращает кол-во слотов в меню.
+     * Returns the number of slots in this menu.
      *
-     * @return кол-во слотов в меню
+     * @return the slot count.
      */
     public int size() {
         return size;
     }
 
     /**
-     * Проверяет, указан ли в шаблоне хотя бы один предмет.
+     * Returns whether at least one item is configured in this template.
      *
-     * @return true, если хотя бы один предмет указан, иначе false
+     * @return {@code true} if any items are set; {@code false} otherwise.
      */
     public boolean hasItems() {
         return !items.isEmpty();
     }
 
     /**
-     * Возвращает словарь с указанием предметов в слотах.
+     * Returns a map of items keyed by slot index.
      *
-     * @return словарь предметов
+     * @return the item map.
      */
     public Map<Integer, ItemStack> items() {
         return items;
     }
 
     /**
-     * Возвращает задержку между обработкой кликов.
+     * Returns the click cooldown for this template.
      *
-     * @return задержка обработки кликов
+     * @return the cooldown in milliseconds.
      */
     public long cooldown() {
         return cooldown;
@@ -135,9 +134,9 @@ public sealed abstract class Template permits SimpleTemplate, MatrixTemplate {
         protected long cooldown;
 
         /**
-         * Возвращает заголовок меню, если установлен.
+         * Returns the menu title, or {@code null} if not set.
          *
-         * @return заголовок меню, или null, если он не установлен.
+         * @return the title, or {@code null}.
          */
         @Nullable
         public final Component title() {
@@ -145,11 +144,11 @@ public sealed abstract class Template permits SimpleTemplate, MatrixTemplate {
         }
 
         /**
-         * Устанавливает заголовок меню из компонента MiniMessage.
+         * Sets the menu title from an Adventure {@link Component}.
          * <p>
-         * Если указать null, заголовок будет сброшен до заголовка по умолчанию!
+         * Pass {@code null} to reset the title to the default.
          *
-         * @param title заголовок
+         * @param title the title, or {@code null} to clear.
          */
         public final B title(@Nullable final Component title) {
             this.title = title;
@@ -158,11 +157,10 @@ public sealed abstract class Template permits SimpleTemplate, MatrixTemplate {
         }
 
         /**
-         * Устанавливает заголовок меню из строки, применяя к ней
-         * форматирование MiniMessage и указанные плейсхолдеры.
+         * Sets the menu title from a MiniMessage-formatted string.
          *
-         * @param title     заголовок
-         * @param resolvers плейсхолдеры
+         * @param title     the title string.
+         * @param resolvers the tag resolvers to apply.
          */
         public final B titleRich(@NonNull String title, @NonNull TagResolver... resolvers) {
             this.title = MiniMessage.miniMessage().deserialize(title, resolvers);
@@ -171,9 +169,9 @@ public sealed abstract class Template permits SimpleTemplate, MatrixTemplate {
         }
 
         /**
-         * Устанавливает заголовок меню из строки без форматирования.
+         * Sets the menu title from a plain (unformatted) string.
          *
-         * @param title заголовок
+         * @param title the title string.
          */
         public final B titlePlain(@NonNull String title) {
             this.title = Component.text(title);
@@ -182,18 +180,18 @@ public sealed abstract class Template permits SimpleTemplate, MatrixTemplate {
         }
 
         /**
-         * Возвращает задержку обработки кликов меню.
+         * Returns the click cooldown for this template.
          *
-         * @return задержка обработки кликов
+         * @return the cooldown in milliseconds.
          */
         public final long cooldown() {
             return cooldown;
         }
 
         /**
-         * Устанавливает задержку обработки кликов.
+         * Sets the minimum time between click events.
          *
-         * @param cooldown задержка
+         * @param cooldown the cooldown in milliseconds.
          */
         public final B cooldown(long cooldown) {
             Preconditions.checkArgument(cooldown >= 0, "cooldown must be positive");
@@ -204,15 +202,14 @@ public sealed abstract class Template permits SimpleTemplate, MatrixTemplate {
         }
 
         /**
-         * Собирает указанные параметры "до кучи" и
-         * создаёт из них шаблон.
+         * Builds and returns a template from the configured parameters.
          *
-         * @return созданный шаблон
+         * @return the created template.
          */
         public abstract T build();
 
         /**
-         * Нужно для того, чтобы возвращать имплементацию билдера, а не абстрактный класс
+         * Returns the concrete builder subtype to enable fluent chaining.
          */
         @ApiStatus.Internal
         protected abstract B self();

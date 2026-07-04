@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Запрос <code>CREATE TABLE</code>.
+ * A <code>CREATE TABLE</code> query.
  */
 public final class CreateTable extends AbstractQuery {
 
@@ -37,9 +37,9 @@ public final class CreateTable extends AbstractQuery {
     }
 
     /**
-     * Добавляет предложение <code>IF NOT EXISTS</code> в запрос.
+     * Adds the <code>IF NOT EXISTS</code> clause to the query.
      *
-     * @return Этот объект.
+     * @return this object.
      */
     public CreateTable ifNotExists() {
         this.ifNotExists = true;
@@ -47,11 +47,11 @@ public final class CreateTable extends AbstractQuery {
     }
 
     /**
-     * Добавляет столбец в таблицу.
+     * Adds a column to the table.
      *
-     * @param name Имя столбца.
-     * @param type Тип столбца.
-     * @return Этот объект.
+     * @param name the column name.
+     * @param type the column type.
+     * @return this object.
      */
     public CreateTable column(@NonNull String name, @NonNull String type) {
         SQLUtil.validateIdentifier(name);
@@ -66,95 +66,95 @@ public final class CreateTable extends AbstractQuery {
     }
 
     /**
-     * Добавляет столбец типа <code>INT</code>.
+     * Adds an <code>INT</code> column.
      *
-     * @param name Имя столбца.
-     * @return Этот объект.
+     * @param name the column name.
+     * @return this object.
      */
     public CreateTable integer(@NonNull String name) {
         return column(name, "INT");
     }
 
     /**
-     * Добавляет столбец типа <code>BIGINT</code>.
+     * Adds a <code>BIGINT</code> column.
      *
-     * @param name Имя столбца.
-     * @return Этот объект.
+     * @param name the column name.
+     * @return this object.
      */
     public CreateTable bigint(@NonNull String name) {
         return column(name, "BIGINT");
     }
 
     /**
-     * Добавляет столбец типа <code>TINYINT(1)</code>.
+     * Adds a <code>TINYINT(1)</code> column.
      *
-     * @param name Имя столбца.
-     * @return Этот объект.
+     * @param name the column name.
+     * @return this object.
      */
     public CreateTable bool(@NonNull String name) {
         return column(name, "TINYINT(1)");
     }
 
     /**
-     * Добавляет столбец типа <code>VARCHAR(size)</code>.
+     * Adds a <code>VARCHAR(size)</code> column.
      *
-     * @param name Имя столбца.
-     * @param size Максимальное количество символов.
-     * @return Этот объект.
+     * @param name the column name.
+     * @param size the maximum number of characters.
+     * @return this object.
      */
     public CreateTable varchar(@NonNull String name, int size) {
         return column(name, "VARCHAR(" + size + ")");
     }
 
     /**
-     * Добавляет столбец типа <code>CHAR(size)</code>.
+     * Adds a <code>CHAR(size)</code> column.
      *
-     * @param name Имя столбца.
-     * @param size Максимальное количество символов.
-     * @return Этот объект.
+     * @param name the column name.
+     * @param size the maximum number of characters.
+     * @return this object.
      */
     public CreateTable character(@NonNull String name, int size) {
         return column(name, "CHAR(" + size + ")");
     }
 
     /**
-     * Добавляет столбец типа <code>TEXT</code>.
+     * Adds a <code>TEXT</code> column.
      *
-     * @param name Имя столбца.
-     * @return Этот объект.
+     * @param name the column name.
+     * @return this object.
      */
     public CreateTable text(@NonNull String name) {
         return column(name, "TEXT");
     }
 
     /**
-     * Добавляет столбец типа <code>SERIAL</code>.
+     * Adds a <code>SERIAL</code> column.
      * <p>
-     * <b>Только для PostgreSQL</b>
+     * <b>PostgreSQL only</b>
      *
-     * @param name Имя столбца
-     * @return Этот объект.
+     * @param name the column name.
+     * @return this object.
      */
     public CreateTable serial(@NonNull String name) {
         return column(name, "SERIAL");
     }
 
     /**
-     * Добавляет столбец типа <code>BIGSERIAL</code>.
+     * Adds a <code>BIGSERIAL</code> column.
      * <p>
-     * <b>Только для PostgreSQL</b>
+     * <b>PostgreSQL only</b>
      *
-     * @param name Имя столбца
-     * @return Этот объект.
+     * @param name the column name.
+     * @return this object.
      */
     public CreateTable bigSerial(@NonNull String name) {
         return column(name, "BIGSERIAL");
     }
 
     /**
-     * Устанавливает <code>NOT NULL</code> для последнего добавленного столбца.
+     * Sets <code>NOT NULL</code> on the most recently added column.
      *
-     * @return Этот объект.
+     * @return this object.
      */
     public CreateTable notNull() {
         lastColumn().notNull = true;
@@ -162,9 +162,9 @@ public final class CreateTable extends AbstractQuery {
     }
 
     /**
-     * Добавляет предложение <code>AUTO_INCREMENT</code> для последнего добавленного столбца.
+     * Sets <code>AUTO_INCREMENT</code> on the most recently added column.
      *
-     * @return Этот объект.
+     * @return this object.
      */
     public CreateTable autoIncrement() {
         lastColumn().autoIncrement = true;
@@ -172,9 +172,9 @@ public final class CreateTable extends AbstractQuery {
     }
 
     /**
-     * Добавляет предложение <code>PRIMARY KEY</code> для последнего добавленного столбца.
+     * Sets <code>PRIMARY KEY</code> on the most recently added column.
      *
-     * @return Этот объект.
+     * @return this object.
      */
     public CreateTable primaryKey() {
         lastColumn().primaryKey = true;
@@ -182,10 +182,10 @@ public final class CreateTable extends AbstractQuery {
     }
 
     /**
-     * Устанавливает значение по умолчанию для последнего добавленного столбца.
+     * Sets the default value for the most recently added column.
      *
-     * @param value Устанавливаемое значение, не должно быть null.
-     * @return Этот объект.
+     * @param value the default value; must not be null.
+     * @return this object.
      */
     public CreateTable defaultValue(@NonNull Object value) {
         lastColumn().defaultValue = value;
@@ -193,10 +193,10 @@ public final class CreateTable extends AbstractQuery {
     }
 
     /**
-     * Добавляет столбец <code>INT AUTO_INCREMENT PRIMARY KEY</code>.
+     * Adds an <code>INT AUTO_INCREMENT PRIMARY KEY</code> column.
      *
-     * @param name Имя столбца.
-     * @return Этот объект.
+     * @param name the column name.
+     * @return this object.
      */
     public CreateTable intKey(@NonNull String name) {
         return integer(name).autoIncrement().primaryKey();

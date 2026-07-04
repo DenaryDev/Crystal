@@ -14,17 +14,18 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Утилиты для работы с местоположением игрока.
+ * Utilities for working with locations.
  */
 public final class LocationUtils {
 
     /**
-     * Проверяет, находится ли точка в указанной зоне.
+     * Returns whether the given location is within the axis-aligned bounding box
+     * defined by two corner positions.
      *
-     * @param loc  точка для проверки
-     * @param pos1 первая точка зоны
-     * @param pos2 вторая точка зоны
-     * @return true, если указанная точка в зоне, иначе false
+     * @param loc  the location to test.
+     * @param pos1 one corner of the area.
+     * @param pos2 the opposite corner of the area.
+     * @return {@code true} if the location is inside the area; {@code false} otherwise.
      */
     public static boolean inArea(@NonNull final Location loc, @NonNull final Location pos1, @NonNull final Location pos2) {
         final double x1 = Math.min(pos1.getX(), pos2.getX());
@@ -41,10 +42,11 @@ public final class LocationUtils {
     }
 
     /**
-     * Возвращает центральную позицию, но не трогает высоту.
+     * Returns a copy of the given location snapped to the horizontal center of its block (X + 0.5, Z + 0.5).
+     * The Y coordinate is left unchanged.
      *
-     * @param location точка
-     * @return центральная позиция от этой точки
+     * @param location the location to center.
+     * @return the horizontally centered location.
      */
     @NonNull
     public static Location centerLocation(@NonNull final Location location) {
@@ -56,14 +58,15 @@ public final class LocationUtils {
     }
 
     /**
-     * Находит ближайшей к точке блок, и возвращает его {@link Location}
+     * Finds the nearest block of the given type within the search radius and returns its location.
      * <p>
-     * По высоте ищет в диапазоне от -1 до +1 относительно высоты точки.
+     * The vertical search range is limited to Y-1 through Y+1 relative to the origin.
+     * Large radius values are not recommended for performance reasons.
      *
-     * @param loc    точка, вокруг которой ищем блок
-     * @param type   тип блока, который ищем
-     * @param radius радиус, не рекомендуются ставить большие значения
-     * @return Позиция ближайшего к точке блока, или null, если таковой не найден
+     * @param loc    the origin location to search around.
+     * @param type   the block type to search for.
+     * @param radius the horizontal search radius in blocks.
+     * @return the location of the nearest matching block, or {@code null} if none was found.
      */
     @Nullable
     public static Location findClosestBlock(@NonNull final Location loc, @NonNull final Material type, final int radius) {
@@ -86,12 +89,14 @@ public final class LocationUtils {
     }
 
     /**
-     * Преобразует {@link Location} в строку вида {@code мир;x;y;z} или {@code мир;x;y;z;yaw;pitch}.
+     * Serializes a {@link Location} to a semicolon-delimited string of the form
+     * {@code world;x;y;z} or {@code world;x;y;z;yaw;pitch}.
      * <p>
-     * Если мир не загружен, он не включается в строку.
+     * If the world is not loaded, the world name is omitted from the string.
+     * Yaw and pitch are appended only when either value is greater than zero.
      *
-     * @param location локация для сериализации
-     * @return строковое представление локации
+     * @param location the location to serialize.
+     * @return the string representation of the location.
      */
     public static String locationToString(Location location) {
         Preconditions.checkNotNull(location, "location cannot be null");

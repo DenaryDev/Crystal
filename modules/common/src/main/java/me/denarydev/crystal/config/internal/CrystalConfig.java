@@ -10,7 +10,6 @@ package me.denarydev.crystal.config.internal;
 import io.sapphiremc.lib.configurate.objectmapping.ConfigSerializable;
 import io.sapphiremc.lib.configurate.objectmapping.meta.Comment;
 import me.denarydev.crystal.Crystal;
-import me.denarydev.crystal.Platform;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.nio.file.Path;
@@ -23,16 +22,14 @@ public final class CrystalConfig {
         |             Crystal            |
         |          by DenaryDev          |
         +--------------------------------+
-        |- В этом конфиге настраиваются пути ко всем остальным конфигам.
-        |- Если конфиг лежит не в папке плагина, указывайте полный путь к нему!
+        |- This config defines paths to all other config files.
+        |- If a config file is located outside the plugin folder, provide its full path.
         """;
 
-    @Comment("Путь к файлу настроек пулов бд.")
+    @Comment("Path to the connection pool settings file.")
     private Path poolsPath = Crystal.instance().dataFolder().resolve("pools.yml");
-    @Comment("Путь к файлу настроек сообщений.")
-    private Path messagesPath = Platform.current() == Platform.CORE ? // На коре сообщения не используются
-        null :
-        Crystal.instance().dataFolder().resolve("messages.yml");
+    @Comment("Path to the messages settings file.")
+    private Path messagesPath = Crystal.instance().dataFolder().resolve("messages.yml");
 
     public Path poolsPath() {
         return poolsPath;

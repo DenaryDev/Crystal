@@ -15,17 +15,17 @@ import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * Класс для упрощения автозаполнения команд, создаваемых через Brigadier.
+ * Utilities for simplifying tab-completion of commands built with Brigadier.
  */
 public final class SharedSuggestionProvider {
     private static final CharMatcher MATCH_SPLITTER = CharMatcher.anyOf("._/");
 
     /**
-     * Добавляет предложения автозаполнения кооманды из указанного списка в указанный билдер.
+     * Adds tab-completion suggestions from the given list to the given builder.
      *
-     * @param variants варианты предложений
-     * @param builder  билдер предложений
-     * @return {@link CompletableFuture<Suggestions>} с результатом работы билдера
+     * @param variants the suggestion candidates.
+     * @param builder  the suggestions builder.
+     * @return a {@link CompletableFuture} containing the built {@link Suggestions}.
      */
     public static CompletableFuture<Suggestions> suggest(Iterable<String> variants, SuggestionsBuilder builder) {
         final String remaining = builder.getRemaining().toLowerCase(Locale.ROOT);

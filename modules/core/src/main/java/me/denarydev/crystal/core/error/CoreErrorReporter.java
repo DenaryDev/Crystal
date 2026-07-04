@@ -20,17 +20,17 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Обработчик ошибок для платформы Core.
- * Регистрирует инцидент в логах и отправляет игроку сообщение с уникальным кодом ошибки.
+ * Error reporter for the Core platform.
+ * Logs the incident and sends the player a message containing a unique error code.
  */
 public final class CoreErrorReporter implements ErrorReporter<Player> {
     private final Logger logger;
 
     /**
-     * Создает новый экземпляр репортера для указанного логгера.
+     * Creates a new reporter backed by the given logger.
      *
-     * @param logger логгер, в который будут записываться ошибки
-     * @return новый экземпляр {@link CoreErrorReporter}
+     * @param logger the logger to write errors to.
+     * @return a new {@link CoreErrorReporter} instance.
      */
     public static CoreErrorReporter create(@NonNull Logger logger) {
         return new CoreErrorReporter(logger);
@@ -41,10 +41,10 @@ public final class CoreErrorReporter implements ErrorReporter<Player> {
     }
 
     /**
-     * Регистрирует ошибку и отправляет уведомление пользователю.
+     * Reports an error and sends a notification to the given recipient.
      *
-     * @param target получатель уведомления об ошибке
-     * @param error  возникшее исключение
+     * @param target the recipient to notify.
+     * @param error  the exception that occurred.
      */
     @Override
     public void report(@NonNull Player target, @NonNull Throwable error) {
@@ -52,12 +52,12 @@ public final class CoreErrorReporter implements ErrorReporter<Player> {
     }
 
     /**
-     * Регистрирует ошибку с дополнительным контекстом и отправляет уведомление пользователю.
+     * Reports an error with additional context and sends a notification to the given recipient.
      *
-     * @param target     получатель уведомления об ошибке
-     * @param error      возникшее исключение
-     * @param logMessage сообщение для логгера (поддерживает плейсхолдеры {})
-     * @param params     аргументы для форматирования сообщения
+     * @param target     the recipient to notify.
+     * @param error      the exception that occurred.
+     * @param logMessage the message to log (supports <code>{}</code> placeholders).
+     * @param params     the arguments used to format the log message.
      */
     @Override
     public void report(@NonNull Player target, @NonNull Throwable error, @Nullable String logMessage, Object... params) {

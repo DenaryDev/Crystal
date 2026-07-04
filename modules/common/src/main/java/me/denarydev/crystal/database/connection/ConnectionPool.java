@@ -27,7 +27,7 @@ public sealed abstract class ConnectionPool permits FlatfileConnectionPool, Hika
     protected final Logger logger = Crystal.instance().logger();
 
     /**
-     * Возвращает тип базы данных, которая используется в этой фабрике.
+     * Returns the database type used by this connection pool.
      *
      * @return {@link DatabaseType}
      */
@@ -35,26 +35,26 @@ public sealed abstract class ConnectionPool permits FlatfileConnectionPool, Hika
     public abstract DatabaseType implementationType();
 
     /**
-     * Инициализирует пул соединений с БД.
+     * Initializes the database connection pool.
      */
     public abstract void initialize();
 
     /**
-     * Закрывает пул соединений с БД.
+     * Shuts down the database connection pool.
      */
     public abstract void shutdown();
 
     /**
-     * Проверяет, инициализирован ли этот пул соединений с БД.
+     * Returns whether this connection pool has been initialized and is ready for use.
      *
-     * @return true, если пул инициализирован и готов к использованию, в ином случае false
+     * @return {@code true} if the pool is initialized, {@code false} otherwise
      */
     public abstract boolean isInitialized();
 
     /**
-     * Создает новый создатель запросов, использующий данный пул соединений.
+     * Creates a new query builder backed by this connection pool.
      *
-     * @return Экземпляр {@link QueryBuilder} для формирования SQL-запросов.
+     * @return a {@link QueryBuilder} instance for building SQL queries.
      * @see me.denarydev.crystal.database.query.impl
      */
     public final QueryBuilder query() {
@@ -62,29 +62,29 @@ public sealed abstract class ConnectionPool permits FlatfileConnectionPool, Hika
     }
 
     /**
-     * Создает новый построитель пакетных запросов (batch), использующий данный пул соединений.
-     * Позволяет эффективно выполнять однотипные запросы с разными наборами параметров за один раз.
+     * Creates a new batch query builder backed by this connection pool.
+     * Allows multiple parameterized executions of the same statement to be sent in a single batch.
      *
-     * @return Экземпляр {@link BatchBuilder} для формирования пакета SQL-запросов.
+     * @return a {@link BatchBuilder} instance for building batched SQL queries.
      */
     public final BatchBuilder batch() {
         return BatchBuilder.of(this);
     }
 
     /**
-     * Возвращает источник соединений с БД или выкидывает исключение, если он не инициализирован.
+     * Returns the data source for this pool, or throws if it has not been initialized.
      *
-     * @return Источник подключений к БД.
-     * @throws SQLException если не удалось соединиться с БД.
+     * @return the data source.
+     * @throws SQLException if the data source is not initialized.
      */
     @NonNull
     public abstract DataSource dataSource() throws SQLException;
 
     /**
-     * Подключается к БД и возвращает это подключение.
+     * Acquires and returns a new connection from the pool.
      *
-     * @return Новое подключение к БД.
-     * @throws SQLException когда соединение не может быть получено.
+     * @return a new database connection.
+     * @throws SQLException if a connection cannot be obtained.
      */
     @NonNull
     public final Connection connection() throws SQLException {
@@ -108,9 +108,10 @@ public sealed abstract class ConnectionPool permits FlatfileConnectionPool, Hika
     }
 
     /**
-     * Выполняет обратный вызов с переданным соединением и автоматически закрывает его по завершении.
+     * Executes the given callback with a connection from the pool, automatically
+     * closing the connection on completion.
      *
-     * @param callback Обратный вызов, который будет выполнен при успешном соединении.
+     * @param callback the callback to execute.
      */
     public abstract void connect(@NonNull final ConnectionCallback callback);
 
@@ -118,7 +119,7 @@ public sealed abstract class ConnectionPool permits FlatfileConnectionPool, Hika
     public abstract Function<String, String> statementProcessor();
 
     /**
-     * Оборачивает соединение в обратный вызов, который автоматически обрабатывает перехват ошибок SQL.
+     * A callback that wraps a connection and automatically handles SQL error interception.
      */
     public interface ConnectionCallback {
         void accept(@NonNull final Connection connection) throws SQLException;
@@ -127,9 +128,9 @@ public sealed abstract class ConnectionPool permits FlatfileConnectionPool, Hika
     public static abstract sealed class Builder<T extends ConnectionPool> permits FlatfileConnectionPool.Builder, HikariConnectionPool.Builder {
 
         /**
-         * Создаёт фабрику соединений с параметрами из этого билдера.
+         * Builds a connection pool from the parameters set on this builder.
          *
-         * @return фабрика соединений
+         * @return the connection pool
          */
         public abstract T build();
     }

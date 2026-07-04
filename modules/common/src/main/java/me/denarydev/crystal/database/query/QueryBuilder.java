@@ -20,7 +20,7 @@ import org.jspecify.annotations.NonNull;
 import java.util.Arrays;
 
 /**
- * Утилитный класс для создания объектов запросов.
+ * Utility class for creating query objects.
  */
 public final class QueryBuilder {
 
@@ -31,18 +31,18 @@ public final class QueryBuilder {
     }
 
     /**
-     * Создаёт экземпляр создателя запросов на основе указанного пула соединений.
+     * Creates a query builder backed by the given connection pool.
      *
-     * @param pool Пул соединений.
-     * @return Экземпляр создателя запросов.
+     * @param pool the connection pool.
+     * @return a query builder instance.
      */
     public static QueryBuilder of(ConnectionPool pool) {
         return new QueryBuilder(pool);
     }
 
     /**
-     * @param tableName Название таблицы, которая будет создана.
-     * @return Запрос <code>CREATE TABLE</code>.
+     * @param tableName the name of the table to create.
+     * @return a <code>CREATE TABLE</code> query.
      */
     public CreateTable createTable(@NonNull String tableName) {
         SQLUtil.validateIdentifier(tableName);
@@ -50,8 +50,8 @@ public final class QueryBuilder {
     }
 
     /**
-     * @param tableName Название таблицы, в которую будет добавлена запись.
-     * @return Запрос <code>INSERT</code>.
+     * @param tableName the name of the table to insert into.
+     * @return an <code>INSERT</code> query.
      */
     public Insert insertInto(@NonNull String tableName) {
         SQLUtil.validateIdentifier(tableName);
@@ -59,8 +59,8 @@ public final class QueryBuilder {
     }
 
     /**
-     * @param tableName Название таблицы, которая будет обновлена.
-     * @return Запрос <code>UPDATE</code>.
+     * @param tableName the name of the table to update.
+     * @return an <code>UPDATE</code> query.
      */
     public Update update(@NonNull String tableName) {
         SQLUtil.validateIdentifier(tableName);
@@ -68,8 +68,8 @@ public final class QueryBuilder {
     }
 
     /**
-     * @param tableName Название таблицы, из которой будут удалены записи.
-     * @return Запрос <code>DELETE</code>.
+     * @param tableName the name of the table to delete from.
+     * @return a <code>DELETE</code> query.
      */
     public Delete deleteFrom(@NonNull String tableName) {
         SQLUtil.validateIdentifier(tableName);
@@ -77,9 +77,9 @@ public final class QueryBuilder {
     }
 
     /**
-     * @param columns Названия столбцов для выбора. Если пустой, вызывающий должен
-     *                самостоятельно указать выбираемые столбцы или выражения.
-     * @return Запрос <code>SELECT</code>.
+     * @param columns the column names to select; if empty, the caller is responsible
+     *                for specifying the select expressions manually.
+     * @return a <code>SELECT</code> query.
      */
     public Select select(@NonNull String... columns) {
         Select select = new Select(pool);
@@ -92,11 +92,11 @@ public final class QueryBuilder {
     }
 
     /**
-     * Создает "сырой" запрос из произвольного текста SQL.
+     * Creates a raw query from arbitrary SQL text.
      *
-     * @param sql    Текст SQL-запроса.
-     * @param params Параметры (для заполнения плейсхолдеров <code>?</code>).
-     * @return Запрос.
+     * @param sql    the SQL query string.
+     * @param params the parameters (substituted in place of <code>?</code> placeholders).
+     * @return the query.
      */
     public AbstractQuery raw(@NonNull String sql, @NonNull Object... params) {
         SQLUtil.validatePlaceholderCount(sql, params);

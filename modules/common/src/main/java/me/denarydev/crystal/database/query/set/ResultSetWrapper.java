@@ -16,23 +16,22 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Обертка для {@link ResultSet}, позволяющая выполнять полезные операции, такие как маппинг.
- * При закрытии обертки будет закрыт и лежащий в основе ResultSet.
+ * A wrapper around {@link ResultSet} that provides convenient operations such as row mapping.
+ * Closing this wrapper also closes the underlying ResultSet.
  *
- * @param set Объект ResultSet.
+ * @param set the underlying ResultSet.
  */
 public record ResultSetWrapper(ResultSet set) implements AutoCloseable {
 
     /**
-     * Преобразует первую строку в наборе результатов (если она существует) с помощью указанного маппера
-     * и возвращает Optional со значением.
-     * Базовый ResultSet будет закрыт после возврата из этого метода.
-     * Optional будет пустым, если набор не содержит строк или если маппер вернул null.
+     * Maps the first row in the result set (if any) using the given mapper and returns the result as an Optional.
+     * The underlying ResultSet is closed after this method returns.
+     * The Optional will be empty if there are no rows or if the mapper returned null.
      *
-     * @param mapper Маппер.
-     * @param <T>    Тип преобразованного элемента.
-     * @return Optional, содержащий преобразованную строку.
-     * @throws SQLException При ошибке SQL.
+     * @param mapper the row mapper.
+     * @param <T>    the type of the mapped element.
+     * @return an Optional containing the mapped row.
+     * @throws SQLException on SQL error.
      */
     public <T> Optional<T> map(@NonNull ResultSetMapper<T> mapper) throws SQLException {
         try (final ResultSet set = this.set) {
@@ -41,13 +40,13 @@ public record ResultSetWrapper(ResultSet set) implements AutoCloseable {
     }
 
     /**
-     * Преобразует все строки в наборе результатов с помощью указанного маппера и собирает результаты в список.
-     * Базовый ResultSet будет закрыт после возврата из этого метода.
+     * Maps all rows in the result set using the given mapper and collects the results into a list.
+     * The underlying ResultSet is closed after this method returns.
      *
-     * @param mapper Маппер.
-     * @param <T>    Тип преобразованного элемента.
-     * @return Список преобразованных строк.
-     * @throws SQLException При ошибке SQL.
+     * @param mapper the row mapper.
+     * @param <T>    the type of the mapped element.
+     * @return a list of mapped rows.
+     * @throws SQLException on SQL error.
      */
     public <T> List<T> mapAll(@NonNull ResultSetMapper<T> mapper) throws SQLException {
         final List<T> list = new ArrayList<>();
@@ -62,9 +61,9 @@ public record ResultSetWrapper(ResultSet set) implements AutoCloseable {
     }
 
     /**
-     * Закрывает лежащий в основе {@link ResultSet}.
+     * Closes the underlying {@link ResultSet}.
      *
-     * @throws SQLException При ошибке SQL.
+     * @throws SQLException on SQL error.
      */
     @Override
     public void close() throws SQLException {

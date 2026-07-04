@@ -24,7 +24,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Запрашивает у игрока ответ в виде сообщения в чат.
+ * Prompts a player to type a response in chat.
  */
 public final class ChatPrompt {
 
@@ -43,11 +43,11 @@ public final class ChatPrompt {
     private boolean closed = false;
 
     /**
-     * Выводит в чат игроку запрос ввода.
+     * Opens a chat input prompt for the given player.
      *
-     * @param plugin ваш плагин
-     * @param player игрок
-     * @param action действие при получении ввода
+     * @param plugin the owning plugin.
+     * @param player the player to prompt.
+     * @param action the action to run when the player responds.
      */
     public static ChatPrompt show(Plugin plugin, Player player, MessageAction action) {
         return new ChatPrompt(plugin, player, action);
@@ -64,9 +64,9 @@ public final class ChatPrompt {
     }
 
     /**
-     * Устанавливает действие при закрытии запроса.
+     * Sets the action to run when this prompt closes.
      *
-     * @param action действие при закрытии запроса
+     * @param action the close action.
      */
     public ChatPrompt closeAction(@NonNull CloseAction action) {
         this.closeAction = action;
@@ -75,9 +75,9 @@ public final class ChatPrompt {
     }
 
     /**
-     * Устанавливает слово, при вводе которого запрос будет отменён.
+     * Sets the word that, when typed, cancels the prompt.
      *
-     * @param word слово, отменяющее запрос
+     * @param word the cancel word.
      */
     public ChatPrompt cancelWord(@NonNull String word) {
         this.cancelWord = word;
@@ -86,11 +86,11 @@ public final class ChatPrompt {
     }
 
     /**
-     * Устанавливает время ожидания ответа от игрока в тиках (1 секунда = 20 тиков).
+     * Sets how long to wait for the player's response, in ticks (20 ticks = 1 second).
      * <p>
-     * По истечении указанного времени запрос закроется с {@link CloseReason#CANCELLED}
+     * When the timeout expires, the prompt closes with {@link CloseReason#TIMEOUT}.
      *
-     * @param timeout время ожидания ответа
+     * @param timeout the timeout duration in ticks.
      */
     public ChatPrompt timeout(long timeout) {
         this.timeoutTask = Bukkit.getGlobalRegionScheduler().runDelayed(plugin, task -> {
@@ -102,9 +102,9 @@ public final class ChatPrompt {
     }
 
     /**
-     * Проверяет, закрыт ли этот запрос.
+     * Returns whether this prompt has been closed.
      *
-     * @return true, если запрос закрыт, иначе false
+     * @return {@code true} if the prompt is closed; {@code false} otherwise.
      */
     public boolean closed() {
         return closed;

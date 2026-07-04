@@ -11,28 +11,28 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 /**
- * Универсальный интерфейс для обработки и регистрации ошибок в экосистеме Crystal.
- * Обеспечивает единый формат уведомления пользователей и логирования инцидентов.
+ * A generic interface for handling and reporting errors in the Crystal ecosystem.
+ * Provides a consistent format for notifying users and logging incidents.
  *
- * @param <T> тип получателя уведомления (например, Player в Paper или Velocity)
+ * @param <T> the type of the notification recipient (e.g., Player in Paper or Velocity).
  */
 public interface ErrorReporter<T> {
 
     /**
-     * Регистрирует ошибку и отправляет уведомление пользователю.
+     * Reports an error and sends a notification to the given recipient.
      *
-     * @param target получатель уведомления об ошибке
-     * @param error  возникшее исключение
+     * @param target the recipient to notify.
+     * @param error  the exception that occurred.
      */
     void report(@NonNull T target, @NonNull Throwable error);
 
     /**
-     * Регистрирует ошибку с дополнительным контекстом и отправляет уведомление пользователю.
+     * Reports an error with additional context and sends a notification to the given recipient.
      *
-     * @param target     получатель уведомления об ошибке
-     * @param error      возникшее исключение
-     * @param logMessage сообщение для логгера (поддерживает плейсхолдеры {})
-     * @param params     аргументы для форматирования сообщения
+     * @param target     the recipient to notify.
+     * @param error      the exception that occurred.
+     * @param logMessage the message to log (supports <code>{}</code> placeholders).
+     * @param params     the arguments used to format the log message.
      */
     void report(@NonNull T target, @NonNull Throwable error, @Nullable String logMessage, Object... params);
 }

@@ -10,7 +10,7 @@ package me.denarydev.crystal.paper.input.actions;
 import me.denarydev.crystal.paper.input.CloseReason;
 
 /**
- * Действие при закрытии запроса.
+ * An action executed when a {@link me.denarydev.crystal.paper.input.ChatPrompt} closes.
  */
 @FunctionalInterface
 public interface CloseAction {

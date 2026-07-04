@@ -1,42 +1,42 @@
 # Crystal — Database Module
 
-Модуль для работы с базами данных в Minecraft-плагинах. Предоставляет единый API для подключения к различным СУБД, управления пулами соединений и выполнения SQL-запросов через fluent-интерфейс.
+A module for working with databases in Minecraft plugins. Provides a unified API for connecting to various database engines, managing connection pools, and executing SQL queries through a fluent interface.
 
 ---
 
-## Поддерживаемые базы данных
+## Supported databases
 
-| Тип          | `DatabaseType`  | Драйвер             |
-|--------------|-----------------|---------------------|
-| SQLite       | `SQLITE`        | файловый (встроен)  |
-| H2           | `H2`            | файловый (встроен)  |
-| MySQL        | `MYSQL`         | HikariCP            |
-| MariaDB      | `MARIADB`       | HikariCP            |
-| PostgreSQL   | `POSTGRESQL`    | HikariCP            |
+| Type | `DatabaseType` | Driver |
+|---|---|---|
+| SQLite | `SQLITE` | file-based |
+| H2 | `H2` | file-based |
+| MySQL | `MYSQL` | HikariCP |
+| MariaDB | `MARIADB` | HikariCP |
+| PostgreSQL | `POSTGRESQL` | HikariCP |
 
-Файловые БД (SQLite, H2) хранят данные в указанном `.db`-файле. Удалённые (MySQL, MariaDB, PostgreSQL) используют пул соединений на основе [HikariCP](https://github.com/brettwooldridge/HikariCP).
+File-based databases (SQLite, H2) store data in the specified `.db` file. Remote databases (MySQL, MariaDB, PostgreSQL) use a connection pool backed by [HikariCP](https://github.com/brettwooldridge/HikariCP).
 
 ---
 
-## Пулы соединений
+## Connection pools
 
-### Через PoolManager (рекомендуется)
+### Via PoolManager (recommended)
 
-`PoolManager` — синглтон, который читает конфигурацию пулов из файла `pools.yml` и инициализирует их лениво при первом обращении.
+`PoolManager` is a singleton that reads pool configuration from `pools.yml` and initializes each pool lazily on first access.
 
 ```java
-// Получить пул по имени (Optional)
+// Get a pool by name (Optional)
 Optional<ConnectionPool> pool = PoolManager.get().getPool("my_pool");
 
-// Получить пул или выбросить исключение, если не найден
+// Get a pool or throw if not found
 ConnectionPool pool = PoolManager.get().requirePool("my_pool");
 ```
 
-Пулы создаются один раз и переиспользуются. Псевдонимы (aliases) позволяют обращаться к одному пулу под несколькими именами.
+Pools are created once and reused. Aliases let you refer to a single pool under multiple names.
 
-### Вручную через ConnectionPoolBuilders
+### Manually via ConnectionPoolBuilders
 
-Если пул нужно создать без конфигурационного файла:
+When you need to create a pool without a configuration file:
 
 ```java
 // MariaDB
@@ -58,52 +58,52 @@ ConnectionPool pool = ConnectionPoolBuilders.sqlite()
 pool.initialize();
 ```
 
-Доступные билдеры: `sqlite()`, `h2()`, `mysql()`, `mariadb()`, `postgresql()`.
+Available builders: `sqlite()`, `h2()`, `mysql()`, `mariadb()`, `postgresql()`.
 
 ---
 
 ## Query API
 
-Получив `ConnectionPool`, можно строить запросы через `pool.query()`:
+Once you have a `ConnectionPool`, build queries via `pool.query()`:
 
 ```java
 QueryBuilder q = pool.query();
 ```
 
-> **Важно:** все методы выполнения запросов бросают проверяемое `SQLException`, которое необходимо обрабатывать.
+> **Note:** all query execution methods throw a checked `SQLException` that must be handled.
 
 ---
 
-### Методы выполнения (AbstractQuery)
+### Execution methods (AbstractQuery)
 
-Доступны на любом типе запроса.
+Available on every query type.
 
-| Метод | Описание |
+| Method | Description |
 |---|---|
-| `update()` | Выполняет запрос как UPDATE/INSERT/DELETE, возвращает кол-во затронутых строк |
-| `updateWithKeys(connection)` | Выполняет запрос на переданном соединении и возвращает `ResultSetWrapper` со сгенерированными ключами (соединение закрывает вызывающая сторона) |
-| `updateWithKeysAndMap(mapper)` | Выполняет запрос и маппит первый сгенерированный ключ в `Optional<T>` |
-| `updateWithKeysAndMapAll(mapper)` | Выполняет запрос и маппит все сгенерированные ключи в `List<T>` |
-| `query(connection)` | Выполняет SELECT на переданном соединении и возвращает `ResultSetWrapper` (соединение закрывает вызывающая сторона) |
-| `queryAndMap(mapper)` | Выполняет SELECT и маппит первую строку в `Optional<T>` |
-| `queryAndMapAll(mapper)` | Выполняет SELECT и маппит все строки в `List<T>` |
+| `update()` | Executes the query as UPDATE/INSERT/DELETE; returns the number of affected rows |
+| `updateWithKeys(connection)` | Executes the query on the given connection and returns a `ResultSetWrapper` containing the generated keys (the caller is responsible for closing the connection) |
+| `updateWithKeysAndMap(mapper)` | Executes the query and maps the first generated key into `Optional<T>` |
+| `updateWithKeysAndMapAll(mapper)` | Executes the query and maps all generated keys into `List<T>` |
+| `query(connection)` | Executes a SELECT on the given connection and returns a `ResultSetWrapper` (the caller closes the connection) |
+| `queryAndMap(mapper)` | Executes a SELECT and maps the first row into `Optional<T>` |
+| `queryAndMapAll(mapper)` | Executes a SELECT and maps all rows into `List<T>` |
 
-> `updateWithKeys(connection)` и `query(connection)` принимают соединение явно — это нужно для транзакций, когда несколько запросов должны выполниться на одном `Connection`.
+> `updateWithKeys(connection)` and `query(connection)` accept an explicit connection — useful for transactions where multiple queries must run on the same `Connection`.
 
-`ResultSetMapper<T>` — функциональный интерфейс `T map(ResultSet set) throws SQLException`.
+`ResultSetMapper<T>` is a functional interface: `T map(ResultSet set) throws SQLException`.
 
 ---
 
-### WHERE-условия (SELECT, UPDATE, DELETE)
+### WHERE conditions (SELECT, UPDATE, DELETE)
 
-| Метод | Генерирует |
+| Method | Generates |
 |---|---|
 | `where(column, value)` | `` `column` = ? `` |
-| `whereExpr(expr, params...)` | произвольное SQL-выражение |
+| `whereExpr(expr, params...)` | arbitrary SQL expression |
 | `whereNull(column)` | `` `column` IS NULL `` |
-| `whereNullable(column, value)` | IS NULL или `= ?` в зависимости от значения |
+| `whereNullable(column, value)` | IS NULL or `= ?` depending on the value |
 
-Несколько вызовов объединяются через `AND`.
+Multiple calls are joined with `AND`.
 
 ---
 
@@ -111,13 +111,13 @@ QueryBuilder q = pool.query();
 
 ```java
 try {
-    // Одна запись
+    // Single record
     Optional<MyObject> result = q.select("id", "name")
         .from("users")
         .where("id", userId)
         .queryAndMap(rs -> new MyObject(rs.getInt("id"), rs.getString("name")));
 
-    // Все записи
+    // All records
     List<MyObject> all = q.select().all()
         .from("users")
         .whereExpr("`score` > ?", 100)
@@ -127,19 +127,19 @@ try {
 } catch (SQLException e) { }
 ```
 
-| Метод | Описание |
+| Method | Description |
 |---|---|
-| `all()` | Выбрать все столбцы (`SELECT *`) |
-| `column(name)` | Добавить столбец по имени |
-| `expression(expr, params...)` | Добавить произвольное SQL-выражение |
-| `from(table)` | Указать таблицу |
-| `from(database, table)` | Указать базу данных и таблицу |
-| `orderBy(column)` | Сортировка по столбцу |
-| `orderByExpr(expr, params...)` | Сортировка по произвольному выражению |
-| `desc()` | Добавить `DESC` к сортировке |
-| `limit(n)` | Ограничить количество строк |
-| `offset(n)` | Пропустить n строк |
-| `forUpdate()` | Добавить `FOR UPDATE` |
+| `all()` | Select all columns (`SELECT *`) |
+| `column(name)` | Add a column by name |
+| `expression(expr, params...)` | Add an arbitrary SQL expression |
+| `from(table)` | Specify the table |
+| `from(database, table)` | Specify the database and table |
+| `orderBy(column)` | Sort by a column |
+| `orderByExpr(expr, params...)` | Sort by an arbitrary expression |
+| `desc()` | Append `DESC` to the sort |
+| `limit(n)` | Limit the number of rows |
+| `offset(n)` | Skip n rows |
+| `forUpdate()` | Append `FOR UPDATE` |
 
 ---
 
@@ -147,7 +147,7 @@ try {
 
 ```java
 try {
-    // Обычная вставка
+    // Plain insert
     q.insertInto("users")
         .value("id", uuid)
         .value("name", name)
@@ -166,19 +166,19 @@ try {
         .value("id", uuid)
         .value("name", name)
         .value("score", score)
-        .onDuplicateKeyUpdateExcept("id")   // обновить все столбцы кроме ключа
+        .onDuplicateKeyUpdateExcept("id")   // update all columns except the key
         .update();
 } catch (SQLException e) { }
 ```
 
-| Метод | Описание                                                                |
-|---|-------------------------------------------------------------------------|
-| `ignore()` | Добавить `INSERT IGNORE`                                                |
-| `value(column, value)` | Вставить значение                                                       |
-| `valueExpr(column, expr, params...)` | Вставить произвольное SQL-выражение                                     |
-| `valueNull(column)` | Вставить NULL                                                           |
-| `valueNullable(column, value)` | Вставить NULL или значение в зависимости от value                       |
-| `onDuplicateKeyUpdateExcept(keys...)` | `ON DUPLICATE KEY UPDATE` для всех столбцов, кроме помеченных как ключи |
+| Method | Description |
+|---|---|
+| `ignore()` | Add `INSERT IGNORE` |
+| `value(column, value)` | Insert a value |
+| `valueExpr(column, expr, params...)` | Insert an arbitrary SQL expression |
+| `valueNull(column)` | Insert NULL |
+| `valueNullable(column, value)` | Insert NULL or a value depending on the argument |
+| `onDuplicateKeyUpdateExcept(keys...)` | `ON DUPLICATE KEY UPDATE` for all columns except the specified keys |
 
 ---
 
@@ -195,12 +195,12 @@ try {
 } catch (SQLException e) { }
 ```
 
-| Метод | Описание |
+| Method | Description |
 |---|---|
-| `value(column, value)` | Установить значение |
-| `valueExpr(column, expr, params...)` | Установить произвольное SQL-выражение |
-| `valueNull(column)` | Установить NULL |
-| `valueNullable(column, value)` | NULL или значение в зависимости от value |
+| `value(column, value)` | Set a value |
+| `valueExpr(column, expr, params...)` | Set an arbitrary SQL expression |
+| `valueNull(column)` | Set NULL |
+| `valueNullable(column, value)` | NULL or a value depending on the argument |
 
 ---
 
@@ -214,13 +214,13 @@ try {
 } catch (SQLException e) { }
 ```
 
-Только WHERE-условия, других методов нет.
+Only WHERE conditions are available; no other methods.
 
 ---
 
 ### CREATE TABLE
 
-Модификаторы `notNull()`, `primaryKey()`, `autoIncrement()`, `defaultValue()` применяются к **последнему добавленному** столбцу.
+The modifiers `notNull()`, `primaryKey()`, `autoIncrement()`, and `defaultValue()` apply to the **last added** column.
 
 ```java
 try {
@@ -234,24 +234,24 @@ try {
 } catch (SQLException e) { }
 ```
 
-**Методы добавления столбцов:**
+**Column methods:**
 
-| Метод | SQL-тип |
+| Method | SQL type |
 |---|---|
-| `column(name, type)` | произвольный тип |
+| `column(name, type)` | arbitrary type |
 | `integer(name)` | `INT` |
 | `bigint(name)` | `BIGINT` |
 | `bool(name)` | `TINYINT(1)` |
 | `varchar(name, size)` | `VARCHAR(size)` |
 | `character(name, size)` | `CHAR(size)` |
 | `text(name)` | `TEXT` |
-| `serial(name)` | `SERIAL` (только PostgreSQL) |
-| `bigSerial(name)` | `BIGSERIAL` (только PostgreSQL) |
+| `serial(name)` | `SERIAL` (PostgreSQL only) |
+| `bigSerial(name)` | `BIGSERIAL` (PostgreSQL only) |
 | `intKey(name)` | `INT AUTO_INCREMENT PRIMARY KEY` |
 
-**Модификаторы последнего столбца:**
+**Column modifiers:**
 
-| Метод | Добавляет |
+| Method | Appends |
 |---|---|
 | `notNull()` | `NOT NULL` |
 | `autoIncrement()` | `AUTO_INCREMENT` |
@@ -260,7 +260,7 @@ try {
 
 ---
 
-### Raw-запросы
+### Raw queries
 
 ```java
 try {
@@ -272,9 +272,9 @@ try {
 
 ---
 
-### Batch-запросы
+### Batch queries
 
-Для массового выполнения однотипных запросов через `pool.batch()`. Все запросы в пакете должны иметь одинаковый SQL-текст.
+For bulk execution of repeated queries via `pool.batch()`. All queries in a batch must share the same SQL text.
 
 ```java
 try {
@@ -292,16 +292,16 @@ try {
 } catch (SQLException e) { }
 ```
 
-| Метод | Описание |
+| Method | Description |
 |---|---|
-| `add(query)` | Добавить запрос в пакет |
-| `execute()` | Выполнить пакет, вернуть `int[]` с кол-вом затронутых строк по каждому запросу |
+| `add(query)` | Add a query to the batch |
+| `execute()` | Execute the batch; returns `int[]` with the affected row count per query |
 
 ---
 
 ## SchemaReader
 
-Позволяет загрузить схему таблиц из `.sql`-файла (например, из ресурсов плагина):
+Loads a table schema from a `.sql` file (e.g. from plugin resources):
 
 ```java
 List<String> statements = SchemaReader.getStatements(
@@ -313,41 +313,41 @@ for (String sql : statements) {
 }
 ```
 
-Комментарии (`--`, `#`) и пустые строки пропускаются автоматически.
+Comments (`--`, `#`) and blank lines are skipped automatically.
 
 ---
 
-## Структура пакета
+## Package structure
 
 ```
 me.denarydev.crystal.database
-├── DatabaseType                  — перечисление поддерживаемых СУБД
+├── DatabaseType                  — enum of supported database engines
 ├── connection
-│   ├── ConnectionPool            — абстрактный пул соединений (базовый класс)
-│   ├── ConnectionPoolBuilders    — фабричные методы для создания билдеров пулов
+│   ├── ConnectionPool            — abstract connection pool (base class)
+│   ├── ConnectionPoolBuilders    — factory methods for pool builders
 │   ├── file
-│   │   ├── FlatfileConnectionPool — база для файловых пулов
+│   │   ├── FlatfileConnectionPool — base for file-based pools
 │   │   ├── SQLiteConnectionPool
 │   │   └── H2ConnectionPool
 │   └── hikari
-│       ├── HikariConnectionPool  — база для удалённых пулов (HikariCP)
+│       ├── HikariConnectionPool  — base for remote pools (HikariCP)
 │       ├── MySqlConnectionPool
 │       ├── MariaDBConnectionPool
 │       └── PostgresConnectionPool
 ├── pool
-│   ├── PoolManager               — синглтон-менеджер именованных пулов
-│   └── impl.PoolManagerImpl      — внутренняя реализация (конфиг + lazy-инициализация)
+│   ├── PoolManager               — singleton manager for named pools
+│   └── impl.PoolManagerImpl      — internal implementation (config + lazy init)
 ├── query
-│   ├── QueryBuilder              — точка входа для построения запросов
-│   ├── AbstractQuery             — базовый класс запроса (execute/query/update)
-│   ├── ConditionalQuery          — расширение с поддержкой WHERE
-│   ├── BatchBuilder              — пакетное выполнение запросов
-│   ├── Dialect                   — перечисление диалектов SQL
-│   ├── Expression                — SQL-выражение с параметрами
-│   ├── impl                      — конкретные реализации (Select, Insert, Update, Delete, CreateTable, Raw)
+│   ├── QueryBuilder              — entry point for building queries
+│   ├── AbstractQuery             — base query class (execute/query/update)
+│   ├── ConditionalQuery          — extension with WHERE support
+│   ├── BatchBuilder              — batch query execution
+│   ├── Dialect                   — SQL dialect enum
+│   ├── Expression                — SQL expression with bound parameters
+│   ├── impl                      — concrete implementations (Select, Insert, Update, Delete, CreateTable, Raw)
 │   └── set
-│       ├── ResultSetWrapper      — обёртка над ResultSet с методами map/mapAll
-│       └── ResultSetMapper       — функциональный интерфейс для маппинга строк
+│       ├── ResultSetWrapper      — ResultSet wrapper with map/mapAll helpers
+│       └── ResultSetMapper       — functional interface for row mapping
 └── schema
-    └── SchemaReader              — чтение SQL-схем из файлов/потоков
+    └── SchemaReader              — reads SQL schemas from files or streams
 ```

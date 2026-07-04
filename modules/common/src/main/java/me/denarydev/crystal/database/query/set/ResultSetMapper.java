@@ -11,18 +11,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Преобразует {@link ResultSet} в объект.
+ * Converts a {@link ResultSet} row into an object.
  */
 @FunctionalInterface
 public interface ResultSetMapper<T> {
 
     /**
-     * Преобразует {@link ResultSet} в объект.
-     * Перед вызовом этого метода объект ResultSet должен указывать на строку.
+     * Maps the current row of the given {@link ResultSet} to an object.
+     * The ResultSet must already be positioned on a row before this method is called.
      *
-     * @param set Результирующая выборка (Result set).
-     * @return Значение, может быть null.
-     * @throws SQLException При ошибке SQL.
+     * @param set the result set.
+     * @return the mapped value; may be null.
+     * @throws SQLException on SQL error.
      */
     T map(ResultSet set) throws SQLException;
 }

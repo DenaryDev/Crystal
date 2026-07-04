@@ -16,16 +16,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Методы для получения схем базы данных из .sql файлов.
+ * Utility methods for reading database schema statements from {@code .sql} files.
  */
 public final class SchemaReader {
 
     /**
-     * Читает SQL-запросы из входного потока, очищая их от комментариев.
+     * Reads SQL statements from the given input stream, stripping line comments.
      *
-     * @param is входной поток данных .sql файла
-     * @return список SQL-инструкций без завершающей точки с запятой
-     * @throws IOException если произошла ошибка при чтении потока
+     * @param is the input stream of a {@code .sql} file.
+     * @return a list of SQL statements with the trailing semicolons removed.
+     * @throws IOException if an error occurs while reading the stream.
      */
     public static List<String> getStatements(final InputStream is) throws IOException {
         final List<String> queries = new LinkedList<>();

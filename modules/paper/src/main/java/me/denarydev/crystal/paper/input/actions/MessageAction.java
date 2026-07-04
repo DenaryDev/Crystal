@@ -8,7 +8,7 @@
 package me.denarydev.crystal.paper.input.actions;
 
 /**
- * Действие при получении ответа на запрос.
+ * An action executed when the player responds to a {@link me.denarydev.crystal.paper.input.ChatPrompt}.
  */
 @FunctionalInterface
 public interface MessageAction {

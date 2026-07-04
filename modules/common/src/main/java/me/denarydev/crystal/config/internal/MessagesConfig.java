@@ -19,8 +19,8 @@ public final class MessagesConfig {
         |             Crystal            |
         |          by DenaryDev          |
         +--------------------------------+
-        |- В этом конфиге настраиваются пути ко всем остальным конфигам.
-        |- Если конфиг лежит не в папке плагина, указывайте полный путь к нему!
+        |- This config defines messages sent to players.
+        |- If a config file is located outside the plugin folder, provide its full path.
         """;
 
     private Errors errors = new Errors();
@@ -31,8 +31,8 @@ public final class MessagesConfig {
 
     @ConfigSerializable
     public static final class Errors {
-        private String errorWithCode = "<red>Произошла неизвестная ошибка! Обратитесь к администрации, сообщив код ошибки: <yellow><u><code></u>";
-        private String errorCodeHover = "<gray>Нажми, чтобы скопировать код ошибки";
+        private String errorWithCode = "<red>An unknown error has occurred! Please contact the administrators and provide this error code: <yellow><u><code></u>";
+        private String errorCodeHover = "<gray>Click to copy the error code";
 
         public String errorWithCode() {
             return errorWithCode;

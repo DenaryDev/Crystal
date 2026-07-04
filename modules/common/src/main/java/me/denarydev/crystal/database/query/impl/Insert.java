@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Запрос <code>INSERT</code>.
+ * An <code>INSERT</code> query.
  */
 public final class Insert extends AbstractQuery {
 
@@ -42,9 +42,9 @@ public final class Insert extends AbstractQuery {
     }
 
     /**
-     * Добавляет предложение <code>IGNORE</code> в запрос.
+     * Adds the <code>IGNORE</code> clause to the query.
      *
-     * @return Этот объект.
+     * @return this object.
      */
     public Insert ignore() {
         this.ignore = true;
@@ -52,11 +52,11 @@ public final class Insert extends AbstractQuery {
     }
 
     /**
-     * Добавляет значение для вставки в указанный столбец.
+     * Adds a value to insert into the given column.
      *
-     * @param column Имя столбца.
-     * @param value  Значение столбца.
-     * @return Этот объект.
+     * @param column the column name.
+     * @param value  the column value.
+     * @return this object.
      */
     public Insert value(@NonNull String column, @NonNull Object value) {
         SQLUtil.validateIdentifier(column);
@@ -64,12 +64,12 @@ public final class Insert extends AbstractQuery {
     }
 
     /**
-     * Добавляет значение в виде SQL-выражения для вставки в указанный столбец.
+     * Adds a SQL expression as the value to insert into the given column.
      *
-     * @param column Имя столбца.
-     * @param expr   SQL-выражение.
-     * @param params Параметры выражения (для заполнения плейсхолдеров <code>?</code>).
-     * @return Этот объект.
+     * @param column the column name.
+     * @param expr   the SQL expression.
+     * @param params the expression parameters (substituted in place of <code>?</code> placeholders).
+     * @return this object.
      */
     public Insert valueExpr(@NonNull String column, @NonNull String expr, @NonNull Object... params) {
         SQLUtil.validateIdentifier(column);
@@ -79,33 +79,33 @@ public final class Insert extends AbstractQuery {
     }
 
     /**
-     * Добавляет значение <code>NULL</code> для вставки в указанный столбец.
+     * Inserts a <code>NULL</code> value into the given column.
      *
-     * @param column Имя столбца.
-     * @return Этот объект.
+     * @param column the column name.
+     * @return this object.
      */
     public Insert valueNull(@NonNull String column) {
         return valueExpr(column, "NULL");
     }
 
     /**
-     * Если указанное значение равно null, добавляет значение <code>NULL</code> для указанного столбца,
-     * в противном случае добавляет указанное значение как обычное значение столбца.
+     * Inserts either <code>NULL</code> or the given value into the given column,
+     * depending on whether the value is null.
      *
-     * @param column Имя столбца.
-     * @param value  Допускающее null значение.
-     * @return Этот объект.
+     * @param column the column name.
+     * @param value  the nullable value.
+     * @return this object.
      */
     public Insert valueNullable(@NonNull String column, @Nullable Object value) {
         return value == null ? valueNull(column) : value(column, value);
     }
 
     /**
-     * Добавляет предложение <code>ON DUPLICATE KEY UPDATE</code> со всеми значениями, добавленными через
-     * методы <code>value*()</code>, исключая столбцы, помеченные как ключи.
+     * Adds an <code>ON DUPLICATE KEY UPDATE</code> clause for all values added via the
+     * <code>value*()</code> methods, excluding the columns designated as keys.
      *
-     * @param keys Ключевые столбцы, которые не должны обновляться.
-     * @return Этот объект.
+     * @param keys the key columns that should not be updated.
+     * @return this object.
      */
     public Insert onDuplicateKeyUpdateExcept(@NonNull String... keys) {
         this.update.clear();

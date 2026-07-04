@@ -17,19 +17,18 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Различные методы для работы с числами.
+ * Utility methods for working with numbers.
  */
 public final class NumberUtils {
     private static final String NUMBER_REGEX = "[-+]?\\d*\\.?\\d+";
 
     /**
-     * Форматирует число используя формат по умолчанию
-     * в зависимости от типа числа.
-     * Для целых чисел используется формат "#,###",
-     * для дробных чисел используется формат "#,###.00".
+     * Formats a number using a default pattern based on its type.
+     * Whole numbers use the pattern {@code "#,###"};
+     * fractional numbers use the pattern {@code "#,###.00"}.
      *
-     * @param number число для форматирования
-     * @return форматированное число в виде строки
+     * @param number the number to format.
+     * @return the formatted number as a string.
      */
     @NonNull
     public static String formatNumber(final double number) {
@@ -39,11 +38,11 @@ public final class NumberUtils {
     }
 
     /**
-     * Форматирует число используя указанный формат.
+     * Formats a number using the given {@link DecimalFormat}.
      *
-     * @param number число для форматирования
-     * @param format формат {@link DecimalFormat}
-     * @return форматированное число в виде строки
+     * @param number the number to format.
+     * @param format the decimal format to apply.
+     * @return the formatted number as a string.
      */
     @NonNull
     public static String formatNumber(final double number, @NonNull final DecimalFormat format) {
@@ -58,12 +57,12 @@ public final class NumberUtils {
     }
 
     /**
-     * Проверяет, является ли указанная строка целым числом.
+     * Returns whether the given string represents a valid integer.
      * <p>
-     * Проверка происходит методом {@link Integer#parseInt(String)}
+     * Checked via {@link Integer#parseInt(String)}.
      *
-     * @param string строка для проверки
-     * @return true, если является, в ином случае false
+     * @param string the string to check.
+     * @return {@code true} if the string is a valid integer; {@code false} otherwise.
      */
     public static boolean isInteger(@NonNull final String string) {
         try {
@@ -76,28 +75,27 @@ public final class NumberUtils {
     }
 
     /**
-     * Проверяет, является ли указанная строка числом.
+     * Returns whether the given string represents a valid number.
      * <p>
-     * Проверка происходит через регулярное выражение (Regex).
+     * Checked via a regular expression.
      *
-     * @param string строка для проверки
-     * @return true, если является, в ином случае false
+     * @param string the string to check.
+     * @return {@code true} if the string is numeric; {@code false} otherwise.
      */
     public static boolean isNumeric(@NonNull final String string) {
         return string.matches(NUMBER_REGEX);
     }
 
     /**
-     * Получает из указанного словаря случайное значение.
+     * Returns a random value from the given weighted map.
      * <p>
-     * Ключ в словаре - шанс выпадения значения,
-     * которое к нему привязано.
+     * Each key in the map represents the percentage chance of the corresponding value being selected.
      * <p>
-     * <b>Сумма шансов всегда должна быть равна 100</b>
+     * <b>The sum of all chance values must equal 100.</b>
      *
-     * @param map словарь с шансами
-     * @param <T> тип значения
-     * @return случайное значение
+     * @param map the map of chances to values.
+     * @param <T> the value type.
+     * @return a randomly selected value.
      */
     @NonNull
     public static <T> T randomValue(@NonNull final Map<Integer, T> map) {
@@ -116,11 +114,11 @@ public final class NumberUtils {
     }
 
     /**
-     * Округляет число до заданного количества знаков после запятой.
+     * Rounds a number to the given number of decimal places.
      *
-     * @param value  значение для округления
-     * @param places до какого знака после запятой округлять
-     * @return округлённое значение
+     * @param value  the value to round.
+     * @param places the number of decimal places to round to.
+     * @return the rounded value.
      */
     public static double roundAvoid(final double value, final int places) {
         final double scale = Math.pow(10, places);

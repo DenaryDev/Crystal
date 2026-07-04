@@ -16,7 +16,7 @@ import java.nio.file.Path;
 import java.util.function.Function;
 
 /**
- * Пул соединений для встроенной базы данных SQLite.
+ * Connection pool for the embedded SQLite database.
  */
 public final class SQLiteConnectionPool extends FlatfileConnectionPool {
 

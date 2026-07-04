@@ -20,16 +20,16 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Название и описание предмета для записи в конфиг через Configurate
+ * An item display name and lore pair, suitable for serialization via Configurate.
  */
 @ConfigSerializable
 public final class NameAndLore {
 
     /**
-     * Создаёт связку названия и описания предмета без указания описания.
+     * Creates a name-and-lore pair with no lore.
      *
-     * @param name название предмета
-     * @return новый экземпляр этого класса, но без описания
+     * @param name the item display name.
+     * @return a new instance with no lore.
      */
     @Contract(
         value = "_ -> new",
@@ -40,11 +40,11 @@ public final class NameAndLore {
     }
 
     /**
-     * Создаёт связку названия и описания предмета без указания описания.
+     * Creates a name-and-lore pair with the given lore lines.
      *
-     * @param name название предмета
-     * @param lore описание предмета
-     * @return новый экземпляр этого класса, но без описания
+     * @param name the item display name.
+     * @param lore the lore lines.
+     * @return a new instance with the given name and lore.
      */
     @Contract(
         value = "_, _ -> new",
@@ -55,11 +55,11 @@ public final class NameAndLore {
     }
 
     /**
-     * Создаёт связку названия и описания предмета.
+     * Creates a name-and-lore pair with the given lore list.
      *
-     * @param name название предмета
-     * @param lore описание предмета
-     * @return новый экземпляр этого класса
+     * @param name the item display name.
+     * @param lore the lore lines.
+     * @return a new instance with the given name and lore.
      */
     @Contract(
         value = "_, _ -> new",
@@ -81,9 +81,9 @@ public final class NameAndLore {
     }
 
     /**
-     * Возвращает название предмета в виде строки.
+     * Returns the raw (unparsed) display name string.
      *
-     * @return название предмета
+     * @return the display name.
      * @see NameAndLore#name(TagResolver...)
      */
     @NonNull
@@ -92,11 +92,10 @@ public final class NameAndLore {
     }
 
     /**
-     * Возвращает название предмета в виде компонента
-     * с применением к нему форматирования MiniMessage.
+     * Returns the display name as a {@link Component} parsed by MiniMessage.
      *
-     * @param placeholders заполнители
-     * @return форматированное название
+     * @param placeholders the tag resolvers to apply.
+     * @return the formatted display name.
      */
     @NonNull
     public Component name(@NonNull TagResolver... placeholders) {
@@ -104,9 +103,9 @@ public final class NameAndLore {
     }
 
     /**
-     * Возвращает описание предмета в виде списка строк.
+     * Returns the raw (unparsed) lore lines.
      *
-     * @return описание предмета или null, если описание не указано
+     * @return the lore lines, or {@code null} if no lore was set.
      * @see NameAndLore#lore(TagResolver...)
      */
     @Nullable
@@ -115,11 +114,10 @@ public final class NameAndLore {
     }
 
     /**
-     * Возвращает описание предмета в виде списка компонентов
-     * с применением к нему форматирования MiniMessage.
+     * Returns the lore as a list of {@link Component}s parsed by MiniMessage.
      *
-     * @param tags заполнители
-     * @return форматированное описание или null, если описание не указано
+     * @param tags the tag resolvers to apply.
+     * @return the formatted lore lines, or {@code null} if no lore was set.
      */
     @Nullable
     public List<Component> lore(@NonNull TagResolver... tags) {
@@ -131,11 +129,11 @@ public final class NameAndLore {
     }
 
     /**
-     * Применяет название и описание к указанному предмету.
+     * Applies the display name and lore to the given item.
      *
-     * @param item         предмет
-     * @param placeholders заполнители, применяемые к названию и описанию
-     * @return Этот же предмет, но с изменённым именем и описанием
+     * @param item         the item to modify.
+     * @param placeholders the tag resolvers to apply to the name and lore.
+     * @return the same item with the updated display name and lore.
      */
     @NonNull
     public ItemStack apply(@NonNull ItemStack item, @NonNull TagResolver... placeholders) {

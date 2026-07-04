@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Запрос <code>SELECT</code>.
+ * A <code>SELECT</code> query.
  */
 public final class Select extends ConditionalQuery<Select> {
 
@@ -44,9 +44,9 @@ public final class Select extends ConditionalQuery<Select> {
     }
 
     /**
-     * Добавляет <code>*</code> в список выбираемых выражений. Другие столбцы не могут быть добавлены.
+     * Adds <code>*</code> to the list of selected expressions. No other columns may be added after this.
      *
-     * @return Этот объект.
+     * @return this object.
      */
     public Select all() {
         if (!this.expressions.isEmpty()) {
@@ -59,10 +59,10 @@ public final class Select extends ConditionalQuery<Select> {
     }
 
     /**
-     * Добавляет столбец в список выбираемых выражений.
+     * Adds a column to the list of selected expressions.
      *
-     * @param name Имя столбца.
-     * @return Этот объект.
+     * @param name the column name.
+     * @return this object.
      */
     public Select column(@NonNull String name) {
         SQLUtil.validateIdentifier(name);
@@ -70,11 +70,11 @@ public final class Select extends ConditionalQuery<Select> {
     }
 
     /**
-     * Добавляет SQL-выражение в список выбираемых выражений.
+     * Adds a SQL expression to the list of selected expressions.
      *
-     * @param expr   SQL-выражение.
-     * @param params Параметры выражения (для заполнения плейсхолдеров <code>?</code>).
-     * @return Этот объект.
+     * @param expr   the SQL expression.
+     * @param params the expression parameters (substituted in place of <code>?</code> placeholders).
+     * @return this object.
      */
     public Select expression(@NonNull String expr, @NonNull Object... params) {
         SQLUtil.validatePlaceholderCount(expr, params);
@@ -89,10 +89,10 @@ public final class Select extends ConditionalQuery<Select> {
     }
 
     /**
-     * Устанавливает имя таблицы, из которой будет производиться выборка.
+     * Sets the name of the table to select from.
      *
-     * @param tableName Имя таблицы.
-     * @return Этот объект.
+     * @param tableName the table name.
+     * @return this object.
      */
     public Select from(@NonNull String tableName) {
         SQLUtil.validateIdentifier(tableName);
@@ -101,11 +101,11 @@ public final class Select extends ConditionalQuery<Select> {
     }
 
     /**
-     * Устанавливает имена базы данных и таблицы, из которых будет производиться выборка.
+     * Sets the database and table name to select from.
      *
-     * @param database  Имя базы данных.
-     * @param tableName Имя таблицы.
-     * @return Этот объект.
+     * @param database  the database name.
+     * @param tableName the table name.
+     * @return this object.
      */
     public Select from(@NonNull String database, @NonNull String tableName) {
         SQLUtil.validateIdentifier(tableName);
@@ -115,10 +115,10 @@ public final class Select extends ConditionalQuery<Select> {
     }
 
     /**
-     * Добавляет предложение <code>ORDER BY столбец</code> в запрос.
+     * Adds an <code>ORDER BY column</code> clause to the query.
      *
-     * @param column Имя столбца.
-     * @return Этот объект.
+     * @param column the column name.
+     * @return this object.
      */
     public Select orderBy(@NonNull String column) {
         SQLUtil.validateIdentifier(column);
@@ -126,11 +126,11 @@ public final class Select extends ConditionalQuery<Select> {
     }
 
     /**
-     * Добавляет предложение <code>ORDER BY выражение</code> в запрос.
+     * Adds an <code>ORDER BY expression</code> clause to the query.
      *
-     * @param expr   SQL-выражение.
-     * @param params Параметры выражения (для заполнения плейсхолдеров <code>?</code>).
-     * @return Этот объект.
+     * @param expr   the SQL expression.
+     * @param params the expression parameters (substituted in place of <code>?</code> placeholders).
+     * @return this object.
      */
     public Select orderByExpr(@NonNull String expr, @NonNull Object... params) {
         SQLUtil.validatePlaceholderCount(expr, params);
@@ -140,9 +140,9 @@ public final class Select extends ConditionalQuery<Select> {
     }
 
     /**
-     * Добавляет ключевое слово <code>DESC</code> в предложение <code>ORDER BY</code>.
+     * Adds the <code>DESC</code> keyword to the <code>ORDER BY</code> clause.
      *
-     * @return Этот объект.
+     * @return this object.
      */
     public Select desc() {
         if (this.orderBy == null) {
@@ -155,10 +155,10 @@ public final class Select extends ConditionalQuery<Select> {
     }
 
     /**
-     * Добавляет предложение <code>LIMIT limit</code> в запрос.
+     * Adds a <code>LIMIT</code> clause to the query.
      *
-     * @param limit Лимит, должен быть положительным числом.
-     * @return Этот объект.
+     * @param limit the row limit; must be a positive number.
+     * @return this object.
      */
     public Select limit(long limit) {
         if (limit < 1) {
@@ -171,10 +171,10 @@ public final class Select extends ConditionalQuery<Select> {
     }
 
     /**
-     * Добавляет предложение <code>OFFSET offset</code> в запрос.
+     * Adds an <code>OFFSET</code> clause to the query.
      *
-     * @param offset Смещение, должно быть неотрицательным числом.
-     * @return Этот объект.
+     * @param offset the row offset; must be a non-negative number.
+     * @return this object.
      */
     public Select offset(long offset) {
         if (offset < 0) {
@@ -187,9 +187,9 @@ public final class Select extends ConditionalQuery<Select> {
     }
 
     /**
-     * Добавляет предложение <code>FOR UPDATE</code> в конец запроса.
+     * Adds a <code>FOR UPDATE</code> clause at the end of the query.
      *
-     * @return Этот объект.
+     * @return this object.
      */
     public Select forUpdate() {
         this.forUpdate = true;

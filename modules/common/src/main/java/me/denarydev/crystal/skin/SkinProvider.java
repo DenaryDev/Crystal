@@ -18,19 +18,19 @@ public abstract class SkinProvider {
     private static SkinProvider current;
 
     /**
-     * Проверяет, инициализирован ли провайдер скинов.
+     * Returns whether the skin provider has been initialized.
      *
-     * @return true, если провайдер инициализирован, иначе false
+     * @return {@code true} if the provider is initialized; {@code false} otherwise.
      */
     public static boolean isInitialized() {
         return current != null;
     }
 
     /**
-     * Возвращает текущий провайдер скинов, если он инициализирован.
+     * Returns the current skin provider.
      *
-     * @return Провайдер скинов
-     * @throws IllegalStateException если провайдер не инициализирован.
+     * @return the skin provider.
+     * @throws IllegalStateException if the provider has not been initialized.
      */
     public static SkinProvider current() {
         if (current == null) {
@@ -41,11 +41,11 @@ public abstract class SkinProvider {
     }
 
     /**
-     * Устанавливает текущий провайдер скинов.
+     * Sets the current skin provider.
      * <p>
-     * <b>Необходимо вызывать на этапе первой инициализации вашего плагина</b>
+     * <b>Must be called during your plugin's initialization phase.</b>
      *
-     * @param provider провайдер скинов
+     * @param provider the skin provider to use.
      */
     public static void use(@NonNull SkinProvider provider) {
         current = provider;
@@ -54,18 +54,18 @@ public abstract class SkinProvider {
     }
 
     /**
-     * Получает скин игрока по его уникальному идентификатору (UUID).
+     * Returns the skin of the player with the given UUID.
      *
-     * @param uuid уникальный ID игрока
-     * @return Optional со скином, или пустой Optional, если скин не найден
+     * @param uuid the player's unique ID.
+     * @return an Optional containing the skin property, or an empty Optional if not found.
      */
     public abstract Optional<SkinProperty> playerSkin(@NonNull UUID uuid);
 
     /**
-     * Получает скин игрока по его никнейму.
+     * Returns the skin of the player with the given username.
      *
-     * @param name никнейм игрока
-     * @return Optional со скином, или пустой Optional, если скин не найден
+     * @param name the player's username.
+     * @return an Optional containing the skin property, or an empty Optional if not found.
      */
     public abstract Optional<SkinProperty> playerSkin(@NonNull String name);
 }

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Представляет SQL-запрос с предложением <code>WHERE</code>.
+ * Represents a SQL query that supports a <code>WHERE</code> clause.
  */
 public abstract class ConditionalQuery<T extends ConditionalQuery<T>> extends AbstractQuery {
 
@@ -29,12 +29,12 @@ public abstract class ConditionalQuery<T extends ConditionalQuery<T>> extends Ab
     }
 
     /**
-     * Добавляет условие <code>WHERE</code>, которое проверяет, что указанный столбец имеет указанное значение.
-     * Условия объединяются операцией <code>AND</code>.
+     * Adds a <code>WHERE</code> condition that checks whether the given column equals the given value.
+     * Conditions are combined with <code>AND</code>.
      *
-     * @param column Имя столбца.
-     * @param value  Значение.
-     * @return Этот объект.
+     * @param column the column name.
+     * @param value  the value.
+     * @return this object.
      */
     public final T where(@NonNull String column, @NonNull Object value) {
         SQLUtil.validateIdentifier(column);
@@ -42,12 +42,12 @@ public abstract class ConditionalQuery<T extends ConditionalQuery<T>> extends Ab
     }
 
     /**
-     * Добавляет SQL-выражение в качестве условия <code>WHERE</code>, например <code>`mycolumn` / 100 = ?</code>.
-     * Условия объединяются операцией <code>AND</code>.
+     * Adds an arbitrary SQL expression as a <code>WHERE</code> condition, for example <code>`mycolumn` / 100 = ?</code>.
+     * Conditions are combined with <code>AND</code>.
      *
-     * @param expr   SQL-выражение.
-     * @param params Параметры выражения (заполняются вместо плейсхолдеров <code>?</code>).
-     * @return Этот объект.
+     * @param expr   the SQL expression.
+     * @param params the expression parameters (substituted in place of <code>?</code> placeholders).
+     * @return this object.
      */
     @SuppressWarnings("unchecked")
     public final T whereExpr(@NonNull String expr, @NonNull Object... params) {
@@ -57,24 +57,24 @@ public abstract class ConditionalQuery<T extends ConditionalQuery<T>> extends Ab
     }
 
     /**
-     * Добавляет условие <code>WHERE</code>, которое проверяет, имеет ли указанный столбец значение <code>NULL</code>.
-     * Условия объединяются операцией <code>AND</code>.
+     * Adds a <code>WHERE</code> condition that checks whether the given column is <code>NULL</code>.
+     * Conditions are combined with <code>AND</code>.
      *
-     * @param column Имя столбца.
-     * @return Этот объект.
+     * @param column the column name.
+     * @return this object.
      */
     public final T whereNull(@NonNull String column) {
         return whereExpr("`" + column + "` IS NULL");
     }
 
     /**
-     * Добавляет условие <code>WHERE</code>, которое проверяет, имеет ли указанный столбец указанное значение,
-     * которое может быть <code>NULL</code>.
-     * Условия объединяются операцией <code>AND</code>.
+     * Adds a <code>WHERE</code> condition that checks the given column against a possibly null value.
+     * If the value is null, an <code>IS NULL</code> check is added; otherwise an equality check is used.
+     * Conditions are combined with <code>AND</code>.
      *
-     * @param column Имя столбца.
-     * @param value  Добавляемое значение.
-     * @return Этот объект.
+     * @param column the column name.
+     * @param value  the value to check against, may be null.
+     * @return this object.
      */
     public final T whereNullable(@NonNull String column, @Nullable Object value) {
         return value == null ? whereNull(column) : where(column, value);

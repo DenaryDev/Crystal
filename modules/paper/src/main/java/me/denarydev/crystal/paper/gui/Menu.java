@@ -30,10 +30,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Экземпляр меню.
+ * A menu instance backed by a Bukkit inventory.
  * <p>
- * Используйте {@link Menu#builder()} для создания меню нуля,
- * или {@link Menu#builder(Template)} для создания меню по шаблону
+ * Use {@link Menu#builder()} to create a menu from scratch,
+ * or {@link Menu#builder(Template)} to create a menu from a template.
  */
 public class Menu implements InventoryHolder {
 
@@ -58,31 +58,31 @@ public class Menu implements InventoryHolder {
     }
 
     /**
-     * Запускает создатель меню без шаблона.
+     * Creates a menu builder with no pre-set template.
      *
-     * @return {@link Builder} без параметров
+     * @return a blank {@link Builder}.
      */
     public static Builder builder() {
         return new Builder(null);
     }
 
     /**
-     * Запускает создатель меню по указанному шаблону.
+     * Creates a menu builder pre-populated from the given template.
      *
-     * @param template шаблон для билдера
-     * @return {@link Builder} на основе шаблона.
+     * @param template the template to base the builder on.
+     * @return a {@link Builder} seeded from the template.
      */
     public static Builder builder(@NonNull Template template) {
         return new Builder(template);
     }
 
     /**
-     * Возвращает шаблон этого меню.
+     * Returns the template associated with this menu.
      * <p>
-     * Если вы создавали меню без шаблона, то вернёт шаблон,
-     * созданный из параметров, указанных при создании этого меню.
+     * If the menu was created without a template, returns the template
+     * that was generated from the builder's parameters.
      *
-     * @return шаблон меню
+     * @return the menu's template.
      */
     @NonNull
     public Template template() {
@@ -90,10 +90,10 @@ public class Menu implements InventoryHolder {
     }
 
     /**
-     * Возвращает игрока, которому открыто меню, если он есть,
-     * или null, если меню никому не открыто.
+     * Returns the player currently viewing this menu,
+     * or {@code null} if the menu is not open.
      *
-     * @return игрок, которому открыто меню, или null, если меню не открыто
+     * @return the viewer, or {@code null} if none.
      */
     @Nullable
     public Player viewer() {
@@ -101,37 +101,35 @@ public class Menu implements InventoryHolder {
     }
 
     /**
-     * Проверяет, есть ли предмет в указанном слоте.
+     * Returns whether the given slot contains an item.
      *
-     * @param slot слот для проверки
-     * @return true, если в слоте есть предмет, иначе false
+     * @param slot the slot to check.
+     * @return {@code true} if the slot contains an item; {@code false} otherwise.
      */
     public boolean hasItem(int slot) {
         return inventory.getItem(slot) != null;
     }
 
     /**
-     * Добавляет предмет в указанные слоты.
+     * Places an item in the given slot(s).
      * <p>
-     * <b>Если меню уже отображается игроку, для применения
-     * изменений нужно обновить его, вызвав метод {@link #update()}.</b>
+     * <b>If the menu is already open, call {@link #update()} to push the change to the viewer.</b>
      *
-     * @param item  предмет
-     * @param slots слот или несколько слотов
+     * @param item  the item to place.
+     * @param slots the slot or slots to place it in.
      */
     public void addItem(@NonNull ItemStack item, int... slots) {
         addItemInternal(item, slots);
     }
 
     /**
-     * Добавляет предмет и действие к нему в указанные слоты.
+     * Places an item with a click action in the given slot(s).
      * <p>
-     * <b>Если меню уже отображается игроку, для применения
-     * изменений нужно обновить его, вызвав метод {@link #update()}.</b>
+     * <b>If the menu is already open, call {@link #update()} to push the change to the viewer.</b>
      *
-     * @param item   предмет
-     * @param action действие
-     * @param slots  слот или несколько слотов
+     * @param item   the item to place.
+     * @param action the click action for the item.
+     * @param slots  the slot or slots to place it in.
      */
     public void addItem(@NonNull ItemStack item, @Nullable ClickAction action, int... slots) {
         addItemInternal(item, slots);
@@ -139,21 +137,21 @@ public class Menu implements InventoryHolder {
     }
 
     /**
-     * Добавляет действие при клике по указанным слотам.
+     * Registers a click action for the given slot(s).
      * <p>
-     * <b>Действия обрабатываются даже для пустых слотов!</b>
+     * <b>Actions are fired even for empty slots!</b>
      *
-     * @param action действие
-     * @param slots  слот или несколько слотов
+     * @param action the click action.
+     * @param slots  the slot or slots to register the action for.
      */
     public void addAction(@Nullable ClickAction action, int... slots) {
         addActionInternal(action, slots);
     }
 
     /**
-     * Открывает это меню для указанного игрока.
+     * Opens this menu for the given player.
      *
-     * @param viewer игрок
+     * @param viewer the player to show the menu to.
      */
     public void show(@NonNull Player viewer) {
         this.viewer = viewer;
@@ -162,7 +160,7 @@ public class Menu implements InventoryHolder {
     }
 
     /**
-     * Обновляет меню для игрока, если он привязан.
+     * Refreshes the menu for the current viewer, if any.
      */
     public void update() {
         if (viewer == null) return;
@@ -171,7 +169,7 @@ public class Menu implements InventoryHolder {
     }
 
     /**
-     * Закрывает меню, если оно открыто игроку.
+     * Closes this menu if it is currently open.
      */
     public void close() {
         if (viewer == null) return;
@@ -237,9 +235,9 @@ public class Menu implements InventoryHolder {
     }
 
     /**
-     * Создатель экземпляров класса {@link Menu}.
+     * Builder for {@link Menu} instances.
      * <p>
-     * Для вызова используйте метод {@link Menu#builder}.
+     * Obtain via {@link Menu#builder} or {@link Menu#builder(Template)}.
      */
     public static final class Builder {
         private Component title;
@@ -261,9 +259,9 @@ public class Menu implements InventoryHolder {
         }
 
         /**
-         * Возвращает заголовок меню, если установлен.
+         * Returns the menu title, or {@code null} if not set.
          *
-         * @return заголовок меню, или null, если он не установлен.
+         * @return the title, or {@code null}.
          */
         @Nullable
         public Component title() {
@@ -271,11 +269,11 @@ public class Menu implements InventoryHolder {
         }
 
         /**
-         * Устанавливает заголовок меню из компонента MiniMessage.
+         * Sets the menu title from an Adventure {@link Component}.
          * <p>
-         * Если указать null, заголовок будет сброшен!
+         * Pass {@code null} to clear the title.
          *
-         * @param title заголовок
+         * @param title the title, or {@code null} to clear.
          */
         public Builder title(@Nullable Component title) {
             this.title = title;
@@ -284,11 +282,10 @@ public class Menu implements InventoryHolder {
         }
 
         /**
-         * Устанавливает заголовок меню из строки, применяя к ней
-         * форматирование MiniMessage и указанные плейсхолдеры.
+         * Sets the menu title from a MiniMessage-formatted string.
          *
-         * @param title     заголовок
-         * @param resolvers плейсхолдеры
+         * @param title     the title string.
+         * @param resolvers the tag resolvers to apply.
          */
         public Builder titleRich(@NonNull String title, @NonNull TagResolver... resolvers) {
             this.title = MiniMessage.miniMessage().deserialize(title, resolvers);
@@ -297,9 +294,9 @@ public class Menu implements InventoryHolder {
         }
 
         /**
-         * Устанавливает заголовок меню из строки без форматирования.
+         * Sets the menu title from a plain (unformatted) string.
          *
-         * @param title заголовок
+         * @param title the title string.
          */
         public Builder titlePlain(@NonNull String title) {
             this.title = Component.text(title);
@@ -308,22 +305,22 @@ public class Menu implements InventoryHolder {
         }
 
         /**
-         * Возвращает размер меню в количестве слотов.
+         * Returns the menu size in slots.
          *
-         * @return размер меню, или 0, если не указано
+         * @return the slot count, or {@code 0} if not set.
          */
         public int size() {
             return size;
         }
 
         /**
-         * Устанавливает размер меню в количестве слотов.
+         * Sets the menu size in slots.
          * <p>
-         * Указанное значение должно быть кратно 9 и в диапазоне от 9 до 54!
+         * The value must be a multiple of 9 and between 9 and 54 inclusive.
          * <p>
-         * Игнорируется, если указан тип меню через {@link Builder#type(InventoryType)}!
+         * Ignored if an inventory type is set via {@link Builder#type(InventoryType)}.
          *
-         * @param size кол-во слотов
+         * @param size the number of slots.
          */
         public Builder size(int size) {
             Preconditions.checkArgument(size % 9 == 0, "Size must be multiple of 9!");
@@ -335,9 +332,9 @@ public class Menu implements InventoryHolder {
         }
 
         /**
-         * Возвращает тип инвентаря, если установлен.
+         * Returns the inventory type, or {@code null} if not set.
          *
-         * @return тип меню или null, если не установлен
+         * @return the inventory type, or {@code null}.
          */
         @Nullable
         public InventoryType type() {
@@ -345,11 +342,11 @@ public class Menu implements InventoryHolder {
         }
 
         /**
-         * Устанавливает тип меню.
+         * Sets the inventory type for this menu.
          * <p>
-         * Установка типа меню игнорирует указанный методом {@link Builder#size(int)} размер меню.
+         * Setting a type overrides any size set via {@link Builder#size(int)}.
          *
-         * @param type тип меню
+         * @param type the inventory type.
          * @see InventoryType
          */
         public Builder type(@NonNull InventoryType type) {
@@ -359,22 +356,21 @@ public class Menu implements InventoryHolder {
         }
 
         /**
-         * Возвращает все указанные предметы, привязанные к слотам.
+         * Returns all items currently configured in this builder, keyed by slot.
          *
-         * @return все указанные в этом создателе предметы.
+         * @return a map of slot indices to items.
          */
         public Map<Integer, ItemStack> items() {
             return items;
         }
 
         /**
-         * Добавляет предмет в указанные слоты.
+         * Places an item in the given slot(s).
          * <p>
-         * Если в каком-то из указанных слотов уже есть предмет,
-         * перезаписывает его.
+         * Overwrites any item already set in the specified slots.
          *
-         * @param item  предмет
-         * @param slots слот или несколько слотов
+         * @param item  the item to place.
+         * @param slots the slot or slots to place it in.
          */
         public Builder item(@NonNull ItemStack item, int... slots) {
             Preconditions.checkArgument(slots.length > 0, "You must specify at least one slot!");
@@ -387,15 +383,13 @@ public class Menu implements InventoryHolder {
         }
 
         /**
-         * Добавляет предмет с действием при клике по нему
-         * в указанные слоты.
+         * Places an item with a click action in the given slot(s).
          * <p>
-         * Если в каком-то из указанных слотов уже есть предмет,
-         * перезаписывает его.
+         * Overwrites any item or action already set in the specified slots.
          *
-         * @param item   предмет
-         * @param action действие
-         * @param slots  слот или несколько слотов
+         * @param item   the item to place.
+         * @param action the click action for the item.
+         * @param slots  the slot or slots to place it in.
          */
         public Builder item(@NonNull ItemStack item, @NonNull ClickAction action, int... slots) {
             Preconditions.checkArgument(slots.length > 0, "You must specify at least one slot!");
@@ -409,24 +403,23 @@ public class Menu implements InventoryHolder {
         }
 
         /**
-         * Возвращает все указанные действия при клике по предметам, привязанные к слотам.
+         * Returns all click actions currently configured in this builder, keyed by slot.
          *
-         * @return все указанные действия
+         * @return a map of slot indices to click actions.
          */
         public Map<Integer, ClickAction> actions() {
             return actions;
         }
 
         /**
-         * Добавляет действие при клике по указанным слотам.
+         * Registers a click action for the given slot(s).
          * <p>
-         * Если в каком-то из указанных слотов уже есть действие,
-         * перезаписывает его.
+         * Overwrites any action already set in the specified slots.
          * <p>
-         * <b>Действия обрабатываются даже для пустых слотов!</b>
+         * <b>Actions are fired even for empty slots!</b>
          *
-         * @param action действие
-         * @param slots  слот или несколько слотов
+         * @param action the click action.
+         * @param slots  the slot or slots to register the action for.
          */
         public Builder action(@NonNull ClickAction action, int... slots) {
             Preconditions.checkArgument(slots.length > 0, "You must specify at least one slot!");
@@ -439,18 +432,18 @@ public class Menu implements InventoryHolder {
         }
 
         /**
-         * Возвращает задержку обработки кликов меню.
+         * Returns the click cooldown for this menu.
          *
-         * @return задержка обработки кликов
+         * @return the cooldown in milliseconds.
          */
         public long cooldown() {
             return cooldown;
         }
 
         /**
-         * Устанавливает задержку между обработкой кликов.
+         * Sets the minimum time between click events.
          *
-         * @param cooldown задержка
+         * @param cooldown the cooldown in milliseconds.
          */
         public Builder cooldown(long cooldown) {
             this.cooldown = cooldown;
@@ -459,9 +452,9 @@ public class Menu implements InventoryHolder {
         }
 
         /**
-         * Возвращает действие, выполняемое при закрытии меню.
+         * Returns the action executed when the menu is closed, or {@code null} if not set.
          *
-         * @return действие, если установлено, иначе null.
+         * @return the close action, or {@code null}.
          */
         @Nullable
         public CloseAction closeAction() {
@@ -469,9 +462,9 @@ public class Menu implements InventoryHolder {
         }
 
         /**
-         * Добавляет действие, выполняемое при закрытии меню.
+         * Sets the action to execute when the menu is closed.
          *
-         * @param action действие
+         * @param action the close action, or {@code null} to remove.
          */
         public Builder closeAction(@Nullable CloseAction action) {
             this.closeAction = action;
@@ -480,10 +473,9 @@ public class Menu implements InventoryHolder {
         }
 
         /**
-         * Собирает указанные параметры "до кучи" и
-         * создаёт из них экземпляр меню.
+         * Builds and returns a {@link Menu} from the configured parameters.
          *
-         * @return созданный экземпляр меню
+         * @return the created menu instance.
          */
         public Menu build() {
             final SimpleTemplate template = SimpleTemplate.builder()

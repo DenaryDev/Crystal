@@ -12,20 +12,20 @@ import org.jspecify.annotations.NonNull;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Утилиты для форматирования времени в текстовую строку.
+ * Utilities for formatting time durations into human-readable strings.
  */
 public final class TimeFormatter {
 
     /**
-     * Преобразует заданный промежуток времени в читаемую строку.
+     * Converts the given duration to a human-readable string.
      *
-     * @param time   значение времени
-     * @param unit   единица измерения времени
-     * @param day    локализация для дней
-     * @param hour   локализация для часов
-     * @param minute локализация для минут
-     * @param second локализация для секунд
-     * @return отформатированная строка времени
+     * @param time   the time value.
+     * @param unit   the time unit of the value.
+     * @param day    the localized label for days.
+     * @param hour   the localized label for hours.
+     * @param minute the localized label for minutes.
+     * @param second the localized label for seconds.
+     * @return the formatted time string.
      */
     public static String timeToString(long time, @NonNull TimeUnit unit, @NonNull String day, @NonNull String hour, @NonNull String minute, @NonNull String second) {
         long millis = unit.toMillis(time);
@@ -34,28 +34,28 @@ public final class TimeFormatter {
     }
 
     /**
-     * Преобразует игровые тики (1 тик = 50 мс) в читаемую строку.
+     * Converts game ticks (1 tick = 50 ms) to a human-readable string.
      *
-     * @param ticks  количество тиков
-     * @param day    локализация для дней
-     * @param hour   локализация для часов
-     * @param minute локализация для минут
-     * @param second локализация для секунд
-     * @return отформатированная строка времени
+     * @param ticks  the number of ticks.
+     * @param day    the localized label for days.
+     * @param hour   the localized label for hours.
+     * @param minute the localized label for minutes.
+     * @param second the localized label for seconds.
+     * @return the formatted time string.
      */
     public static String ticksToString(long ticks, @NonNull String day, @NonNull String hour, @NonNull String minute, @NonNull String second) {
         return millisToString(ticks * 50L, day, hour, minute, second);
     }
 
     /**
-     * Преобразует миллисекунды в читаемую строку.
+     * Converts milliseconds to a human-readable string.
      *
-     * @param millis количество миллисекунд
-     * @param day    локализация для дней
-     * @param hour   локализация для часов
-     * @param minute локализация для минут
-     * @param second локализация для секунд
-     * @return отформатированная строка времени
+     * @param millis the number of milliseconds.
+     * @param day    the localized label for days.
+     * @param hour   the localized label for hours.
+     * @param minute the localized label for minutes.
+     * @param second the localized label for seconds.
+     * @return the formatted time string.
      */
     public static String millisToString(long millis, @NonNull String day, @NonNull String hour, @NonNull String minute, @NonNull String second) {
         final StringBuilder builder = new StringBuilder();

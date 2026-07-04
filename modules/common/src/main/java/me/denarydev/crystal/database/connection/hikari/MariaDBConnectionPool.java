@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * Пул соединений для базы данных MariaDB.
+ * Connection pool for the MariaDB database.
  */
 public final class MariaDBConnectionPool extends HikariConnectionPool {
 

@@ -15,15 +15,15 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Методы для работы со строками.
+ * Utility methods for working with strings.
  */
 public final class TextUtils {
 
     /**
-     * Делает первый символ строки заглавным.
+     * Capitalizes the first character of the given string.
      *
-     * @param string строка со строчной буквы
-     * @return Строка с заглавной буквы
+     * @param string the string to capitalize.
+     * @return the string with its first character uppercased.
      */
     @NonNull
     public static String capitalize(@NonNull final String string) {
@@ -31,10 +31,10 @@ public final class TextUtils {
     }
 
     /**
-     * Делает первый символ каждой строки в списке заглавным.
+     * Capitalizes the first character of each string in the given list.
      *
-     * @param strings список строк со строчной буквы
-     * @return список Строк с заглавной буквы
+     * @param strings the list of strings to capitalize.
+     * @return a new list with each string's first character uppercased.
      */
     @NonNull
     public static List<String> capitalizeAll(@NonNull final List<String> strings) {
@@ -42,10 +42,10 @@ public final class TextUtils {
     }
 
     /**
-     * Делает первый символ каждой строки в массиве заглавным.
+     * Capitalizes the first character of each string in the given array.
      *
-     * @param text массив строк со строчной буквы
-     * @return массив Строк с заглавной буквы
+     * @param text the array of strings to capitalize.
+     * @return a new array with each string's first character uppercased.
      */
     @NonNull
     public static String[] capitalizeAll(@NonNull final String... text) {
@@ -53,11 +53,12 @@ public final class TextUtils {
     }
 
     /**
-     * Переносит слишком длинный текст по словам с учётом указанной длинны строки.
+     * Wraps the given text by breaking it into lines of at most {@code maxLength} characters,
+     * splitting only at word boundaries.
      *
-     * @param text      исходный текст
-     * @param maxLength максимальная длина строки в символах
-     * @return список строк
+     * @param text      the source text.
+     * @param maxLength the maximum line length in characters.
+     * @return a list of wrapped lines.
      */
     @NonNull
     public static List<String> wrapText(@NonNull String text, int maxLength) {

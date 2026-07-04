@@ -20,15 +20,15 @@ import java.util.Base64;
 import java.util.UUID;
 
 /**
- * Утилиты для работы с предметами головы.
+ * Utilities for creating and configuring player head items.
  */
 public final class HeadUtils {
 
     /**
-     * Создаёт предмет головы с указанной текстурой.
+     * Creates a player head item with the given texture.
      *
-     * @param texture текстура головы
-     * @return {@link ItemStack} с текстурой
+     * @param texture the Base64-encoded texture value or texture hash.
+     * @return an {@link ItemStack} with the texture applied.
      */
     @NonNull
     public static ItemStack createHead(final String texture) {
@@ -36,11 +36,11 @@ public final class HeadUtils {
     }
 
     /**
-     * Создаёт предмет головы с указанной текстурой и количеством.
+     * Creates a player head item stack with the given texture and quantity.
      *
-     * @param texture текстура головы
-     * @param amount  количество предметов
-     * @return {@link ItemStack} с текстурой
+     * @param texture the Base64-encoded texture value or texture hash.
+     * @param amount  the stack size (clamped to 1–64).
+     * @return an {@link ItemStack} with the texture applied.
      */
     @NonNull
     public static ItemStack createHead(final String texture, final int amount) {
@@ -48,11 +48,11 @@ public final class HeadUtils {
     }
 
     /**
-     * Создаёт предмет головы с указанной текстурой и подписью.
+     * Creates a player head item with the given texture and signature.
      *
-     * @param texture   текстура головы
-     * @param signature подпись (Не обязательно)
-     * @return {@link ItemStack} с текстурой
+     * @param texture   the Base64-encoded texture value.
+     * @param signature the Mojang signature for the texture, or {@code null} if unavailable.
+     * @return an {@link ItemStack} with the texture applied.
      */
     @NonNull
     public static ItemStack createHead(final String texture, final String signature) {
@@ -60,12 +60,12 @@ public final class HeadUtils {
     }
 
     /**
-     * Создаёт предмет головы с указанной текстурой и подписью.
+     * Creates a player head item stack with the given texture, signature, and quantity.
      *
-     * @param texture   текстура головы
-     * @param signature подпись (Не обязательно)
-     * @param amount    количество предметов
-     * @return {@link ItemStack} с текстурой
+     * @param texture   the Base64-encoded texture value.
+     * @param signature the Mojang signature for the texture, or {@code null} if unavailable.
+     * @param amount    the stack size (clamped to 1–64).
+     * @return an {@link ItemStack} with the texture applied.
      */
     @NonNull
     public static ItemStack createHead(@NonNull final String texture, @Nullable final String signature, final int amount) {
@@ -80,21 +80,21 @@ public final class HeadUtils {
     }
 
     /**
-     * Устанавливает текстуру головы.
+     * Applies the given texture to a skull's metadata.
      *
-     * @param meta    метаданные предмета головы
-     * @param texture текстура головы
+     * @param meta    the skull metadata to modify.
+     * @param texture the Base64-encoded texture value or texture hash.
      */
     public static void setTexture(@NonNull final SkullMeta meta, @NonNull final String texture) {
         setTexture(meta, texture, null);
     }
 
     /**
-     * Устанавливает текстуру головы.
+     * Applies the given texture and optional signature to a skull's metadata.
      *
-     * @param meta      метаданные предмета головы
-     * @param texture   текстура головы
-     * @param signature подпись (Не обязательно)
+     * @param meta      the skull metadata to modify.
+     * @param texture   the Base64-encoded texture value or texture hash.
+     * @param signature the Mojang signature for the texture, or {@code null} if unavailable.
      */
     public static void setTexture(@NonNull final SkullMeta meta, @NonNull final String texture, @Nullable String signature) {
         final PlayerProfile profile = Bukkit.createProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "CrystalHead");

@@ -12,17 +12,17 @@ import org.jspecify.annotations.NonNull;
 import java.util.regex.Pattern;
 
 /**
- * Утилиты для сопоставления строк с wildcard-шаблонами,
- * где {@code *} заменяет любое количество символов, а {@code ?} — ровно один.
+ * Utilities for matching strings against wildcard patterns,
+ * where {@code *} matches any number of characters and {@code ?} matches exactly one.
  */
 public final class Wildcards {
 
     /**
-     * Проверяет строку на соответствие указанному "дикому" шаблону
+     * Returns whether the given string matches the given wildcard pattern.
      *
-     * @param wildcard шаблон
-     * @param string   строка
-     * @return true, если строка соответствует шаблону, в ином случае false
+     * @param wildcard the wildcard pattern.
+     * @param string   the string to test.
+     * @return {@code true} if the string matches the pattern; {@code false} otherwise.
      */
     public static boolean matches(@NonNull String wildcard, @NonNull String string) {
         if (wildcard.isEmpty()) {

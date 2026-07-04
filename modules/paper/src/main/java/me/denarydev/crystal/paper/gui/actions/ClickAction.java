@@ -10,15 +10,15 @@ package me.denarydev.crystal.paper.gui.actions;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 /**
- * Действие, выполняемое при клике по слоту в меню.
+ * An action executed when a player clicks a slot in a menu.
  */
 @FunctionalInterface
 public interface ClickAction {
 
     /**
-     * Вызывается при клике по слоту в меню.
+     * Called when a player clicks a slot in the menu.
      *
-     * @param event событие клика по инвентарю
+     * @param event the inventory click event.
      */
     void click(final InventoryClickEvent event);
 }

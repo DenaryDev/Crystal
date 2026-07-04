@@ -15,18 +15,18 @@ import javax.sql.DataSource;
 import java.util.Optional;
 
 /**
- * Менеджер пулов соединений с базами данных.
- * Предоставляет доступ к пулам, зарегистрированным в конфигурации Crystal.
+ * Manager for database connection pools.
+ * Provides access to pools registered in the Crystal configuration.
  */
 public abstract class PoolManager {
 
     private static PoolManager impl;
 
     /**
-     * Возвращает текущий экземпляр менеджера пулов.
+     * Returns the current pool manager instance.
      *
-     * @return текущий экземпляр {@link PoolManager}
-     * @throws IllegalStateException если менеджер ещё не инициализирован
+     * @return the current {@link PoolManager} instance
+     * @throws IllegalStateException if the manager has not been initialized yet
      */
     public static PoolManager get() {
         if (impl == null) {
@@ -37,25 +37,24 @@ public abstract class PoolManager {
     }
 
     /**
-     * Пытается получить пул соединений с БД, и возвращает его,
-     * обёрнутый в {@link Optional}, если он найден в конфиге.
+     * Attempts to retrieve a connection pool by name and returns it wrapped in an
+     * {@link Optional} if found in the configuration.
      * <p>
-     * В ином случае возвращает {@link Optional#empty()}.
+     * Returns {@link Optional#empty()} otherwise.
      *
-     * @param poolName название пула.
-     * @return {@link Optional} с объектом {@link DataSource}, если найден, иначе пустой {@link Optional}.
+     * @param poolName the name of the pool.
+     * @return an {@link Optional} containing the {@link ConnectionPool} if found, otherwise an empty {@link Optional}.
      */
     public abstract Optional<ConnectionPool> getPool(@NonNull String poolName);
 
     /**
-     * Пытается получить пул соединений с БД и возвращает его,
-     * если удалось соединиться.
+     * Attempts to retrieve a connection pool by name and returns it if found.
      * <p>
-     * В ином случае выкидывает {@link IllegalStateException}.
+     * Throws {@link IllegalStateException} if the pool is not found.
      *
-     * @param poolName название пула.
-     * @return пул соединений с бд.
-     * @throws IllegalStateException если пул не найден.
+     * @param poolName the name of the pool.
+     * @return the database connection pool.
+     * @throws IllegalStateException if the pool is not found.
      */
     public abstract ConnectionPool requirePool(@NonNull String poolName);
 

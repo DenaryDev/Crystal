@@ -8,44 +8,44 @@
 package me.denarydev.crystal;
 
 /**
- * Перечисление поддерживаемых платформ для работы Crystal.
+ * Enumeration of platforms supported by Crystal.
  * <p>
- * Определяет среду выполнения, позволяя библиотеке адаптировать логику
- * под конкретное серверное ядро или прокси-сервер.
+ * Defines the runtime environment, allowing the library to adapt its logic
+ * for a specific server core or proxy.
  */
 public enum Platform {
     /**
-     * Платформа Paper и её производные.
+     * The Paper platform and its derivatives.
      */
     PAPER,
 
     /**
-     * Прокси-сервер Velocity.
+     * The Velocity proxy.
      */
     VELOCITY,
 
     /**
-     * Самописное ядро ProstoCraft Core.
+     * The custom ProstoCraft Core server core.
      */
     CORE;
 
     static Platform current;
 
     /**
-     * Возвращает текущую платформу, на которой запущен Crystal.
+     * Returns the platform Crystal is currently running on.
      *
-     * @return текущая платформа
+     * @return the current platform
      */
     public static Platform current() {
         return current;
     }
 
     /**
-     * Проверяет, является ли данная платформа текущей средой выполнения.
+     * Returns whether this platform is the current runtime environment.
      * <p>
-     * Пример использования: {@code Platform.CORE.isCurrent()}
+     * Example usage: {@code Platform.CORE.isCurrent()}
      *
-     * @return {@code true}, если платформа активна
+     * @return {@code true} if this platform is active
      */
     public boolean isCurrent() {
         return this == current;

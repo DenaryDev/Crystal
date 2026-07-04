@@ -10,7 +10,7 @@ package me.denarydev.crystal.database;
 import me.denarydev.crystal.database.query.Dialect;
 
 /**
- * Поддерживаемые типы баз данных.
+ * Supported database types.
  */
 public enum DatabaseType {
     SQLITE(false),
@@ -26,18 +26,18 @@ public enum DatabaseType {
     }
 
     /**
-     * Проверяет, использует ли данный тип БД удалённое сетевое подключение.
+     * Returns whether this database type uses a remote network connection.
      *
-     * @return true, если база данных использует удалённое подключение
+     * @return {@code true} if this database type uses a remote connection
      */
     public boolean remote() {
         return remote;
     }
 
     /**
-     * Возвращает диалект для данного типа базы данных.
+     * Returns the SQL dialect for this database type.
      *
-     * @return диалект базы данных
+     * @return the SQL dialect
      */
     public Dialect dialect() {
         return switch (this) {

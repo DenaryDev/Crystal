@@ -16,33 +16,33 @@ import io.sapphiremc.lib.configurate.util.CheckedFunction;
 import org.jspecify.annotations.NonNull;
 
 /**
- * Получает экземпляры указанных классов из файла.
+ * Deserializes configuration files into instances of the specified class.
  * <p>
- * Подробнее: <a href="https://github.com/SpongePowered/Configurate/wiki/Object-Mapper">документация Configurate`s ObjectMapper (англ)</a>
+ * See: <a href="https://github.com/SpongePowered/Configurate/wiki/Object-Mapper">Configurate ObjectMapper documentation</a>
  * <p>
- * <b>Обязательно используйте Configurate из пути <code>io.sapphiremc.lib.configurate</code>,
- * не <code>org.spongepowered.configurate</code></b>
+ * <b>You MUST use Configurate from the path <code>io.sapphiremc.lib.configurate</code>,
+ * not <code>org.spongepowered.configurate</code></b>
  */
 public final class ConfigMapper {
 
     /**
-     * Загружает конфигурацию из файла и возвращает её в виде экземпляра указанного класса.
+     * Loads the configuration from a file and returns it as an instance of the given class.
      *
-     * @param loader загрузчик конфигурации, может быть получен из {@link ConfigLoaders}
-     * @param clazz  тип класса конфига
-     * @return созданный экземпляр класса конфига
+     * @param loader the configuration loader, obtainable from {@link ConfigLoaders}
+     * @param clazz  the class to deserialize into
+     * @return the deserialized config instance
      */
     public static <T> T load(@NonNull ConfigurationLoader<?> loader, @NonNull Class<T> clazz) throws ConfigurateException {
         return load(loader, clazz, false);
     }
 
     /**
-     * Загружает конфигурацию из файла и возвращает её в виде экземпляра указанного класса.
+     * Loads the configuration from a file and returns it as an instance of the given class.
      *
-     * @param loader      загрузчик конфигурации, может быть получен из {@link ConfigLoaders}
-     * @param clazz       тип класса конфига
-     * @param refreshNode обновлять ли порядок параметров в файле
-     * @return созданный экземпляр класса конфига
+     * @param loader      the configuration loader, obtainable from {@link ConfigLoaders}
+     * @param clazz       the class to deserialize into
+     * @param refreshNode whether to refresh the order of configuration keys in the file
+     * @return the deserialized config instance
      */
     public static <T> T load(@NonNull ConfigurationLoader<?> loader, @NonNull Class<T> clazz, boolean refreshNode) throws ConfigurateException {
         final var creator = creator(clazz, refreshNode);

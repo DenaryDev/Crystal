@@ -19,8 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Позволяет выполнять запрос с несколькими списками параметров в одном пакете,
- * используя метод {@link PreparedStatement#executeBatch()}.
+ * Executes a query with multiple sets of parameters in a single batch,
+ * using {@link PreparedStatement#executeBatch()}.
  */
 public final class BatchBuilder {
 
@@ -33,21 +33,21 @@ public final class BatchBuilder {
     }
 
     /**
-     * Создает новый экземпляр BatchBuilder.
+     * Creates a new BatchBuilder instance.
      *
-     * @param pool Пул соединений.
-     * @return Новый объект BatchBuilder.
+     * @param pool the connection pool.
+     * @return a new BatchBuilder.
      */
     public static BatchBuilder of(ConnectionPool pool) {
         return new BatchBuilder(pool);
     }
 
     /**
-     * Добавляет запрос в пакет. Если построитель не пуст, SQL-текст запроса
-     * должен в точности совпадать с первым добавленным запросом.
+     * Adds a query to the batch. If the builder is not empty, the SQL text of the query
+     * must exactly match that of the first query added.
      *
-     * @param query Добавляемый запрос.
-     * @return Этот объект.
+     * @param query the query to add.
+     * @return this object.
      */
     public BatchBuilder add(@NonNull AbstractQuery query) {
         final AbstractQuery raw = new Raw(pool, query.getSQL(), query.getParams());
@@ -66,11 +66,11 @@ public final class BatchBuilder {
     }
 
     /**
-     * Получает соединение из указанного при создании пула, выполняет все добавленные запросы
-     * в виде пакета и закрывает соединение.
+     * Acquires a connection from the pool, executes all added queries as a batch,
+     * and closes the connection.
      *
-     * @return Массив счетчиков обновлений для каждой выполненной инструкции.
-     * @throws SQLException При ошибке SQL.
+     * @return an array of update counts for each executed statement.
+     * @throws SQLException on SQL error.
      */
     public int[] execute() throws SQLException {
         if (this.queries.isEmpty()) {

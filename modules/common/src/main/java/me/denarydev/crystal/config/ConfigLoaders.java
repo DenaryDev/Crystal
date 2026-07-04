@@ -18,26 +18,26 @@ import java.nio.file.Path;
 import java.util.function.UnaryOperator;
 
 /**
- * Класс для создания загрузчиков конфигураций из библиотеки Configurate.
+ * Factory for creating Configurate configuration loaders.
  * <p>
- * Crystal использует свой форк Configurate с поддержкой комментариев в yaml файлах.
+ * Crystal uses a fork of Configurate that supports comments in YAML files.
  * <p>
- * <b>Обязательно используйте Configurate из пути <code>io.sapphiremc.lib.configurate</code>,
- * не <code>org.spongepowered.configurate</code></b>
+ * <b>You MUST use Configurate from the path <code>io.sapphiremc.lib.configurate</code>,
+ * not <code>org.spongepowered.configurate</code></b>
  */
 public final class ConfigLoaders {
 
     /**
-     * Возвращает создатель загрузчика конфигурации yaml.
+     * Returns a builder for a YAML configuration loader.
      * <p>
-     * Уже указанные нами параметры:
+     * The following settings are pre-configured:
      * <ul>
-     * <li><code>nodeStyle({@link NodeStyle#BLOCK})</code> - читаемый вид файла конфигурации</li>
-     * <li><code>indent(2)</code> - отступы по 2 пробела (<i>по умолчанию у Configurate 4</i>)</li>
-     * <li><code>splitLines(false)</code> - не разделять на части слишком длинные строки</li>
+     * <li><code>nodeStyle({@link NodeStyle#BLOCK})</code> — block style for a human-readable layout</li>
+     * <li><code>indent(2)</code> — 2-space indentation (<i>the Configurate 4 default</i>)</li>
+     * <li><code>splitLines(false)</code> — prevents long lines from being split</li>
      * </ul>
      *
-     * @return создатель загрузчика конфигурации yaml
+     * @return a YAML configuration loader builder
      */
     public static YamlConfigurationLoader.Builder yamlBuilder() {
         return YamlConfigurationLoader.builder()
@@ -47,10 +47,10 @@ public final class ConfigLoaders {
     }
 
     /**
-     * Возвращает загрузчик конфигурации yaml со всеми значениями по умолчанию.
+     * Returns a YAML configuration loader with all default settings.
      *
-     * @param path Путь к файлу конфигурации
-     * @return новый экземпляр загрузчика конфигурации yaml
+     * @param path path to the configuration file
+     * @return a new YAML configuration loader instance
      */
     public static YamlConfigurationLoader yaml(@NonNull Path path) {
         return yamlBuilder()
@@ -59,33 +59,33 @@ public final class ConfigLoaders {
     }
 
     /**
-     * Создает загрузчик конфигурации yaml с указанным заголовком.
+     * Creates a YAML configuration loader with the given header.
      *
-     * @param path   путь к файлу конфигурации
-     * @param header заголовок конфигурации
-     * @return новый экземпляр загрузчика конфигурации yaml
+     * @param path   path to the configuration file
+     * @param header the configuration file header
+     * @return a new YAML configuration loader instance
      */
     public static YamlConfigurationLoader yaml(@NonNull Path path, @NonNull String header) {
         return yaml(path, options -> options.header(header));
     }
 
     /**
-     * Создает загрузчик конфигурации yaml и добавляет к нему указанные сериализаторы.
+     * Creates a YAML configuration loader and registers the given type serializers.
      *
-     * @param path        путь к файлу конфигурации
-     * @param serializers сериализаторы
-     * @return новый экземпляр загрузчика конфигурации yaml
+     * @param path        path to the configuration file
+     * @param serializers type serializers to register
+     * @return a new YAML configuration loader instance
      */
     public static YamlConfigurationLoader yaml(@NonNull Path path, @NonNull TypeSerializerCollection serializers) {
         return yaml(path, options -> options.serializers(b -> b.registerAll(serializers)));
     }
 
     /**
-     * Создает загрузчик конфигурации yaml и применяет указанный редактор настроек к нему.
+     * Creates a YAML configuration loader and applies the given options editor to it.
      *
-     * @param path   путь к файлу конфигурации
-     * @param editor редактор настроек загрузчика конфигурации
-     * @return новый экземпляр загрузчика конфигурации yaml
+     * @param path   path to the configuration file
+     * @param editor editor for the loader's configuration options
+     * @return a new YAML configuration loader instance
      */
     public static YamlConfigurationLoader yaml(@NonNull Path path, @NonNull UnaryOperator<ConfigurationOptions> editor) {
         return yamlBuilder().path(path)
@@ -94,9 +94,9 @@ public final class ConfigLoaders {
     }
 
     /**
-     * Возвращает создатель загрузчика конфигурации hocon с некоторыми заданными параметрами.
+     * Returns a builder for a HOCON configuration loader with some pre-configured settings.
      *
-     * @return создатель загрузчика конфигурации yaml
+     * @return a HOCON configuration loader builder
      */
     public static HoconConfigurationLoader.Builder hoconBuilder() {
         return HoconConfigurationLoader.builder()
@@ -104,43 +104,43 @@ public final class ConfigLoaders {
     }
 
     /**
-     * Возвращает загрузчик конфигурации hocon со всеми значениями по умолчанию.
+     * Returns a HOCON configuration loader with all default settings.
      *
-     * @param path Путь к файлу конфигурации
-     * @return новый экземпляр загрузчика конфигурации hocon
+     * @param path path to the configuration file
+     * @return a new HOCON configuration loader instance
      */
     public static HoconConfigurationLoader hocon(@NonNull Path path) {
         return hocon(path, options -> options);
     }
 
     /**
-     * Создает загрузчик конфигурации hocon с указанным заголовком.
+     * Creates a HOCON configuration loader with the given header.
      *
-     * @param path   путь к файлу конфигурации
-     * @param header заголовок конфигурации
-     * @return новый экземпляр загрузчика конфигурации hocon
+     * @param path   path to the configuration file
+     * @param header the configuration file header
+     * @return a new HOCON configuration loader instance
      */
     public static HoconConfigurationLoader hocon(@NonNull Path path, @NonNull String header) {
         return hocon(path, options -> options.header(header));
     }
 
     /**
-     * Создает загрузчик конфигурации hocon и добавляет к нему указанные сериализаторы.
+     * Creates a HOCON configuration loader and registers the given type serializers.
      *
-     * @param path        путь к файлу конфигурации
-     * @param serializers сериализаторы
-     * @return новый экземпляр загрузчика конфигурации hocon
+     * @param path        path to the configuration file
+     * @param serializers type serializers to register
+     * @return a new HOCON configuration loader instance
      */
     public static HoconConfigurationLoader hocon(@NonNull Path path, @NonNull TypeSerializerCollection serializers) {
         return hocon(path, options -> options.serializers(b -> b.registerAll(serializers)));
     }
 
     /**
-     * Создает загрузчик конфигурации hocon и применяет указанный редактор настроек к нему.
+     * Creates a HOCON configuration loader and applies the given options editor to it.
      *
-     * @param path   путь к файлу конфигурации
-     * @param editor редактор настроек загрузчика конфигурации
-     * @return новый экземпляр загрузчика конфигурации yaml
+     * @param path   path to the configuration file
+     * @param editor editor for the loader's configuration options
+     * @return a new HOCON configuration loader instance
      */
     public static HoconConfigurationLoader hocon(@NonNull Path path, @NonNull UnaryOperator<ConfigurationOptions> editor) {
         return HoconConfigurationLoader.builder()

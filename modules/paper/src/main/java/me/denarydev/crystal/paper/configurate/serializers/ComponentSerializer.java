@@ -18,8 +18,8 @@ import java.lang.reflect.Type;
 import java.util.function.Predicate;
 
 /**
- * Сериализатор для {@link net.kyori.adventure.text.Component} в Configurate.
- * Сериализует компоненты в строку формата MiniMessage и обратно.
+ * A Configurate serializer for {@link net.kyori.adventure.text.Component}.
+ * Serializes components to and from MiniMessage-formatted strings.
  */
 public class ComponentSerializer extends ScalarSerializer<Component> {
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();

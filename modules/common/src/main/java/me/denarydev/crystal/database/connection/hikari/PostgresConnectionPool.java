@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 /**
- * Пул соединений для базы данных PostgreSQL.
+ * Connection pool for the PostgreSQL database.
  */
 public final class PostgresConnectionPool extends HikariConnectionPool {
 

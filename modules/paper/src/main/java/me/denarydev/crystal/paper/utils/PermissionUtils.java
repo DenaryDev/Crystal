@@ -12,16 +12,19 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 /**
- * Утилиты для работы с пермишенами.
+ * Utilities for working with permissions.
  */
 public final class PermissionUtils {
 
     /**
-     * Получает число из пермишена игрока.
+     * Extracts the highest integer suffix from all permissions the player holds that start with the given prefix.
+     * <p>
+     * For example, if the prefix is {@code "example.limit."} and the player has
+     * {@code "example.limit.5"} and {@code "example.limit.10"}, this returns {@code 10}.
      *
-     * @param player     игрок
-     * @param permission пермишен
-     * @return число из пермишена
+     * @param player     the player whose permissions are checked.
+     * @param permission the permission prefix to match against.
+     * @return the highest numeric value found among matching permissions.
      */
     public static int numberFromPermission(final Player player, final String permission) {
         final List<Integer> values = player.getEffectivePermissions().stream()

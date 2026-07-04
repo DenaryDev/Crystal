@@ -8,10 +8,10 @@
 package me.denarydev.crystal.skin;
 
 /**
- * Свойство скина игрока — пара из Base64-значения текстуры и её подписи.
+ * A player skin property — a pair of a Base64-encoded texture value and its signature.
  *
- * @param value     Base64-закодированные данные текстуры
- * @param signature криптографическая подпись Mojang для данной текстуры
+ * @param value     the Base64-encoded texture data.
+ * @param signature the Mojang cryptographic signature for this texture.
  */
 public record SkinProperty(String value, String signature) {
 }

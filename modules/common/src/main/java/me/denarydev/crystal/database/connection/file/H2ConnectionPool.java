@@ -15,7 +15,7 @@ import java.nio.file.Path;
 import java.util.function.Function;
 
 /**
- * Пул соединений для встроенной базы данных H2.
+ * Connection pool for the embedded H2 database.
  */
 public final class H2ConnectionPool extends FlatfileConnectionPool {
 

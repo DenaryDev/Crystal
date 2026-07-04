@@ -11,25 +11,25 @@ import me.denarydev.crystal.random.StringGenerator;
 import org.slf4j.Logger;
 
 /**
- * Рекомендуется использовать <code>PaperErrorLogger</code> при использовании <code>crystal-paper</code>,
- * или <code>VelocityErrorLogger</code> при использовании <code>crystal-velocity</code>
+ * Prefer using {@code PaperErrorLogger} when using {@code crystal-paper},
+ * or {@code VelocityErrorLogger} when using {@code crystal-velocity}.
  * <p>
- * Этот класс будет удалён в недалёком будущем
+ * This class will be removed in the near future.
  */
 @Deprecated(forRemoval = true)
 public final class ErrorLogger {
 
     /**
-     * Выводит указанную ошибку в консоль через указанный логгер, добавляя к ней
-     * сгенерированный код ошибки, который возвращается этим методом.
+     * Logs the given error to the console via the given logger, appending a generated
+     * error code to the message, and returns that code.
      * <p>
-     * Код ошибки затем можно отправить игроку, чтобы проще было идентифицировать
-     * логи по жалобе игрока.
+     * The error code can then be sent to the player so that logs can be more easily
+     * identified from a player's support report.
      *
-     * @param logger  логгер, через который выводить ошибку
-     * @param message сообщение об ошибке
-     * @param params  параметры сообщения об ошибке (как в обычном slf4j логгере)
-     * @return код ошибки, который был выведен в консоль
+     * @param logger  the logger to write the error to
+     * @param message the error message
+     * @param params  the message parameters (as in a standard SLF4J logger)
+     * @return the error code that was logged
      */
     public static String logError(Logger logger, String message, Object... params) {
         final StringBuilder builder = new StringBuilder();
