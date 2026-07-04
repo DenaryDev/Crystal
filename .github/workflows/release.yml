@@ -3,7 +3,7 @@ name: Release & Deploy
 on:
   push:
     branches:
-      - "v3"
+      - "master"
 
 jobs:
   build:
@@ -13,27 +13,59 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+
+      - name: Resolve version
+        id: version
+        run: |
+          VERSION=$(grep '^version=' gradle.properties | cut -d'=' -f2)
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if [[ "$VERSION" == *-SNAPSHOT ]]; then
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Fail if stable tag already exists
+        if: steps.version.outputs.prerelease == 'false'
+        run: |
+          if gh release view "v${{ steps.version.outputs.version }}" >/dev/null 2>&1; then
+            echo "::error::Release v${{ steps.version.outputs.version }} already exists - forgot to bump the version?"
+            exit 1
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Set up JDK
         uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 25
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v6
+
       - name: Build & Publish
         run: ./gradlew build publish --no-daemon -Dorg.gradle.parallel=true --stacktrace
         env:
           ORG_GRADLE_PROJECT_includeCore: true
           ORG_GRADLE_PROJECT_prostocraftUsername: ${{ secrets.DEPLOY_USERNAME }}
           ORG_GRADLE_PROJECT_prostocraftPassword: ${{ secrets.DEPLOY_PASSWORD }}
+
+      - name: Delete previous snapshot release
+        if: steps.version.outputs.prerelease == 'true'
+        run: gh release delete "v${{ steps.version.outputs.version }}" --yes --cleanup-tag
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Create Release
         uses: softprops/action-gh-release@v3
         with:
-          tag_name: latest
-          name: Latest build
+          tag_name: v${{ steps.version.outputs.version }}
+          name: Crystal ${{ steps.version.outputs.version }}
           files: |
             build/libs/Crystal-*.jar
-          prerelease: false
-          make_latest: true
+          prerelease: ${{ steps.version.outputs.prerelease }}
+          make_latest: ${{ steps.version.outputs.prerelease == 'false' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

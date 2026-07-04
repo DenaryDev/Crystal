@@ -24,16 +24,3 @@ fun submodule(name: String) {
         this.name = "crystal-$name"
     }
 }
-
-@Suppress("UnstableApiUsage")
-gradle.lifecycle.beforeProject {
-    val baseVersion = providers.gradleProperty("baseVersion").get().trim()
-    val buildNumber = providers.environmentVariable("GITHUB_RUN_NUMBER").orNull?.trim()?.toInt()
-    val versionString = if (buildNumber == null) {
-        "$baseVersion.local-SNAPSHOT"
-    } else {
-        "$baseVersion.build.$buildNumber"
-    }
-
-    version = versionString
-}

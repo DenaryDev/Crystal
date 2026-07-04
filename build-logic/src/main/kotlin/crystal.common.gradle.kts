@@ -64,7 +64,13 @@ java {
     withSourcesJar()
 }
 
-val repository = if (project.name.endsWith("-core")) "private" else "snapshots"
+val repository: String = if (project.name.endsWith("-core")) {
+    "private"
+} else if (rootProject.version.toString().endsWith("-SNAPSHOT")) {
+    "snapshots"
+} else {
+    "releases"
+}
 
 publishing {
     repositories {
