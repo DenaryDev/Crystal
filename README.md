@@ -129,6 +129,20 @@ ChatPrompt.show(plugin, player, message -> {
 
 ---
 
+### Shared Suggestion Provider *(Paper only)*
+
+`SharedSuggestionProvider` simplifies tab-completion for commands built with Brigadier: it filters a list of candidates against the remaining input, matching on substrings between `.`, `_`, and `/` separators (not just a plain prefix).
+
+```java
+public CompletableFuture<Suggestions> suggest(CommandContext<CommandSourceStack> ctx, SuggestionsBuilder builder) {
+    return SharedSuggestionProvider.suggest(plugin.getConfig().getKeys(), builder);
+}
+```
+
+For example, with input `gui.` it suggests both `crystal.gui.use` and `other.gui.admin`.
+
+---
+
 ## Documentation
 
 ### [Configurate module](docs/configurate.md)
@@ -142,3 +156,11 @@ Connection pools (file-based and HikariCP), a fluent query builder (SELECT / INS
 ### [GUI module](docs/gui.md) *(Paper only)*
 
 Inventory menus with slot-based and character-mask templates, click and close action callbacks, and live menu updates.
+
+### [Item Builder module](docs/item-builder.md) *(Paper only)*
+
+Fluent `ItemStack` builder covering display name/lore, flags, item model/custom model data, enchantments, potion effects, and persistent data.
+
+### [Utilities](docs/utils.md)
+
+Standalone helper classes: numbers, text, wildcards, and time formatting (`crystal-common`); components, player heads, locations, and permissions (`crystal-paper`); components (`crystal-velocity`).

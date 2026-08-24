@@ -12,6 +12,8 @@ A module for creating inventory menus on the Paper platform. Provides a fluent A
 
 Using templates is **optional** — for simple or fully dynamic menus, `Menu.builder()` without a template is enough.
 
+> Menu items are plain `ItemStack`s. It's recommended to build them with the [Item Builder module](item-builder.md)'s `ItemBuilder` rather than assembling `ItemMeta` by hand.
+
 ---
 
 ## Creating a menu
