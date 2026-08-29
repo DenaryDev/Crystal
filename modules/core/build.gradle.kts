@@ -25,21 +25,18 @@ extraJavaModuleInfo {
 }
 
 tasks {
-    compileJava {
+    named<JavaCompile>("compileJava") {
         dependsOn(":crystal-common:shadowJar")
     }
 
-    processResources {
+    named<ProcessResources>("processResources") {
         inputs.properties(
-            "version" to project.version,
-            "description" to project.description.toString()
+            "version" to provider { project.version.toString() },
+            "description" to provider { project.description }
         )
 
         filesMatching("core.yml") {
-            expand(
-                "version" to project.version,
-                "description" to project.description.toString()
-            )
+            expand(inputs.properties.mapValues { it.value })
         }
     }
 

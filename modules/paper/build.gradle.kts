@@ -1,4 +1,5 @@
 import net.minecrell.pluginyml.paper.PaperPluginDescription
+import xyz.jpenilla.runpaper.task.RunServer
 
 plugins {
     id("crystal.common")
@@ -26,7 +27,7 @@ paper {
 
     main = "me.denarydev.crystal.paper.PaperPlugin"
 
-    apiVersion = "1.21"
+    apiVersion = "26.2"
 
     serverDependencies {
         register("SkinsRestorer") {
@@ -41,11 +42,11 @@ extraJavaModuleInfo {
 }
 
 tasks {
-    compileJava {
+    named<JavaCompile>("compileJava") {
         dependsOn(":crystal-common:shadowJar")
     }
 
-    runServer {
+    named<RunServer>("runServer") {
         minecraftVersion("26.1.2")
         runDirectory(rootProject.projectDir.resolve("run/paper"))
 

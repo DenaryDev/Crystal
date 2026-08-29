@@ -18,9 +18,10 @@ extraJavaModuleInfo {
 
 spotless {
     java {
-        target("**/me/denarydev/crystal/**")
+        target("**/src/**/java/me/denarydev/crystal/**/*.java")
 
-        licenseHeaderFile(rootProject.file("HEADER"))
+        @Suppress("UnstableApiUsage")
+        licenseHeaderFile(isolated.rootProject.projectDirectory.file("HEADER"))
 
         endWithNewline()
         trimTrailingWhitespace()
@@ -29,13 +30,7 @@ spotless {
 }
 
 tasks {
-    assemble {
-        dependsOn(spotlessCheck)
-    }
-
-    compileJava {
-        dependsOn(spotlessApply)
-
+    named<JavaCompile>("compileJava") {
         options.encoding = Charsets.UTF_8.name()
         options.release = 25
         options.compilerArgs.addAll(
@@ -50,7 +45,7 @@ tasks {
         options.isFork = true
     }
 
-    test {
+    named<Test>("test") {
         useJUnitPlatform()
 
         testLogging {
@@ -64,17 +59,19 @@ java {
     withSourcesJar()
 }
 
-val repository: String = if (project.name.endsWith("-core")) {
-    "private"
-} else if (rootProject.version.toString().endsWith("-SNAPSHOT")) {
-    "snapshots"
-} else {
-    "releases"
+val repositoryProvider: Provider<String> = providers.gradleProperty("projectVersion").map { currentVersion ->
+    if (project.name.endsWith("-core")) {
+        "private"
+    } else if (currentVersion.endsWith("-SNAPSHOT")) {
+        "snapshots"
+    } else {
+        "releases"
+    }
 }
 
 publishing {
     repositories {
-        maven("https://repo.rafaelkauwu.me/$repository/") {
+        maven("https://repo.rafaelkauwu.me/${repositoryProvider.get()}/") {
             name = "rafaelkauwu"
             credentials(PasswordCredentials::class)
         }

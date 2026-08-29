@@ -3,6 +3,10 @@ plugins {
     id("com.gradleup.shadow")
 }
 
+group = providers.gradleProperty("projectGroup").get()
+version = providers.gradleProperty("projectVersion").get()
+description = providers.gradleProperty("projectDescription").get()
+
 repositories {
     mavenCentral()
     maven("https://repo.papermc.io/repository/maven-public/") { name = "papermc" }
@@ -18,11 +22,11 @@ java {
 }
 
 tasks {
-    build {
+    named<DefaultTask>("build") {
         dependsOn(shadowJar)
     }
 
-    shadowJar {
+    named<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar>("shadowJar") {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
 
         relocate("com.zaxxer.hikari", "me.denarydev.crystal.libs.hikari")

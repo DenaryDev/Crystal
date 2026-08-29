@@ -13,8 +13,8 @@ A shared utility library for Minecraft plugins targeting **Paper** and **Velocit
 ## Requirements
 
 - Java 25+
-- Paper 1.21+ *(paper module)*
-- Velocity 3.x *(velocity module)*
+- Paper 26.2+ *(paper module)*
+- Velocity 4.x *(velocity module)*
 
 ## Installation
 

@@ -1,12 +1,11 @@
 module crystal.paper {
     requires org.bukkit;
     requires org.jetbrains.annotations;
-    requires net.kyori.adventure;
+    requires net.kyori.adventure.api;
     requires net.kyori.adventure.text.minimessage;
     requires net.kyori.adventure.text.serializer.plain;
     requires com.google.common;
     requires io.sapphiremc.lib.configurate;
-    requires net.kyori.examination.api;
     requires com.google.gson;
     requires java.logging;
     requires crystal.common;

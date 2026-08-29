@@ -1,8 +1,8 @@
 [versions]
 # Platforms
-paper = "26.1.2.build.+"
-velocity = "3.5.0-SNAPSHOT"
-core = "1.2.0-SNAPSHOT"
+paper = "26.2.build.+"
+velocity = "4.1.0-SNAPSHOT"
+core = "1.3.0-SNAPSHOT"
 
 # Configs
 configurate = "4.3.0-DEV-SNAPSHOT" # Version from our repository with YAML comment support
@@ -13,21 +13,24 @@ skinsrestorer = "15.7.7"
 # SQL
 hikari = "7.1.0"
 ## Local
-sqlite = "3.53.2.0"
+sqlite = "3.53.4.0"
 h2 = "2.4.240"
 ## Remote
-mysql = "9.7.0"
-mariadb = "3.5.9"
-postgresql = "42.7.11"
+mysql = "26.7.0"
+mariadb = "3.5.10"
+postgresql = "42.7.13"
 
 # Shared
 slf4j = "2.0.18"
 jspecify = "1.0.0"
 
 # Tests
-mockbukkit = "4.113.2"
+mockbukkit = "4.116.1"
 
 # Plugins
+shadow = "9.6.1"
+spotless = "8.10.1"
+extra-java-module-info = "1.14"
 buildconfig = "6.0.10"
 plugin-yml = "0.9.0"
 run-task = "3.0.2"
@@ -61,13 +64,19 @@ slf4j = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
 jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 
 # Tests
-mockbukkit = { module = "org.mockbukkit.mockbukkit:mockbukkit-v26.1.2", version.ref = "mockbukkit" }
+mockbukkit = { module = "org.mockbukkit.mockbukkit:mockbukkit-v26.2", version.ref = "mockbukkit" }
+
+# Plugins as libraries for build-logic
+gradle-shadow = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow" }
+gradle-spotless = { module = "com.diffplug.spotless:spotless-plugin-gradle", version.ref = "spotless" }
+gradle-extrajavamoduleinfo = { module = "org.gradlex:extra-java-module-info", version.ref = "extra-java-module-info" }
 
 [bundles]
 sql-drivers = ["driver-sqlite", "driver-h2", "driver-mysql", "driver-mariadb", "driver-postgresql"]
 configurate = ["configurate-hocon", "configurate-yaml"]
 
 [plugins]
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
 pluginyml = { id = "de.eldoria.plugin-yml.paper", version.ref = "plugin-yml" }
 runpaper = { id = "xyz.jpenilla.run-paper", version.ref = "run-task" }
