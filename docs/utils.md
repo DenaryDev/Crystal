@@ -101,6 +101,7 @@ Creates and configures player head items from Base64 skin textures (or texture h
 | `centerLocation(Location location)` | Returns a copy snapped to the horizontal block center (X + 0.5, Z + 0.5); Y is unchanged |
 | `findClosestBlock(Location loc, Material type, int radius)` | Finds the nearest block of the given type within `radius` blocks horizontally and Y ± 1 vertically, or `null` if none found. Large radii are discouraged for performance |
 | `locationToString(Location location)` | Serializes a location to `world;x;y;z` (world omitted if not loaded; `;yaw;pitch` appended only when either is greater than zero) |
+| `locationFromString(String string)` | Parses a string produced by `locationToString` back into a `Location`. Supports the world-less variants too; world is `null` if omitted or not currently loaded. Throws `IllegalArgumentException` for an unrecognized format or `NumberFormatException` if a coordinate/yaw/pitch component isn't a valid number |
 
 ### PermissionUtils
 

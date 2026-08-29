@@ -13,7 +13,6 @@ import io.sapphiremc.lib.configurate.serialize.TypeSerializer;
 import me.denarydev.crystal.paper.utils.LocationUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -24,48 +23,21 @@ public final class LocationSerializer implements TypeSerializer<Location> {
     @Override
     public Location deserialize(@NonNull Type type, ConfigurationNode node) throws SerializationException {
         final String s = node.getString();
-        if (s != null) {
-            final String[] loc = s.split(";");
-            if (loc.length == 3) { // X;Y;Z
-                final double x = parseDouble(loc[0]);
-                final double y = parseDouble(loc[1]);
-                final double z = parseDouble(loc[2]);
-
-                return new Location(null, x, y, z);
-            } else if (loc.length == 4) { // WORLD;X;Y;Z
-                return locationWithWorld(loc);
-            } else if (loc.length == 6) { // WORLD;X;Y;Z;YAW;PITCH
-                final Location location = locationWithWorld(loc);
-                location.setYaw((float) parseDouble(loc[4]));
-                location.setPitch((float) parseDouble(loc[5]));
-
-                return location;
-            } else {
-                throw new SerializationException("Invalid location format!");
-            }
-        } else {
+        if (s == null) {
             throw new SerializationException("Location string is null!");
         }
-    }
 
-    private Location locationWithWorld(String[] loc) throws SerializationException {
-        final World world = Bukkit.getWorld(loc[0]);
-        if (world == null) {
+        final String[] parts = s.split(";");
+        if ((parts.length == 4 || parts.length == 6) && Bukkit.getWorld(parts[0]) == null) {
             throw new SerializationException("Unknown world!");
         }
 
-        final double x = parseDouble(loc[1]);
-        final double y = parseDouble(loc[2]);
-        final double z = parseDouble(loc[3]);
-
-        return new Location(world, x, y, z);
-    }
-
-    private double parseDouble(final String s) throws SerializationException {
         try {
-            return Double.parseDouble(s);
+            return LocationUtils.locationFromString(s);
         } catch (NumberFormatException ex) {
             throw new SerializationException(Double.TYPE, ex);
+        } catch (IllegalArgumentException ex) {
+            throw new SerializationException(type, ex);
         }
     }
 

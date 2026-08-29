@@ -8,8 +8,10 @@
 package me.denarydev.crystal.paper.utils;
 
 import com.google.common.base.Preconditions;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -115,5 +117,45 @@ public final class LocationUtils {
         }
 
         return builder.toString();
+    }
+
+    /**
+     * Parses a location string produced by {@link #locationToString(Location)} back into a {@link Location}.
+     * <p>
+     * Accepts the {@code world;x;y;z} and {@code world;x;y;z;yaw;pitch} forms, as well as their
+     * world-less variants ({@code x;y;z} and {@code x;y;z;yaw;pitch}). If a world name is present
+     * but no such world is currently loaded, the resulting location's world is {@code null}.
+     *
+     * @param string the string to parse.
+     * @return the parsed location.
+     * @throws IllegalArgumentException if the string is not in a recognized format.
+     * @throws NumberFormatException    if a coordinate, yaw, or pitch component is not a valid number.
+     */
+    @NonNull
+    public static Location locationFromString(@NonNull final String string) {
+        Preconditions.checkNotNull(string, "string cannot be null");
+
+        final String[] parts = string.split(";");
+
+        final int offset = switch (parts.length) {
+            case 3, 5 -> 0;
+            case 4, 6 -> 1;
+            default -> throw new IllegalArgumentException("Invalid location string: " + string);
+        };
+
+        final World world = offset == 1 ? Bukkit.getWorld(parts[0]) : null;
+
+        final double x = Double.parseDouble(parts[offset]);
+        final double y = Double.parseDouble(parts[offset + 1]);
+        final double z = Double.parseDouble(parts[offset + 2]);
+
+        if (parts.length == offset + 5) {
+            final float yaw = Float.parseFloat(parts[offset + 3]);
+            final float pitch = Float.parseFloat(parts[offset + 4]);
+
+            return new Location(world, x, y, z, yaw, pitch);
+        }
+
+        return new Location(world, x, y, z);
     }
 }
