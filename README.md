@@ -164,3 +164,11 @@ Fluent `ItemStack` builder covering display name/lore, flags, item model/custom 
 ### [Utilities](docs/utils.md)
 
 Standalone helper classes: numbers, text, wildcards, and time formatting (`crystal-common`); components, player heads, locations, and permissions (`crystal-paper`); components (`crystal-velocity`).
+
+## Development
+
+Code style is enforced with [Spotless](https://github.com/diffplug/spotless). Run `./gradlew spotlessCheck` to verify formatting or `./gradlew spotlessApply` to fix it.
+
+After cloning, install the pre-push hook once so pushes with unformatted code are caught automatically:
+
+`./gradlew spotlessInstallGitPrePushHook`
