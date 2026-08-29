@@ -29,13 +29,13 @@ repositories {
 
 dependencies {
     // Paper plugins
-    compileOnly("me.denarydev.crystal:crystal-paper:3.1.0")
+    compileOnly("me.denarydev.crystal:crystal-paper:3.2.0-SNAPSHOT")
 
     // Velocity plugins
-    compileOnly("me.denarydev.crystal:crystal-velocity:3.1.0")
+    compileOnly("me.denarydev.crystal:crystal-velocity:3.2.0-SNAPSHOT")
 
     // Platform-agnostic code only
-    compileOnly("me.denarydev.crystal:crystal-common:3.1.0")
+    compileOnly("me.denarydev.crystal:crystal-common:3.2.0-SNAPSHOT")
 }
 ```
 
@@ -53,7 +53,7 @@ dependencies {
 <dependency>
     <groupId>me.denarydev.crystal</groupId>
     <artifactId>crystal-paper</artifactId>
-    <version>3.1.0</version>
+    <version>3.2.0-SNAPSHOT</version>
     <scope>provided</scope>
 </dependency>
 
@@ -61,7 +61,7 @@ dependencies {
 <dependency>
     <groupId>me.denarydev.crystal</groupId>
     <artifactId>crystal-velocity</artifactId>
-    <version>3.1.0</version>
+    <version>3.2.0-SNAPSHOT</version>
     <scope>provided</scope>
 </dependency>
 
@@ -69,7 +69,7 @@ dependencies {
 <dependency>
     <groupId>me.denarydev.crystal</groupId>
     <artifactId>crystal-common</artifactId>
-    <version>3.1.0</version>
+    <version>3.2.0-SNAPSHOT</version>
     <scope>provided</scope>
 </dependency>
 ```
