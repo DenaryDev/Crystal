@@ -29,7 +29,7 @@ mockbukkit = "4.116.1"
 
 # Plugins
 shadow = "9.6.1"
-spotless = "8.10.1"
+spotless = "8.10.4"
 extra-java-module-info = "1.14"
 buildconfig = "6.0.10"
 plugin-yml = "0.9.0"
