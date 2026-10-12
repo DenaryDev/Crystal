@@ -1,5 +1,4 @@
 import net.minecrell.pluginyml.paper.PaperPluginDescription
-import xyz.jpenilla.runpaper.task.RunServer
 
 plugins {
     id("crystal.common")
@@ -42,15 +41,11 @@ extraJavaModuleInfo {
 }
 
 tasks {
-    named<JavaCompile>("compileJava") {
-        dependsOn(":crystal-common:shadowJar")
-    }
-
-    named<RunServer>("runServer") {
+    runServer {
         minecraftVersion("26.1.2")
-        runDirectory(rootProject.projectDir.resolve("run/paper"))
+        runDirectory = layout.settingsDirectory.dir("run/paper")
 
-        val file = rootProject.projectDir.resolve("run/paper/paper.jar")
+        val file = layout.settingsDirectory.file("run/paper/paper.jar").asFile
         if (file.exists()) serverJar(file)
     }
 }

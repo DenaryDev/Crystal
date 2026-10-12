@@ -1,14 +1,10 @@
+import org.gradle.api.tasks.testing.logging.TestLogEvent
+
 plugins {
     id("crystal.base")
     id("maven-publish")
     id("org.gradlex.extra-java-module-info")
     id("com.diffplug.spotless")
-}
-
-dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation(platform("org.junit:junit-bom:6.0.1"))
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 extraJavaModuleInfo {
@@ -29,10 +25,26 @@ spotless {
     }
 }
 
+testing {
+    suites {
+        @Suppress("UnstableApiUsage")
+        withType<JvmTestSuite>().configureEach {
+            useJUnitJupiter("6.0.1")
+
+            targets.configureEach {
+                testTask {
+                    testLogging {
+                        events(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
+                        showStandardStreams = true
+                    }
+                }
+            }
+        }
+    }
+}
+
 tasks {
-    named<JavaCompile>("compileJava") {
-        options.encoding = Charsets.UTF_8.name()
-        options.release = 25
+    withType<JavaCompile>().configureEach {
         options.compilerArgs.addAll(
             listOf(
                 "-parameters",
@@ -43,15 +55,6 @@ tasks {
             )
         )
         options.isFork = true
-    }
-
-    named<Test>("test") {
-        useJUnitPlatform()
-
-        testLogging {
-            events("passed", "skipped", "failed")
-            showStandardStreams = true
-        }
     }
 }
 

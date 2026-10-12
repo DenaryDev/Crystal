@@ -1,5 +1,3 @@
-import xyz.jpenilla.runvelocity.task.RunVelocity
-
 plugins {
     id("crystal.common")
     alias(libs.plugins.buildconfig)
@@ -19,22 +17,18 @@ dependencies {
 
 buildConfig {
     packageName("me.denarydev.crystal.velocity")
-    buildConfigField("String", "VERSION", provider { "\"${project.version}\"" })
-    buildConfigField("String", "DESCRIPTION", provider { "\"${project.description}\"" })
+    buildConfigField("VERSION", provider { project.version.toString() })
+    buildConfigField("DESCRIPTION", provider { project.description })
 }
 
 tasks {
-    named<JavaCompile>("compileJava") {
-        dependsOn(":crystal-common:shadowJar")
-    }
-
-    named<RunVelocity>("runVelocity") {
+    runVelocity {
         velocityVersion(libs.versions.velocity.get())
-        runDirectory(rootProject.projectDir.resolve("run/velocity"))
+        runDirectory = layout.settingsDirectory.dir("run/velocity")
 
         jvmArgs("--enable-native-access=ALL-UNNAMED")
 
-        val file = rootProject.projectDir.resolve("run/velocity/velocity.jar")
+        val file = layout.settingsDirectory.file("run/velocity/velocity.jar").asFile
         if (file.exists()) runJar(file)
     }
 }

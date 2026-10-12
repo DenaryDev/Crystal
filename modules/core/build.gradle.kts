@@ -2,13 +2,6 @@ plugins {
     id("crystal.common")
 }
 
-repositories {
-    maven("https://repo.rafaelkauwu.me/private/") {
-        name = "rafaelkauwu"
-        credentials(PasswordCredentials::class)
-    }
-}
-
 base {
     archivesName = "Crystal-Core"
 }
@@ -25,11 +18,7 @@ extraJavaModuleInfo {
 }
 
 tasks {
-    named<JavaCompile>("compileJava") {
-        dependsOn(":crystal-common:shadowJar")
-    }
-
-    named<ProcessResources>("processResources") {
+    processResources {
         inputs.properties(
             "version" to provider { project.version.toString() },
             "description" to provider { project.description }
@@ -40,31 +29,35 @@ tasks {
         }
     }
 
+    val prepareCoreRun = register<Copy>("prepareCoreRun") {
+        description = "Copies this plugin into the ProstoCraft Core run directory"
+        group = "crystal"
+
+        val pluginJarName = base.archivesName.map { "$it-RunCoreTask.jar" }
+
+        from(shadowJar)
+        into(layout.settingsDirectory.dir("run/core/plugins"))
+        rename { pluginJarName.get() }
+    }
+
     register<JavaExec>("runCore") {
         description = "Runs ProstoCraft Core with this plugin"
         group = "crystal"
-        dependsOn(shadowJar)
+        dependsOn(prepareCoreRun)
 
-        val workingDir = rootProject.projectDir.resolve("run/core")
-        workingDir(workingDir)
+        val runDirectory = layout.settingsDirectory.dir("run/core").asFile
+        val coreJar = runDirectory.resolve("core.jar")
 
-        val coreJar = workingDir.resolve("core.jar")
-        if (!coreJar.exists()) {
-            throw GradleException("Core jar does not exist: ${coreJar.absolutePath}")
-        }
-
+        workingDir(runDirectory)
         classpath(coreJar)
         standardInput = System.`in`
 
         jvmArgs("--enable-native-access=ALL-UNNAMED")
 
         doFirst {
-            if (!workingDir.exists()) {
-                workingDir.mkdirs()
+            if (!coreJar.exists()) {
+                throw GradleException("Core jar does not exist: ${coreJar.absolutePath}")
             }
-
-            val pluginJar = shadowJar.get().outputs.files.singleFile
-            pluginJar.copyTo(workingDir.resolve("plugins/${base.archivesName.get()}-RunCoreTask.jar"), overwrite = true)
         }
     }
 }
