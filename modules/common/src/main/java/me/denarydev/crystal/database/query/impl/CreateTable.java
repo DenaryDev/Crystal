@@ -182,6 +182,16 @@ public final class CreateTable extends AbstractQuery {
     }
 
     /**
+     * Sets <code>UNIQUE</code> on the most recently added column.
+     *
+     * @return this object.
+     */
+    public CreateTable unique() {
+        lastColumn().unique = true;
+        return this;
+    }
+
+    /**
      * Sets the default value for the most recently added column.
      *
      * @param value the default value; must not be null.
@@ -248,6 +258,10 @@ public final class CreateTable extends AbstractQuery {
                 }
             }
 
+            if (col.unique) {
+                builder.append(" UNIQUE");
+            }
+
             if (col.defaultValue != null) {
                 builder.append(" DEFAULT ").append(SQLUtil.valueToSqlString(col.defaultValue));
             }
@@ -287,6 +301,7 @@ public final class CreateTable extends AbstractQuery {
         private boolean notNull;
         private boolean autoIncrement;
         private boolean primaryKey;
+        private boolean unique;
         private Object defaultValue;
 
         public Column(String name, String type) {

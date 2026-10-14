@@ -79,6 +79,18 @@ class CreateTableQueryTest {
     }
 
     @Test
+    void createTableUnique() {
+        String sql = h2.createTable("users").varchar("email", 64).notNull().unique().getSQL();
+        assertEquals("CREATE TABLE `users` (`email` VARCHAR(64) NOT NULL UNIQUE);", sql);
+    }
+
+    @Test
+    void createTableUniqueWithDefault() {
+        String sql = h2.createTable("t").integer("code").unique().defaultValue(0).getSQL();
+        assertEquals("CREATE TABLE `t` (`code` INT UNIQUE DEFAULT 0);", sql);
+    }
+
+    @Test
     void createTableDefaultValueBool() {
         String sql = h2.createTable("t").bool("active").defaultValue(true).getSQL();
         assertEquals("CREATE TABLE `t` (`active` TINYINT(1) DEFAULT 1);", sql);
