@@ -14,6 +14,8 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -78,6 +80,74 @@ public abstract class ConditionalQuery<T extends ConditionalQuery<T>> extends Ab
      */
     public final T whereNullable(@NonNull String column, @Nullable Object value) {
         return value == null ? whereNull(column) : where(column, value);
+    }
+
+    /**
+     * Adds a <code>WHERE</code> condition that checks whether the given column is equal to one of the given values,
+     * i.e. <code>`column` IN (?, ?, ...)</code>. Conditions are combined with <code>AND</code>.
+     * <p>
+     * An empty collection produces a condition that never matches (<code>1 = 0</code>),
+     * so the query returns or affects no rows instead of failing with a syntax error.
+     *
+     * @param column the column name.
+     * @param values the values.
+     * @return this object.
+     */
+    public final T whereIn(@NonNull String column, @NonNull Collection<?> values) {
+        return whereInInternal(column, values, false);
+    }
+
+    /**
+     * Adds a <code>WHERE</code> condition that checks whether the given column is equal to one of the given values.
+     *
+     * @param column the column name.
+     * @param values the values.
+     * @return this object.
+     * @see #whereIn(String, Collection)
+     */
+    public final T whereIn(@NonNull String column, @NonNull Object... values) {
+        return whereIn(column, Arrays.asList(values));
+    }
+
+    /**
+     * Adds a <code>WHERE</code> condition that checks whether the given column is not equal to any of the given values,
+     * i.e. <code>`column` NOT IN (?, ?, ...)</code>. Conditions are combined with <code>AND</code>.
+     * <p>
+     * An empty collection produces a condition that always matches (<code>1 = 1</code>).
+     *
+     * @param column the column name.
+     * @param values the values.
+     * @return this object.
+     */
+    public final T whereNotIn(@NonNull String column, @NonNull Collection<?> values) {
+        return whereInInternal(column, values, true);
+    }
+
+    /**
+     * Adds a <code>WHERE</code> condition that checks whether the given column is not equal to any of the given values.
+     *
+     * @param column the column name.
+     * @param values the values.
+     * @return this object.
+     * @see #whereNotIn(String, Collection)
+     */
+    public final T whereNotIn(@NonNull String column, @NonNull Object... values) {
+        return whereNotIn(column, Arrays.asList(values));
+    }
+
+    private T whereInInternal(@NonNull String column, @NonNull Collection<?> values, boolean negate) {
+        SQLUtil.validateIdentifier(column);
+
+        if (values.isEmpty()) {
+            return whereExpr(negate ? "1 = 1" : "1 = 0");
+        }
+
+        final StringBuilder expr = new StringBuilder("`").append(column).append(negate ? "` NOT IN (" : "` IN (");
+        expr.repeat("?, ", values.size());
+        expr.setLength(expr.length() - 2);
+        expr.append(")");
+
+        return whereExpr(expr.toString(), values.toArray());
     }
 
     protected void appendConditions(@NonNull StringBuilder builder) {

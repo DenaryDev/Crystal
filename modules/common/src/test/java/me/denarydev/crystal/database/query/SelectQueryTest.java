@@ -11,6 +11,7 @@ import me.denarydev.crystal.Crystal;
 import me.denarydev.crystal.TestCrystal;
 import me.denarydev.crystal.database.connection.ConnectionPool;
 import me.denarydev.crystal.database.connection.ConnectionPoolBuilders;
+import me.denarydev.crystal.database.query.impl.Select;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -166,5 +167,50 @@ class SelectQueryTest {
         assertThrows(IllegalArgumentException.class, () ->
             q.select("id").from("users").limit(1).offset(-1)
         );
+    }
+
+    @Test
+    void selectWithWhereIn() {
+        Select select = q.select("id").from("users").whereIn("name", List.of("a", "b", "c"));
+        assertEquals("SELECT `id` FROM `users` WHERE (`name` IN (?, ?, ?)) ;", select.getSQL());
+        assertEquals(List.of("a", "b", "c"), select.getParams());
+    }
+
+    @Test
+    void selectWithWhereInVarargs() {
+        Select select = q.select("id").from("users").whereIn("score", 1, 2);
+        assertEquals("SELECT `id` FROM `users` WHERE (`score` IN (?, ?)) ;", select.getSQL());
+        assertEquals(List.of(1, 2), select.getParams());
+    }
+
+    @Test
+    void selectWithWhereInEmptyNeverMatches() {
+        Select select = q.select("id").from("users").whereIn("name", List.of());
+        assertEquals("SELECT `id` FROM `users` WHERE (1 = 0) ;", select.getSQL());
+        assertEquals(List.of(), select.getParams());
+    }
+
+    @Test
+    void selectWithWhereNotIn() {
+        Select select = q.select("id").from("users").whereNotIn("name", List.of("a", "b"));
+        assertEquals("SELECT `id` FROM `users` WHERE (`name` NOT IN (?, ?)) ;", select.getSQL());
+        assertEquals(List.of("a", "b"), select.getParams());
+    }
+
+    @Test
+    void selectWithWhereNotInEmptyAlwaysMatches() {
+        String sql = q.select("id").from("users").whereNotIn("name", List.of()).getSQL();
+        assertEquals("SELECT `id` FROM `users` WHERE (1 = 1) ;", sql);
+    }
+
+    @Test
+    void selectWithWhereInCombined() {
+        String sql = q.select("id").from("users").where("active", true).whereIn("role", "admin", "mod").getSQL();
+        assertEquals("SELECT `id` FROM `users` WHERE (`active` = ?) AND (`role` IN (?, ?)) ;", sql);
+    }
+
+    @Test
+    void whereInRejectsInvalidIdentifier() {
+        assertThrows(IllegalArgumentException.class, () -> q.select("id").from("users").whereIn("na`me", 1));
     }
 }
