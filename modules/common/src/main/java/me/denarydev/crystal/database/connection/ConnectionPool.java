@@ -115,6 +115,14 @@ public sealed abstract class ConnectionPool permits FlatfileConnectionPool, Hika
      */
     public abstract void connect(@NonNull final ConnectionCallback callback);
 
+    /**
+     * Rewrites quote characters in a raw SQL string for this pool's database.
+     *
+     * @return the statement processor.
+     * @deprecated Deprecated as of 3.2.0 and no longer used. The query builder quotes identifiers
+     * for the pool's dialect itself; see {@link me.denarydev.crystal.database.query.Dialect#quote(String)}.
+     */
+    @Deprecated(since = "3.2.0", forRemoval = true)
     @ApiStatus.Internal
     public abstract Function<String, String> statementProcessor();
 

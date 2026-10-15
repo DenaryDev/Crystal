@@ -38,6 +38,7 @@ public final class H2ConnectionPool extends FlatfileConnectionPool {
     }
 
     @Override
+    @Deprecated(since = "3.2.0", forRemoval = true)
     public Function<String, String> statementProcessor() {
         return s -> s.replace('\'', '`')
             .replace("LIKE", "ILIKE")

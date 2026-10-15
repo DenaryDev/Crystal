@@ -64,6 +64,7 @@ public final class MySqlConnectionPool extends HikariConnectionPool {
     }
 
     @Override
+    @Deprecated(since = "3.2.0", forRemoval = true)
     public Function<String, String> statementProcessor() {
         return s -> s.replace('\'', '`'); // use backticks for quotes
     }
