@@ -18,10 +18,13 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -94,5 +97,87 @@ public class PaperSchedulerTest {
 
         assertTrue(future.isDone());
         assertEquals(List.of(5), received);
+    }
+
+    @Test
+    public void runDelayed_runsAfterDelay() {
+        final AtomicBoolean ran = new AtomicBoolean();
+
+        scheduler.runDelayed(() -> ran.set(true), 3);
+
+        server.getScheduler().performTicks(2);
+        assertFalse(ran.get());
+        server.getScheduler().performOneTick();
+        assertTrue(ran.get());
+    }
+
+    @Test
+    public void runAtFixedRate_repeatsWithPeriod() {
+        final AtomicInteger runs = new AtomicInteger();
+
+        // MockBukkit does not implement ScheduledTask.cancel(), so only the cadence is checked here
+        assertNotNull(scheduler.runAtFixedRate(runs::incrementAndGet, 1, 2));
+
+        server.getScheduler().performOneTick();
+        assertEquals(1, runs.get());
+        server.getScheduler().performTicks(4);
+        assertEquals(3, runs.get());
+    }
+
+    @Test
+    public void runAtFixedRate_consumerReceivesItsTask() {
+        final CompletableFuture<Object> received = new CompletableFuture<>();
+
+        final var task = scheduler.runAtFixedRate(received::complete, 1, 1);
+
+        server.getScheduler().performOneTick();
+        assertTrue(received.isDone());
+        assertEquals(task, received.join());
+    }
+
+    @Test
+    public void runAsyncAtFixedRate_repeats() {
+        final AtomicInteger runs = new AtomicInteger();
+
+        scheduler.runAsyncAtFixedRate(runs::incrementAndGet, 50, 50, TimeUnit.MILLISECONDS);
+
+        server.getScheduler().performTicks(3);
+        server.getScheduler().waitAsyncTasksFinished();
+        assertTrue(runs.get() >= 2);
+    }
+
+    @Test
+    public void runAsyncDelayed_runsOffTheTickLoop() {
+        final AtomicBoolean ran = new AtomicBoolean();
+
+        scheduler.runAsyncDelayed(() -> ran.set(true), 50, TimeUnit.MILLISECONDS);
+
+        server.getScheduler().performTicks(2);
+        server.getScheduler().waitAsyncTasksFinished();
+        assertTrue(ran.get());
+    }
+
+    @Test
+    public void entityDelayed_runsAfterDelay() {
+        final PlayerMock player = server.addPlayer();
+        final AtomicBoolean ran = new AtomicBoolean();
+
+        assertNotNull(scheduler.runDelayed(player, () -> ran.set(true), 2));
+
+        server.getScheduler().performOneTick();
+        assertFalse(ran.get());
+        server.getScheduler().performOneTick();
+        assertTrue(ran.get());
+    }
+
+    @Test
+    public void entityAtFixedRate_repeats() {
+        final PlayerMock player = server.addPlayer();
+        final AtomicInteger runs = new AtomicInteger();
+
+        assertNotNull(scheduler.runAtFixedRate(player, runs::incrementAndGet, 1, 1));
+
+        server.getScheduler().performTicks(3);
+        assertEquals(3, runs.get());
     }
 }

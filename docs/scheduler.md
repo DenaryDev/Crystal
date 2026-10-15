@@ -48,6 +48,28 @@ On regular Paper `entity(...)` runs on the main thread like `sync()`, so code wr
 
 Tasks submitted to `entity(...)` after the entity has been removed are silently dropped.
 
+### Delayed and repeating tasks
+
+`PaperScheduler` also wraps the delayed and repeating variants of the three schedulers. Each returns the Paper `ScheduledTask`, so the caller can cancel it; the `Consumer<ScheduledTask>` overloads hand the task to itself so it can stop on its own.
+
+```java
+scheduler.runDelayed(() -> announce(), 20);                               // main thread, 1 second
+scheduler.runAtFixedRate(task -> { if (done()) task.cancel(); }, 1, 20);  // main thread, every second
+scheduler.runAsyncAtFixedRate(this::flushStats, 1, 1, TimeUnit.MINUTES);  // off the main thread
+scheduler.runAtFixedRate(player, () -> tickEffect(player), 1, 5);         // player's thread, stops when they leave
+```
+
+| Method | Thread | Delay unit |
+|---|---|---|
+| `runDelayed(task, delayTicks)` | main thread (global region) | ticks, at least 1 |
+| `runAtFixedRate(task, initialDelayTicks, periodTicks)` | main thread (global region) | ticks, at least 1 |
+| `runAsyncDelayed(task, delay, unit)` | async | `TimeUnit` |
+| `runAsyncAtFixedRate(task, initialDelay, period, unit)` | async | `TimeUnit` |
+| `runDelayed(entity, task, delayTicks)` | entity's thread | ticks, at least 1 |
+| `runAtFixedRate(entity, task, initialDelayTicks, periodTicks)` | entity's thread | ticks, at least 1 |
+
+The entity variants return `null` if the entity has already been removed, and a repeating entity task stops when the entity is removed.
+
 ### Owning the tasks
 
 `Scheduler.current()` schedules tasks under the Crystal plugin, so they are not cancelled when *your* plugin is disabled. If that matters, create a scheduler bound to your plugin:
@@ -64,7 +86,7 @@ me.denarydev.crystal.scheduler
 └── Scheduler                  — interface and default CompletableFuture helpers (crystal-common)
 
 me.denarydev.crystal.paper.scheduler
-└── PaperScheduler             — region-aware implementation, adds entity(Entity)
+└── PaperScheduler             — region-aware implementation, adds entity(Entity) and delayed/repeating tasks
 
 me.denarydev.crystal.velocity.scheduler
 └── VelocityScheduler          — proxy scheduler implementation

@@ -177,7 +177,7 @@ Fluent `ItemStack` builder covering display name/lore, flags, item model/custom 
 
 ### [Scheduler](docs/scheduler.md)
 
-Platform-independent `async()` / `sync()` executors with `CompletableFuture` helpers such as `asyncThenSync`, plus a Folia-aware `entity(...)` executor on Paper.
+Platform-independent `async()` / `sync()` executors with `CompletableFuture` helpers such as `asyncThenSync`, plus a Folia-aware `entity(...)` executor and delayed/repeating tasks on Paper.
 
 ### [Utilities](docs/utils.md)
 
