@@ -52,7 +52,9 @@ ItemStack sword = ItemBuilder.fromMaterial(Material.DIAMOND_SWORD)
 | `loreRich(List<String>, resolvers...)` | Sets the lore from MiniMessage strings |
 | `lorePlain(List<String>)` | Sets the lore from plain strings |
 
-> All `Rich`/`Plain` name and lore setters silently no-op when passed `null`, leaving the current value unchanged.
+> All `Rich`/`Plain` name and lore setters silently no-op when passed `null`, leaving the current value unchanged. `displayName(Component)` and `lore(List<Component>)` remove the value instead.
+
+> Minecraft renders custom names and lore in italics by default; names and lore set through the builder are not italic unless requested (e.g. `<i>` in MiniMessage). The existing name and lore of items passed to `fromItem(...)` and values set via `editMeta(...)` are left as-is.
 
 ### Flags, unbreakability, damage
 

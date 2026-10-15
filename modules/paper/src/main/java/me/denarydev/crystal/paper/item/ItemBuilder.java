@@ -10,6 +10,7 @@ package me.denarydev.crystal.paper.item;
 import com.google.common.base.Preconditions;
 import me.denarydev.crystal.paper.utils.HeadUtils;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Color;
@@ -136,12 +137,14 @@ public final class ItemBuilder {
     /**
      * Sets the display name from a {@link Component}.
      * <p>
-     * Passing {@code null} leaves the display name unchanged.
+     * Passing {@code null} removes the display name.
+     * <p>
+     * Unlike vanilla, the display name is not italic unless the italic decoration is explicitly set.
      *
      * @param displayName the display name.
      */
     public ItemBuilder displayName(@Nullable Component displayName) {
-        return editMeta(meta -> meta.displayName(displayName));
+        return editMeta(meta -> meta.displayName(displayName == null ? null : withoutDefaultItalic(displayName)));
     }
 
     /**
@@ -178,12 +181,14 @@ public final class ItemBuilder {
     /**
      * Sets the lore from a list of {@link Component}s.
      * <p>
-     * Passing {@code null} leaves the lore unchanged.
+     * Passing {@code null} removes the lore.
+     * <p>
+     * Unlike vanilla, lore lines are not italic unless the italic decoration is explicitly set.
      *
      * @param lore the lore lines.
      */
     public ItemBuilder lore(@Nullable List<Component> lore) {
-        return editMeta(meta -> meta.lore(lore));
+        return editMeta(meta -> meta.lore(lore == null ? null : lore.stream().map(ItemBuilder::withoutDefaultItalic).toList()));
     }
 
     /**
@@ -625,5 +630,9 @@ public final class ItemBuilder {
     @NonNull
     public ItemBuilder duplicate() {
         return new ItemBuilder(this.itemStack.clone());
+    }
+
+    private static Component withoutDefaultItalic(@NonNull Component component) {
+        return component.decorationIfAbsent(TextDecoration.ITALIC, TextDecoration.State.FALSE);
     }
 }
