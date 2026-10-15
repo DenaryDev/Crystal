@@ -33,6 +33,8 @@ import org.bukkit.potion.PotionType;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -222,6 +224,60 @@ public final class ItemBuilder {
         }
 
         return this;
+    }
+
+    /**
+     * Appends the given {@link Component}s to the end of the existing lore.
+     * <p>
+     * If the item has no lore yet, the lines become the lore.
+     * Unlike vanilla, lore lines are not italic unless the italic decoration is explicitly set.
+     *
+     * @param lines the lore lines to append.
+     */
+    public ItemBuilder appendLore(@NonNull List<? extends Component> lines) {
+        return editMeta(meta -> {
+            final List<Component> current = meta.lore();
+            final List<Component> lore = current == null ? new ArrayList<>(lines.size()) : new ArrayList<>(current);
+
+            for (Component line : lines) {
+                lore.add(withoutDefaultItalic(line));
+            }
+
+            meta.lore(lore);
+        });
+    }
+
+    /**
+     * Appends the given {@link Component}s to the end of the existing lore.
+     *
+     * @param lines the lore lines to append.
+     * @see #appendLore(List)
+     */
+    public ItemBuilder appendLore(@NonNull Component... lines) {
+        return appendLore(Arrays.asList(lines));
+    }
+
+    /**
+     * Appends MiniMessage-formatted lines with optional tag resolvers to the end of the existing lore.
+     *
+     * @param lines the MiniMessage lines to append.
+     * @param tags  tag resolvers for placeholder substitution.
+     * @see #appendLore(List)
+     */
+    public ItemBuilder appendLoreRich(@NonNull List<String> lines, @NonNull TagResolver... tags) {
+        return appendLore(lines.stream()
+            .map(line -> MiniMessage.miniMessage().deserialize(line, tags))
+            .toList());
+    }
+
+    /**
+     * Appends plain (unformatted) lines to the end of the existing lore.
+     *
+     * @param lines the plain lines to append.
+     * @see #appendLore(List)
+     */
+    public ItemBuilder appendLorePlain(@NonNull List<String> lines) {
+        return appendLore(lines.stream().map(Component::text).toList());
     }
 
     //endregion

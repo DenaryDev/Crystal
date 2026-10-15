@@ -51,6 +51,9 @@ ItemStack sword = ItemBuilder.fromMaterial(Material.DIAMOND_SWORD)
 | `lore(List<Component>)` | Sets the lore from a list of `Component`s |
 | `loreRich(List<String>, resolvers...)` | Sets the lore from MiniMessage strings |
 | `lorePlain(List<String>)` | Sets the lore from plain strings |
+| `appendLore(List<Component>)` / `appendLore(Component...)` | Appends `Component`s to the existing lore |
+| `appendLoreRich(List<String>, resolvers...)` | Appends MiniMessage lines to the existing lore |
+| `appendLorePlain(List<String>)` | Appends plain lines to the existing lore |
 
 > All `Rich`/`Plain` name and lore setters silently no-op when passed `null`, leaving the current value unchanged. `displayName(Component)` and `lore(List<Component>)` remove the value instead.
 
