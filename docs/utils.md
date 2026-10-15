@@ -105,9 +105,9 @@ Shorthand wrappers around `MiniMessage.miniMessage()` for (de)serializing Advent
 | `deserialize(List<String> message, TagResolver... tags)` | Parses a list of MiniMessage strings into `Component`s |
 | `serialize(Component component)` | Serializes a `Component` back to a MiniMessage string |
 | `serialize(List<Component> components)` | Serializes a list of `Component`s to MiniMessage strings |
-| `send(Audience audience, String message, TagResolver... tags)` | Parses a MiniMessage string and sends it to the audience |
-| `send(Audience audience, List<String> lines, TagResolver... tags)` | Sends each line as a separate message |
-| `sendActionBar(Audience audience, String message, TagResolver... tags)` | Parses a MiniMessage string and shows it in the action bar |
+| `send(Audience audience, String message, TagResolver... tags)` | Parses a MiniMessage string and sends it to the audience; an empty string sends nothing |
+| `send(Audience audience, List<String> lines, TagResolver... tags)` | Sends each line as a separate message; empty lines are kept as spacing |
+| `sendActionBar(Audience audience, String message, TagResolver... tags)` | Parses a MiniMessage string and shows it in the action bar; an empty string sends nothing |
 
 ### HeadUtils
 
@@ -154,6 +154,6 @@ Same shorthand wrappers around `MiniMessage.miniMessage()` as the Paper module's
 | `deserialize(List<String> message, TagResolver... tags)` | Parses a list of MiniMessage strings into `Component`s |
 | `serialize(Component component)` | Serializes a `Component` back to a MiniMessage string |
 | `serialize(List<Component> components)` | Serializes a list of `Component`s to MiniMessage strings |
-| `send(Audience audience, String message, TagResolver... tags)` | Parses a MiniMessage string and sends it to the audience |
-| `send(Audience audience, List<String> lines, TagResolver... tags)` | Sends each line as a separate message |
-| `sendActionBar(Audience audience, String message, TagResolver... tags)` | Parses a MiniMessage string and shows it in the action bar |
+| `send(Audience audience, String message, TagResolver... tags)` | Parses a MiniMessage string and sends it to the audience; an empty string sends nothing |
+| `send(Audience audience, List<String> lines, TagResolver... tags)` | Sends each line as a separate message; empty lines are kept as spacing |
+| `sendActionBar(Audience audience, String message, TagResolver... tags)` | Parses a MiniMessage string and shows it in the action bar; an empty string sends nothing |

@@ -69,17 +69,24 @@ public final class ComponentUtils {
 
     /**
      * Sends a MiniMessage-formatted message to the given audience.
+     * <p>
+     * An empty message is not sent at all, so a message left blank in a config disables it.
      *
      * @param audience the recipient, such as a player, console or command sender.
      * @param message  the MiniMessage string.
      * @param tags     additional tag resolvers.
      */
     public static void send(Audience audience, String message, TagResolver... tags) {
+        if (message.isEmpty()) return;
+
         audience.sendMessage(deserialize(message, tags));
     }
 
     /**
      * Sends each MiniMessage-formatted line to the given audience as a separate message.
+     * <p>
+     * Unlike {@link #send(Audience, String, TagResolver...)}, empty lines are sent as blank
+     * messages so that they can be used as spacing; an empty list sends nothing.
      *
      * @param audience the recipient, such as a player, console or command sender.
      * @param lines    the MiniMessage lines.
@@ -87,18 +94,22 @@ public final class ComponentUtils {
      */
     public static void send(Audience audience, List<String> lines, TagResolver... tags) {
         for (String line : lines) {
-            send(audience, line, tags);
+            audience.sendMessage(deserialize(line, tags));
         }
     }
 
     /**
      * Sends a MiniMessage-formatted message to the given audience's action bar.
+     * <p>
+     * An empty message is not sent at all.
      *
      * @param audience the recipient.
      * @param message  the MiniMessage string.
      * @param tags     additional tag resolvers.
      */
     public static void sendActionBar(Audience audience, String message, TagResolver... tags) {
+        if (message.isEmpty()) return;
+
         audience.sendActionBar(deserialize(message, tags));
     }
 }

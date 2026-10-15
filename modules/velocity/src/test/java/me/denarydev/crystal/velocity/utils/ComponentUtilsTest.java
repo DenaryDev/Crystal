@@ -76,4 +76,24 @@ public class ComponentUtilsTest {
         assertEquals("Ready", plain(audience.actionBars.get(0)));
         assertEquals(NamedTextColor.GOLD, audience.actionBars.get(0).color());
     }
+
+    @Test
+    public void send_skipsEmptyMessage() {
+        final RecordingAudience audience = new RecordingAudience();
+
+        ComponentUtils.send(audience, "");
+        ComponentUtils.sendActionBar(audience, "");
+
+        assertTrue(audience.messages.isEmpty());
+        assertTrue(audience.actionBars.isEmpty());
+    }
+
+    @Test
+    public void send_listKeepsEmptyLinesAsSpacing() {
+        final RecordingAudience audience = new RecordingAudience();
+
+        ComponentUtils.send(audience, List.of("a", "", "b"));
+
+        assertEquals(List.of("a", "", "b"), audience.messages.stream().map(ComponentUtilsTest::plain).toList());
+    }
 }
