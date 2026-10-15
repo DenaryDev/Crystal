@@ -100,8 +100,17 @@ menu.update();
 // Close programmatically
 menu.close();
 
-// Check whether a slot has an item
+// Remove an item together with its action, or only the action
+menu.removeItem(13);
+menu.removeAction(14);
+
+// Wipe everything, or go back to the items and actions the menu was built with
+menu.clear();
+menu.reset();
+
+// Check whether a slot has an item / which action is registered
 boolean occupied = menu.hasItem(13);
+ClickAction action = menu.action(13);
 
 // Get the current viewer (null if nobody is viewing)
 Player viewer = menu.viewer();
@@ -110,6 +119,33 @@ Player viewer = menu.viewer();
 > `addItem` and `addAction` take effect **only after calling `update()`** when the menu is already open.
 
 > `addAction` registers an action on a slot, but it only fires if that slot contains an item.
+
+> Slots outside the inventory are silently ignored by `addItem`, `addAction` and `removeItem`.
+
+### Slot coordinates
+
+`Slots` computes slot indices from zero-based row/column coordinates, so you don't have to hand-count them.
+Every method returns `int` or `int[]`, ready to be passed to the `int... slots` parameters above.
+
+```java
+menu.addItem(filler, Slots.border(54));          // outer ring of a 6-row menu
+menu.addItem(info, Slots.at(1, 4));              // row 1, column 4 → slot 13
+menu.addItem(filler, Slots.row(5));              // whole bottom row
+menu.addItem(filler, Slots.column(0, 54));       // whole leftmost column
+menu.addItem(content, Slots.inner(54));          // everything inside the border
+```
+
+| Method | Description |
+|---|---|
+| `at(row, column)` | Slot index in a 9-wide inventory |
+| `at(row, column, width)` | Slot index in an inventory of the given width (hopper, dispenser, …) |
+| `rowOf(slot)` / `columnOf(slot)` | Inverse of `at` for 9-wide inventories |
+| `row(row)` | All 9 slots of a row |
+| `column(column, size)` | All slots of a column in a menu of the given size |
+| `range(from, to)` | Every slot from `from` to `to`, inclusive |
+| `all(size)` | Every slot of a menu of the given size |
+| `border(size)` | Top and bottom rows plus leftmost and rightmost columns |
+| `inner(size)` | Every slot not on the border |
 
 ---
 
@@ -202,6 +238,7 @@ Inherits `Template.Builder` methods, plus:
 ```
 me.denarydev.crystal.paper.gui
 ├── Menu                       — menu instance and its Builder
+├── Slots                      — slot index helpers (row/column, border, ranges)
 ├── Template                   — abstract base class for templates and its Builder
 ├── template
 │   ├── SimpleTemplate         — slot-number-based template

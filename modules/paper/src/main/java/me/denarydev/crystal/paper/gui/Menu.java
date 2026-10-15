@@ -26,6 +26,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +41,7 @@ public class Menu implements InventoryHolder {
     private final Template template;
     private final Inventory inventory;
 
+    private final Map<Integer, ClickAction> initialActions;
     private final Map<Integer, ClickAction> clickActions = new HashMap<>();
     @Nullable
     private final CloseAction closeAction;
@@ -50,11 +52,11 @@ public class Menu implements InventoryHolder {
     @ApiStatus.Internal
     Menu(Template template, Map<Integer, ClickAction> actions, @Nullable CloseAction closeAction) {
         this.template = template;
+        this.initialActions = Collections.unmodifiableMap(new HashMap<>(actions));
         this.closeAction = closeAction;
         this.inventory = setupBukkitInventory(template);
 
-        template.items().forEach((slot, item) -> addItemInternal(item, slot));
-        actions.forEach((slot, action) -> addActionInternal(action, slot));
+        reset();
     }
 
     /**
@@ -111,6 +113,17 @@ public class Menu implements InventoryHolder {
     }
 
     /**
+     * Returns the click action registered for the given slot.
+     *
+     * @param slot the slot to look up.
+     * @return the click action, or {@code null} if none is registered.
+     */
+    @Nullable
+    public ClickAction action(int slot) {
+        return clickActions.get(slot);
+    }
+
+    /**
      * Places an item in the given slot(s).
      * <p>
      * <b>If the menu is already open, call {@link #update()} to push the change to the viewer.</b>
@@ -146,6 +159,52 @@ public class Menu implements InventoryHolder {
      */
     public void addAction(@Nullable ClickAction action, int... slots) {
         addActionInternal(action, slots);
+    }
+
+    /**
+     * Removes the item and the click action from the given slot(s).
+     *
+     * @param slots the slot or slots to clear.
+     */
+    public void removeItem(int... slots) {
+        for (int slot : slots) {
+            if (!isValidSlot(slot)) continue;
+
+            inventory.setItem(slot, null);
+            clickActions.remove(slot);
+        }
+    }
+
+    /**
+     * Removes the click action from the given slot(s), leaving the item in place.
+     *
+     * @param slots the slot or slots to remove the action from.
+     */
+    public void removeAction(int... slots) {
+        for (int slot : slots) {
+            clickActions.remove(slot);
+        }
+    }
+
+    /**
+     * Removes all items and click actions from the menu.
+     * <p>
+     * Use {@link #reset()} to restore the items and actions the menu was created with.
+     */
+    public void clear() {
+        inventory.clear();
+        clickActions.clear();
+    }
+
+    /**
+     * Clears the menu and restores the items from the template
+     * and the click actions the menu was built with.
+     */
+    public void reset() {
+        clear();
+
+        template.items().forEach((slot, item) -> addItemInternal(item, slot));
+        initialActions.forEach((slot, action) -> addActionInternal(action, slot));
     }
 
     /**
@@ -202,9 +261,13 @@ public class Menu implements InventoryHolder {
         }
     }
 
+    private boolean isValidSlot(int slot) {
+        return slot >= 0 && slot < inventory.getSize();
+    }
+
     private void addItemInternal(ItemStack item, int... slots) {
         for (int slot : slots) {
-            if (slot < 0 || slot >= template.size()) continue;
+            if (!isValidSlot(slot)) continue;
 
             inventory.setItem(slot, item);
         }
@@ -212,7 +275,7 @@ public class Menu implements InventoryHolder {
 
     private void addActionInternal(ClickAction action, int... slots) {
         for (int slot : slots) {
-            if (slot < 0 || slot >= template.size()) continue;
+            if (!isValidSlot(slot)) continue;
 
             clickActions.put(slot, action);
         }
@@ -478,15 +541,20 @@ public class Menu implements InventoryHolder {
          * @return the created menu instance.
          */
         public Menu build() {
-            final SimpleTemplate template = SimpleTemplate.builder()
+            final SimpleTemplate.Builder template = SimpleTemplate.builder()
                 .title(title)
-                .size(size)
-                .type(type)
                 .items(items)
-                .cooldown(cooldown)
-                .build();
+                .cooldown(cooldown);
 
-            return new Menu(template, actions, closeAction);
+            if (size > 0) {
+                template.size(size);
+            }
+
+            if (type != null) {
+                template.type(type);
+            }
+
+            return new Menu(template.build(), actions, closeAction);
         }
     }
 }
