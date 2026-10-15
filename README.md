@@ -76,6 +76,8 @@ dependencies {
 
 > **Snapshots** are available from the same repository URL. Use version `3.x.x-SNAPSHOT` to pull the latest development build.
 
+> **Bootstrappers** *(Paper)*: Crystal ships an empty bootstrapper, so it can be declared under `dependencies.bootstrap` and used from your plugin's bootstrapper. Only server-independent parts of the library work at that stage; see [Bootstrap access](docs/bootstrap.md).
+
 ## API Overview
 
 ### Error Reporter
@@ -164,6 +166,10 @@ Fluent `ItemStack` builder covering display name/lore, flags, item model/custom 
 ### [Utilities](docs/utils.md)
 
 Standalone helper classes: numbers, text, wildcards, and time formatting (`crystal-common`); components, player heads, locations, and permissions (`crystal-paper`); components (`crystal-velocity`).
+
+### [Bootstrap access](docs/bootstrap.md) *(Paper only)*
+
+Why Crystal has a bootstrapper, how to declare it as a bootstrap dependency, and which classes are safe to use before the server exists.
 
 ## Development
 

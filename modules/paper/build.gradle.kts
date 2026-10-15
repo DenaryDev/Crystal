@@ -25,6 +25,7 @@ paper {
     author = "DenaryDev"
 
     main = "me.denarydev.crystal.paper.PaperPlugin"
+    bootstrapper = "me.denarydev.crystal.paper.PaperBootstrap"
 
     apiVersion = "26.2"
 
