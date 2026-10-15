@@ -9,7 +9,8 @@ package me.denarydev.crystal.paper;
 
 import me.denarydev.crystal.Crystal;
 import me.denarydev.crystal.Platform;
-import org.bukkit.Bukkit;
+import me.denarydev.crystal.paper.scheduler.PaperScheduler;
+import me.denarydev.crystal.scheduler.Scheduler;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 
@@ -18,10 +19,12 @@ import java.nio.file.Path;
 @ApiStatus.Internal
 public final class CrystalPaper extends Crystal {
     private final PaperPlugin plugin;
+    private final PaperScheduler scheduler;
 
     CrystalPaper(PaperPlugin plugin) {
         super(Platform.PAPER);
         this.plugin = plugin;
+        this.scheduler = new PaperScheduler(plugin);
 
         setInstance(this);
     }
@@ -37,7 +40,7 @@ public final class CrystalPaper extends Crystal {
     }
 
     @Override
-    public void runAsync(Runnable task) {
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, task);
+    public Scheduler scheduler() {
+        return scheduler;
     }
 }

@@ -32,6 +32,7 @@ module crystal.common {
     exports me.denarydev.crystal.error;
     exports me.denarydev.crystal.function;
     exports me.denarydev.crystal.random;
+    exports me.denarydev.crystal.scheduler;
     exports me.denarydev.crystal.skin;
     exports me.denarydev.crystal.skin.provider;
     exports me.denarydev.crystal.utils;

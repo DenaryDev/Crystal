@@ -10,5 +10,6 @@ module crystal.velocity {
 
     exports me.denarydev.crystal.velocity;
     exports me.denarydev.crystal.velocity.error;
+    exports me.denarydev.crystal.velocity.scheduler;
     exports me.denarydev.crystal.velocity.skin;
 }

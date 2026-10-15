@@ -9,13 +9,15 @@ package me.denarydev.crystal.core;
 
 import me.denarydev.crystal.Crystal;
 import me.denarydev.crystal.Platform;
+import me.denarydev.crystal.core.scheduler.CoreScheduler;
+import me.denarydev.crystal.scheduler.Scheduler;
 import org.slf4j.Logger;
-import ru.prostocraft.core.Async;
 
 import java.nio.file.Path;
 
 public final class CrystalCore extends Crystal {
     private final CorePlugin plugin;
+    private final CoreScheduler scheduler = new CoreScheduler();
 
     CrystalCore(CorePlugin plugin) {
         super(Platform.CORE);
@@ -35,7 +37,7 @@ public final class CrystalCore extends Crystal {
     }
 
     @Override
-    public void runAsync(Runnable task) {
-        Async.run(task);
+    public Scheduler scheduler() {
+        return scheduler;
     }
 }

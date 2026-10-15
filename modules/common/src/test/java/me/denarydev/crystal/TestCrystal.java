@@ -7,10 +7,12 @@
  */
 package me.denarydev.crystal;
 
+import me.denarydev.crystal.scheduler.Scheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
+import java.util.concurrent.Executor;
 
 public class TestCrystal extends Crystal {
     private static final Logger LOG = LoggerFactory.getLogger("crystal-test");
@@ -31,7 +33,17 @@ public class TestCrystal extends Crystal {
     }
 
     @Override
-    public void runAsync(Runnable task) {
-        task.run();
+    public Scheduler scheduler() {
+        return new Scheduler() {
+            @Override
+            public Executor async() {
+                return Runnable::run;
+            }
+
+            @Override
+            public Executor sync() {
+                return Runnable::run;
+            }
+        };
     }
 }

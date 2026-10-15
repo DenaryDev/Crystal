@@ -69,7 +69,7 @@ public final class PoolManagerImpl extends PoolManager {
             }
 
             if (config.eagerConnect()) {
-                platform.runAsync(lazySource::get);
+                platform.scheduler().async().execute(lazySource::get);
             }
         });
     }

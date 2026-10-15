@@ -26,6 +26,7 @@ module crystal.paper {
     exports me.denarydev.crystal.paper.input.actions;
     exports me.denarydev.crystal.paper.item;
     exports me.denarydev.crystal.paper.listener;
+    exports me.denarydev.crystal.paper.scheduler;
     exports me.denarydev.crystal.paper.skin;
     exports me.denarydev.crystal.paper.utils;
 }

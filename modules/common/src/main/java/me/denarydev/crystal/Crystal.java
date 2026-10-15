@@ -13,6 +13,7 @@ import me.denarydev.crystal.config.ConfigMapper;
 import me.denarydev.crystal.config.internal.CrystalConfig;
 import me.denarydev.crystal.config.internal.MessagesConfig;
 import me.denarydev.crystal.database.pool.impl.PoolManagerImpl;
+import me.denarydev.crystal.scheduler.Scheduler;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 
@@ -70,7 +71,18 @@ public abstract class Crystal {
 
     public abstract Path dataFolder();
 
-    public abstract void runAsync(Runnable task);
+    public abstract Scheduler scheduler();
+
+    /**
+     * Runs the task asynchronously.
+     *
+     * @param task the task to run.
+     * @deprecated Deprecated as of 3.2.0. Use {@code scheduler().async()} or {@link Scheduler#runAsync(Runnable)} instead.
+     */
+    @Deprecated(since = "3.2.0", forRemoval = true)
+    public final void runAsync(Runnable task) {
+        scheduler().async().execute(task);
+    }
 
     protected static void setInstance(Crystal platform) {
         instance = platform;

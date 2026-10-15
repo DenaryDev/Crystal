@@ -110,6 +110,18 @@ skin.ifPresent(s -> applyTexture(s.value(), s.signature()));
 
 ---
 
+### Scheduler
+
+`Scheduler` exposes the platform's asynchronous and synchronous executors as plain `Executor`s, with helpers for the common "load off the main thread, then apply on it" pattern.
+
+```java
+Scheduler.current().asyncThenSync(() -> repository.load(uuid), data -> menu.show(player));
+```
+
+Platform implementations: `PaperScheduler` (`crystal-paper`, adds a Folia-aware `entity(...)` executor), `VelocityScheduler` (`crystal-velocity`), `CoreScheduler` (`crystal-core`).
+
+---
+
 ### Chat Prompt *(Paper only)*
 
 `ChatPrompt` intercepts the next chat message from a player and passes it to your handler — without any visible chat output. Supports an optional cancel word, timeout, and a close callback with a reason.
@@ -162,6 +174,10 @@ Inventory menus with slot-based and character-mask templates, click and close ac
 ### [Item Builder module](docs/item-builder.md) *(Paper only)*
 
 Fluent `ItemStack` builder covering display name/lore, flags, item model/custom model data, enchantments, potion effects, and persistent data.
+
+### [Scheduler](docs/scheduler.md)
+
+Platform-independent `async()` / `sync()` executors with `CompletableFuture` helpers such as `asyncThenSync`, plus a Folia-aware `entity(...)` executor on Paper.
 
 ### [Utilities](docs/utils.md)
 
