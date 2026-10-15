@@ -7,6 +7,8 @@
  */
 package me.denarydev.crystal.paper.scheduler;
 
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -176,6 +178,43 @@ public class PaperSchedulerTest {
         final AtomicInteger runs = new AtomicInteger();
 
         assertNotNull(scheduler.runAtFixedRate(player, runs::incrementAndGet, 1, 1));
+
+        server.getScheduler().performTicks(3);
+        assertEquals(3, runs.get());
+    }
+
+    @Test
+    public void region_runsOnNextTick() {
+        final World world = server.addSimpleWorld("world");
+        final AtomicBoolean ran = new AtomicBoolean();
+
+        scheduler.region(new Location(world, 100, 64, -200)).execute(() -> ran.set(true));
+        scheduler.region(world, 3, -5).execute(() -> ran.set(true));
+
+        assertFalse(ran.get());
+        server.getScheduler().performOneTick();
+        assertTrue(ran.get());
+    }
+
+    @Test
+    public void regionDelayed_runsAfterDelay() {
+        final World world = server.addSimpleWorld("world");
+        final AtomicBoolean ran = new AtomicBoolean();
+
+        assertNotNull(scheduler.runDelayed(new Location(world, 0, 64, 0), () -> ran.set(true), 2));
+
+        server.getScheduler().performOneTick();
+        assertFalse(ran.get());
+        server.getScheduler().performOneTick();
+        assertTrue(ran.get());
+    }
+
+    @Test
+    public void regionAtFixedRate_repeats() {
+        final World world = server.addSimpleWorld("world");
+        final AtomicInteger runs = new AtomicInteger();
+
+        assertNotNull(scheduler.runAtFixedRate(new Location(world, 0, 64, 0), runs::incrementAndGet, 1, 1));
 
         server.getScheduler().performTicks(3);
         assertEquals(3, runs.get());

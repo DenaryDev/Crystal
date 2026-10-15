@@ -10,6 +10,8 @@ package me.denarydev.crystal.paper.scheduler;
 import io.papermc.paper.threadedregions.scheduler.ScheduledTask;
 import me.denarydev.crystal.scheduler.Scheduler;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 import org.jspecify.annotations.NullMarked;
@@ -25,7 +27,8 @@ import java.util.function.Consumer;
  * {@link #async()} uses the {@link org.bukkit.Server#getAsyncScheduler() async scheduler} and
  * {@link #sync()} the {@link org.bukkit.Server#getGlobalRegionScheduler() global region scheduler},
  * which is the main thread on Paper. On Folia, anything touching an entity (opening a menu, teleporting)
- * must run on that entity's region instead: use {@link #entity(Entity)} for that.
+ * must run on that entity's region instead, and anything touching blocks or chunks at a location must
+ * run on the region owning that location: use {@link #entity(Entity)} and {@link #region(Location)} for that.
  * <p>
  * Delayed and repeating tasks are available for each of the three schedulers; they return the
  * {@link ScheduledTask} so the caller can cancel them. Delays for the global and entity schedulers are
@@ -91,6 +94,32 @@ public final class PaperScheduler implements Scheduler {
      */
     public Executor entity(Entity entity) {
         return task -> entity.getScheduler().run(plugin, ignored -> task.run(), null);
+    }
+
+    /**
+     * Returns an executor that runs tasks on the thread owning the region at the given location.
+     * <p>
+     * On Paper this is the main thread; on Folia it is the region thread, which is where blocks
+     * and chunks at that location may be modified.
+     *
+     * @param location the location whose region to run on.
+     * @return the region executor.
+     */
+    public Executor region(Location location) {
+        return task -> Bukkit.getRegionScheduler().execute(plugin, location, task);
+    }
+
+    /**
+     * Returns an executor that runs tasks on the thread owning the region of the given chunk.
+     *
+     * @param world  the world of the chunk.
+     * @param chunkX the chunk X coordinate.
+     * @param chunkZ the chunk Z coordinate.
+     * @return the region executor.
+     * @see #region(Location)
+     */
+    public Executor region(World world, int chunkX, int chunkZ) {
+        return task -> Bukkit.getRegionScheduler().execute(plugin, world, chunkX, chunkZ, task);
     }
 
     //region Delayed and repeating tasks
@@ -210,6 +239,48 @@ public final class PaperScheduler implements Scheduler {
      */
     public @Nullable ScheduledTask runAtFixedRate(Entity entity, Runnable task, long initialDelayTicks, long periodTicks) {
         return runAtFixedRate(entity, ignored -> task.run(), initialDelayTicks, periodTicks);
+    }
+
+    /**
+     * Runs the task on the thread owning the region at the given location after the given delay.
+     * <p>
+     * On Paper this is the main thread; on Folia it is the region thread.
+     *
+     * @param location   the location whose region to run on.
+     * @param task       the task to run.
+     * @param delayTicks the delay in ticks, at least 1.
+     * @return the scheduled task.
+     */
+    public ScheduledTask runDelayed(Location location, Runnable task, long delayTicks) {
+        return Bukkit.getRegionScheduler().runDelayed(plugin, location, ignored -> task.run(), delayTicks);
+    }
+
+    /**
+     * Runs the task on the thread owning the region at the given location repeatedly.
+     * <p>
+     * On Paper this is the main thread; on Folia it is the region thread.
+     *
+     * @param location          the location whose region to run on.
+     * @param task              the task to run; it receives its own {@link ScheduledTask} so it can cancel itself.
+     * @param initialDelayTicks the delay before the first run in ticks, at least 1.
+     * @param periodTicks       the period between runs in ticks, at least 1.
+     * @return the scheduled task.
+     */
+    public ScheduledTask runAtFixedRate(Location location, Consumer<ScheduledTask> task, long initialDelayTicks, long periodTicks) {
+        return Bukkit.getRegionScheduler().runAtFixedRate(plugin, location, task, initialDelayTicks, periodTicks);
+    }
+
+    /**
+     * Runs the task on the thread owning the region at the given location repeatedly.
+     *
+     * @param location          the location whose region to run on.
+     * @param task              the task to run.
+     * @param initialDelayTicks the delay before the first run in ticks, at least 1.
+     * @param periodTicks       the period between runs in ticks, at least 1.
+     * @return the scheduled task.
+     */
+    public ScheduledTask runAtFixedRate(Location location, Runnable task, long initialDelayTicks, long periodTicks) {
+        return runAtFixedRate(location, ignored -> task.run(), initialDelayTicks, periodTicks);
     }
 
     //endregion
