@@ -10,6 +10,9 @@ dependencies {
     implementation(libs.bundles.sql.drivers)
 
     compileOnly(libs.skinsrestorer)
+
+    testImplementation(libs.adventure.minimessage)
+    testImplementation(libs.adventure.legacy)
 }
 
 extraJavaModuleInfo {

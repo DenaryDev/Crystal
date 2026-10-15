@@ -6,6 +6,34 @@ Standalone static-method utility classes bundled with the `crystal-common` and `
 
 ## crystal-common (`me.denarydev.crystal.utils`)
 
+### ColorConverter
+
+Converts legacy colour codes inside a string into MiniMessage tags, so that text written in any common format can be passed straight to `MiniMessage.deserialize`. Plain string processing with no dependency on Adventure, so it is safe to use anywhere `crystal-common` is.
+
+Supported legacy formats, with both `§` and `&` prefixes, case-insensitive:
+
+- named colours `§0`–`§f`, decorations `§k`–`§o` and `§r`
+- hex colours `§#rrggbb`
+- Bungee hex colours `§x§r§r§g§g§b§b`
+
+Legacy semantics are preserved: a colour code cancels active decorations, so a colour following a decoration is emitted as `<reset><colour>`.
+
+| Method | Description |
+|---|---|
+| `toMiniMessage(String text)` | Detects the format in order: legacy `§` codes, MiniMessage, legacy `&` codes. `&` codes are converted only when the text contains no MiniMessage tags (so `<green>R&B` stays intact). Text without codes is returned as is |
+| `toMiniMessage(List<String> lines)` | Applies `toMiniMessage(String)` to every line |
+| `toMiniMessage(String text, char prefix)` | Converts every code with the given prefix, without any heuristics |
+| `hasLegacyCodes(String text, char prefix)` | Whether the text contains at least one valid legacy code with the given prefix |
+| `hasMiniMessageTags(String text)` | Whether the text contains a standard MiniMessage tag (`<red>`, `</bold>`, `<#ff0000>`, `<click:...>`). Unknown tags like `<world>` don't count |
+
+```java
+ColorConverter.toMiniMessage("&a&lHello &cworld");      // "<green><bold>Hello <reset><red>world"
+ColorConverter.toMiniMessage("&#12ab34Hex");            // "<#12ab34>Hex"
+ColorConverter.toMiniMessage("&x&1&2&a&b&3&4Bungee");   // "<#12ab34>Bungee"
+ColorConverter.toMiniMessage("<green>R&B party");       // "<green>R&B party" (MiniMessage, & left alone)
+ColorConverter.toMiniMessage("<green>R&B party", '&'); // "<green>R<aqua> party"
+```
+
 ### NumberUtils
 
 | Method | Description |
