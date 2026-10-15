@@ -18,11 +18,15 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Base64;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * Utilities for creating and configuring player head items.
  */
 public final class HeadUtils {
+
+    // Texture hashes are hex; Base64 texture values always start with "ey"/"ew" (encoded '{'), so they never match
+    private static final Pattern TEXTURE_HASH = Pattern.compile("[0-9a-fA-F]+");
 
     /**
      * Creates a player head item with the given texture.
@@ -99,12 +103,8 @@ public final class HeadUtils {
     public static void setTexture(@NonNull final SkullMeta meta, @NonNull final String texture, @Nullable String signature) {
         final PlayerProfile profile = Bukkit.createProfile(UUID.nameUUIDFromBytes(texture.getBytes()), "CrystalHead");
 
-        if (texture.endsWith("=")) {
-            if (signature == null) {
-                profile.setProperty(new ProfileProperty("textures", texture.replaceAll("=", "")));
-            } else {
-                profile.setProperty(new ProfileProperty("textures", texture, signature));
-            }
+        if (!TEXTURE_HASH.matcher(texture).matches()) {
+            profile.setProperty(new ProfileProperty("textures", texture, signature));
         } else {
             final byte[] encodedData = Base64.getEncoder().encode(String.format("{textures:{SKIN:{url:\"https://textures.minecraft.net/texture/%s\"}}}", texture).getBytes());
             profile.setProperty(new ProfileProperty("textures", new String(encodedData)));
