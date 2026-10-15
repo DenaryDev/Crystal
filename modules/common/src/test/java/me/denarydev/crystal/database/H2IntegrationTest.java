@@ -12,6 +12,7 @@ import me.denarydev.crystal.TestCrystal;
 import me.denarydev.crystal.database.connection.ConnectionPool;
 import me.denarydev.crystal.database.connection.ConnectionPoolBuilders;
 import me.denarydev.crystal.database.query.QueryBuilder;
+import me.denarydev.crystal.database.query.impl.Insert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -187,5 +188,63 @@ class H2IntegrationTest {
 
         assertTrue(key.isPresent());
         assertEquals(1, key.get());
+    }
+
+    @Test
+    void insertIgnoreSkipsExistingRow() throws SQLException {
+        q.insertInto("users").value("id", "u1").value("name", "Alice").update();
+
+        int affected = q.insertInto("users").ignore().keys("id").value("id", "u1").value("name", "Mallory").update();
+        assertEquals(0, affected);
+
+        int inserted = q.insertInto("users").ignore().keys("id").value("id", "u2").value("name", "Bob").update();
+        assertEquals(1, inserted);
+
+        List<String> names = q.select("name").from("users").orderBy("id").queryAndMapAll(rs -> rs.getString("name"));
+        assertEquals(List.of("Alice", "Bob"), names);
+    }
+
+    @Test
+    void upsertInsertsThenUpdates() throws SQLException {
+        Insert upsert = q.insertInto("users")
+            .value("id", "u1")
+            .value("name", "Alice")
+            .value("score", 10)
+            .onDuplicateKeyUpdateExpr("score", "`score` + ?", 5)
+            .onDuplicateKeyUpdateExcept("id");
+
+        upsert.update();
+        upsert.update();
+
+        Optional<Integer> score = q.select("score").from("users").where("id", "u1").queryAndMap(rs -> rs.getInt("score"));
+        assertEquals(15, score.orElseThrow());
+
+        q.insertInto("users")
+            .value("id", "u1")
+            .value("name", "Alicia")
+            .value("score", 0)
+            .onDuplicateKeyUpdate("name", "Alicia")
+            .keys("id")
+            .update();
+
+        Optional<String> name = q.select("name").from("users").where("id", "u1").queryAndMap(rs -> rs.getString("name"));
+        assertEquals("Alicia", name.orElseThrow());
+        assertEquals(15, q.select("score").from("users").where("id", "u1").queryAndMap(rs -> rs.getInt("score")).orElseThrow());
+    }
+
+    @Test
+    void whereInSelectsMatchingRows() throws SQLException {
+        q.insertInto("users").value("id", "u1").value("name", "Alice").update();
+        q.insertInto("users").value("id", "u2").value("name", "Bob").update();
+        q.insertInto("users").value("id", "u3").value("name", "Carol").update();
+
+        List<String> names = q.select("name").from("users").whereIn("id", List.of("u1", "u3")).orderBy("id")
+            .queryAndMapAll(rs -> rs.getString("name"));
+        assertEquals(List.of("Alice", "Carol"), names);
+
+        assertTrue(q.select("name").from("users").whereIn("id", List.of()).queryAndMapAll(rs -> rs.getString("name")).isEmpty());
+
+        int deleted = q.deleteFrom("users").whereNotIn("id", "u2").update();
+        assertEquals(2, deleted);
     }
 }

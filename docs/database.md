@@ -102,8 +102,12 @@ Available on every query type.
 | `whereExpr(expr, params...)` | arbitrary SQL expression |
 | `whereNull(column)` | `` `column` IS NULL `` |
 | `whereNullable(column, value)` | IS NULL or `= ?` depending on the value |
+| `whereIn(column, Collection)` / `whereIn(column, values...)` | `` `column` IN (?, ?, ...) `` |
+| `whereNotIn(column, Collection)` / `whereNotIn(column, values...)` | `` `column` NOT IN (?, ?, ...) `` |
 
 Multiple calls are joined with `AND`.
+
+> An empty collection passed to `whereIn` produces `1 = 0` (matches nothing) and to `whereNotIn` produces `1 = 1` (matches everything), instead of invalid SQL.
 
 ---
 
@@ -154,31 +158,59 @@ try {
         .valueNull("avatar")
         .update();
 
-    // INSERT IGNORE
+    // Skip the row if it already exists
     q.insertInto("users")
         .ignore()
+        .keys("id")
         .value("id", uuid)
         .value("name", name)
         .update();
 
-    // Upsert: ON DUPLICATE KEY UPDATE
+    // Upsert: update all columns except the key
     q.insertInto("users")
         .value("id", uuid)
         .value("name", name)
         .value("score", score)
-        .onDuplicateKeyUpdateExcept("id")   // update all columns except the key
+        .onDuplicateKeyUpdateExcept("id")
+        .update();
+
+    // Upsert with an expression: insert, or increment the counter if the row exists
+    q.insertInto("stats")
+        .value("player", uuid)
+        .value("stat", "kills")
+        .value("count", 1)
+        .keys("player", "stat")
+        .onDuplicateKeyUpdateExpr("count", "`count` + ?", 1)
         .update();
 } catch (SQLException e) { }
 ```
 
 | Method | Description |
 |---|---|
-| `ignore()` | Add `INSERT IGNORE` |
+| `ignore()` | Skip rows that violate a unique or primary key |
+| `keys(columns...)` | Declare the columns whose constraint detects a duplicate (see below) |
 | `value(column, value)` | Insert a value |
 | `valueExpr(column, expr, params...)` | Insert an arbitrary SQL expression |
 | `valueNull(column)` | Insert NULL |
 | `valueNullable(column, value)` | Insert NULL or a value depending on the argument |
-| `onDuplicateKeyUpdateExcept(keys...)` | `ON DUPLICATE KEY UPDATE` for all columns except the specified keys |
+| `onDuplicateKeyUpdate(column, value)` | Set the column to the value when the row already exists |
+| `onDuplicateKeyUpdateExpr(column, expr, params...)` | Set the column to an expression (e.g. `` `count` + ? ``) when the row already exists |
+| `onDuplicateKeyUpdateExcept(keys...)` | Update every inserted column except the keys with its inserted value; also declares the keys |
+
+`onDuplicateKeyUpdateExcept` does not override columns already set via `onDuplicateKeyUpdate`/`onDuplicateKeyUpdateExpr`, so the two can be combined in any order. `ignore()` cannot be combined with an update.
+
+#### Dialect-specific rendering
+
+`ignore()` and upserts are rendered in the syntax of the pool's dialect:
+
+| Dialect | `ignore()` | Upsert | Needs `keys(...)` |
+|---|---|---|---|
+| MySQL / MariaDB | `INSERT IGNORE` | `ON DUPLICATE KEY UPDATE` | no |
+| SQLite | `INSERT OR IGNORE` | `ON CONFLICT [(keys)] DO UPDATE SET` | optional |
+| PostgreSQL | `ON CONFLICT [(keys)] DO NOTHING` | `ON CONFLICT (keys) DO UPDATE SET` | for upsert |
+| H2 | `MERGE INTO … WHEN NOT MATCHED THEN INSERT` | `MERGE INTO … WHEN MATCHED THEN UPDATE SET … WHEN NOT MATCHED THEN INSERT` | always |
+
+Where keys are required and missing, `getSQL()` throws `IllegalStateException`. On H2 every key must also be one of the inserted columns.
 
 ---
 
@@ -342,7 +374,7 @@ me.denarydev.crystal.database
 │   ├── AbstractQuery             — base query class (execute/query/update)
 │   ├── ConditionalQuery          — extension with WHERE support
 │   ├── BatchBuilder              — batch query execution
-│   ├── Dialect                   — SQL dialect enum
+│   ├── Dialect                   — SQL dialect enum (DEFAULT, H2, SQLITE, POSTGRES)
 │   ├── Expression                — SQL expression with bound parameters
 │   ├── impl                      — concrete implementations (Select, Insert, Update, Delete, CreateTable, Raw)
 │   └── set

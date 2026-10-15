@@ -42,6 +42,7 @@ public enum DatabaseType {
     public Dialect dialect() {
         return switch (this) {
             case SQLITE -> Dialect.SQLITE;
+            case H2 -> Dialect.H2;
             case POSTGRESQL -> Dialect.POSTGRES;
             default -> Dialect.DEFAULT;
         };

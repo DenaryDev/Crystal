@@ -245,7 +245,7 @@ public final class CreateTable extends AbstractQuery {
             }
 
             if (col.autoIncrement) {
-                if (dialect == Dialect.DEFAULT) {
+                if (dialect == Dialect.DEFAULT || dialect == Dialect.H2) {
                     builder.append(" AUTO_INCREMENT");
                 }
             }

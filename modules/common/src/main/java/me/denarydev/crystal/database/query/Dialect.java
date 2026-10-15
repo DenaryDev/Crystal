@@ -17,6 +17,13 @@ public enum Dialect {
     DEFAULT,
 
     /**
+     * The SQL dialect for H2 in its regular (non-compatibility) mode.
+     * <p>
+     * DDL is MySQL-like, but upserts are expressed through <code>MERGE</code>.
+     */
+    H2,
+
+    /**
      * The SQL dialect for SQLite.
      */
     SQLITE,
