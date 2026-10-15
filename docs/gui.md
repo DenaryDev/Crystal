@@ -100,6 +100,12 @@ menu.update();
 // Close programmatically
 menu.close();
 
+// Whether a player is currently viewing the menu
+boolean open = menu.isOpen();
+
+// Show the menu again to the player it was last shown to
+menu.reopen();
+
 // Remove an item together with its action, or only the action
 menu.removeItem(13);
 menu.removeAction(14);
@@ -121,6 +127,10 @@ Player viewer = menu.viewer();
 > `addAction` registers an action on a slot, but it only fires if that slot contains an item.
 
 > Slots outside the inventory are silently ignored by `addItem`, `addAction` and `removeItem`.
+
+> `show(...)` and `reopen()` must be called from the thread owning the player — the main thread on Paper, the player's region thread on Folia. When the menu is populated asynchronously, hand the result over with [`PaperScheduler.entity(player)`](scheduler.md#paper-entities-and-folia).
+
+> Opening a menu on top of another one closes the first with `InventoryCloseEvent.Reason.OPEN_NEW`, and its `CloseAction` fires as usual. `reopen()` is the exception: the implicit close it causes does **not** fire the `CloseAction`, so a close action that returns to a parent menu doesn't loop.
 
 ### Slot coordinates
 

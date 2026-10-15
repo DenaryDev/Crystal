@@ -8,13 +8,19 @@
 package me.denarydev.crystal.paper.gui;
 
 import me.denarydev.crystal.paper.gui.actions.ClickAction;
+import me.denarydev.crystal.paper.listener.InventoryListener;
 import org.bukkit.Material;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.MockBukkit;
+import org.mockbukkit.mockbukkit.ServerMock;
+import org.mockbukkit.mockbukkit.entity.PlayerMock;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -26,9 +32,11 @@ public class MenuTest {
     private static final ClickAction NOOP = event -> {
     };
 
+    private ServerMock server;
+
     @BeforeEach
     public void setUp() {
-        MockBukkit.mock();
+        server = MockBukkit.mock();
     }
 
     @AfterEach
@@ -140,5 +148,106 @@ public class MenuTest {
         assertTrue(menu.hasItem(26));
         assertFalse(menu.hasItem(10));
         assertEquals(Material.DIAMOND, menu.getInventory().getItem(13).getType());
+    }
+
+    @Test
+    public void show_setsViewerAndOpens() {
+        final PlayerMock player = server.addPlayer();
+        final Menu menu = Menu.builder().size(9).build();
+
+        assertFalse(menu.isOpen());
+        assertNull(menu.viewer());
+
+        menu.show(player);
+
+        assertTrue(menu.isOpen());
+        assertEquals(player, menu.viewer());
+        assertEquals(menu.getInventory(), player.getOpenInventory().getTopInventory());
+    }
+
+    @Test
+    public void closeInternal_firesCloseActionAndForgetsViewer() {
+        final PlayerMock player = server.addPlayer();
+        final AtomicInteger closes = new AtomicInteger();
+        final Menu menu = Menu.builder().size(9).closeAction(event -> closes.incrementAndGet()).build();
+
+        menu.show(player);
+        menu.closeInternal(new InventoryCloseEvent(player.getOpenInventory(), InventoryCloseEvent.Reason.PLAYER));
+
+        assertEquals(1, closes.get());
+        assertNull(menu.viewer());
+    }
+
+    @Test
+    public void reopen_doesNothingWhenNeverShown() {
+        final Menu menu = Menu.builder().size(9).build();
+
+        menu.reopen();
+
+        assertFalse(menu.isOpen());
+        assertNull(menu.viewer());
+    }
+
+    @Test
+    public void reopen_showsToLastViewerAgain() {
+        final PlayerMock player = server.addPlayer();
+        final Menu menu = Menu.builder().size(9).build();
+
+        menu.show(player);
+        menu.closeInternal(new InventoryCloseEvent(player.getOpenInventory(), InventoryCloseEvent.Reason.PLAYER));
+        player.closeInventory();
+        assertNull(menu.viewer());
+
+        menu.reopen();
+
+        assertTrue(menu.isOpen());
+        assertEquals(player, menu.viewer());
+    }
+
+    @Test
+    public void reopen_doesNotShowToOfflinePlayer() {
+        final PlayerMock player = server.addPlayer();
+        final Menu menu = Menu.builder().size(9).build();
+
+        menu.show(player);
+        player.disconnect();
+        menu.reopen();
+
+        assertEquals(player, menu.viewer());
+        assertFalse(player.isOnline());
+    }
+
+    @Test
+    public void reopen_doesNotFireCloseAction() {
+        server.getPluginManager().registerEvents(new InventoryListener(), MockBukkit.createMockPlugin());
+
+        final PlayerMock player = server.addPlayer();
+        final AtomicInteger closes = new AtomicInteger();
+        final Menu menu = Menu.builder().size(9).closeAction(event -> closes.incrementAndGet()).build();
+
+        menu.show(player);
+        menu.reopen();
+
+        assertEquals(0, closes.get());
+        assertTrue(menu.isOpen());
+        assertEquals(player, menu.viewer());
+    }
+
+    @Test
+    public void switchingMenus_firesCloseActionOfTheFirst() {
+        server.getPluginManager().registerEvents(new InventoryListener(), MockBukkit.createMockPlugin());
+
+        final PlayerMock player = server.addPlayer();
+        final AtomicInteger closes = new AtomicInteger();
+        final Menu first = Menu.builder().size(9).closeAction(event -> closes.incrementAndGet()).build();
+        final Menu second = Menu.builder().size(9).build();
+
+        first.show(player);
+        second.show(player);
+
+        assertEquals(1, closes.get());
+        assertNull(first.viewer());
+        assertFalse(first.isOpen());
+        assertTrue(second.isOpen());
     }
 }

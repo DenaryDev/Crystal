@@ -48,6 +48,9 @@ public class Menu implements InventoryHolder {
 
     @Nullable
     private Player viewer;
+    @Nullable
+    private Player lastViewer;
+    private boolean reopening;
 
     @ApiStatus.Internal
     Menu(Template template, Map<Integer, ClickAction> actions, @Nullable CloseAction closeAction) {
@@ -208,14 +211,48 @@ public class Menu implements InventoryHolder {
     }
 
     /**
+     * Returns whether this menu is currently open for a player.
+     *
+     * @return {@code true} if a player is viewing the menu.
+     */
+    public boolean isOpen() {
+        return viewer != null && viewer.getOpenInventory().getTopInventory() == inventory;
+    }
+
+    /**
      * Opens this menu for the given player.
+     * <p>
+     * Must be called from the thread owning the player (the main thread on Paper,
+     * the player's region thread on Folia).
      *
      * @param viewer the player to show the menu to.
      */
     public void show(@NonNull Player viewer) {
         this.viewer = viewer;
+        this.lastViewer = viewer;
 
         viewer.openInventory(inventory);
+    }
+
+    /**
+     * Opens this menu again for the player it was last shown to.
+     * <p>
+     * Unlike calling {@link #show(Player)} on an open menu, the close action is not fired
+     * for the implicit close that precedes re-opening. Does nothing if the menu was never shown
+     * or the last viewer is offline.
+     * <p>
+     * Must be called from the thread owning the player, see {@link #show(Player)}.
+     */
+    public void reopen() {
+        final Player target = lastViewer;
+        if (target == null || !target.isOnline()) return;
+
+        reopening = true;
+        try {
+            show(target);
+        } finally {
+            reopening = false;
+        }
     }
 
     /**
@@ -292,9 +329,16 @@ public class Menu implements InventoryHolder {
 
     @ApiStatus.Internal
     public void closeInternal(InventoryCloseEvent event) {
+        // The implicit close caused by re-opening on top of ourselves is not a real close
+        if (reopening) {
+            return;
+        }
+
         if (closeAction != null) {
             closeAction.close(event);
         }
+
+        viewer = null;
     }
 
     /**
