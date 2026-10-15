@@ -97,7 +97,7 @@ TimeFormatter.millisToString(93_784_000L, "d", "h", "m", "s"); // "1 d 2 h 3 m 4
 
 ### ComponentUtils
 
-Shorthand wrappers around `MiniMessage.miniMessage()` for (de)serializing Adventure components, including list variants.
+Shorthand wrappers around `MiniMessage.miniMessage()` for (de)serializing Adventure components, including list variants, plus `send` helpers that parse and deliver a message to any `Audience` (players, the console, command senders) in one call.
 
 | Method | Description |
 |---|---|
@@ -105,6 +105,9 @@ Shorthand wrappers around `MiniMessage.miniMessage()` for (de)serializing Advent
 | `deserialize(List<String> message, TagResolver... tags)` | Parses a list of MiniMessage strings into `Component`s |
 | `serialize(Component component)` | Serializes a `Component` back to a MiniMessage string |
 | `serialize(List<Component> components)` | Serializes a list of `Component`s to MiniMessage strings |
+| `send(Audience audience, String message, TagResolver... tags)` | Parses a MiniMessage string and sends it to the audience |
+| `send(Audience audience, List<String> lines, TagResolver... tags)` | Sends each line as a separate message |
+| `sendActionBar(Audience audience, String message, TagResolver... tags)` | Parses a MiniMessage string and shows it in the action bar |
 
 ### HeadUtils
 
@@ -151,3 +154,6 @@ Same shorthand wrappers around `MiniMessage.miniMessage()` as the Paper module's
 | `deserialize(List<String> message, TagResolver... tags)` | Parses a list of MiniMessage strings into `Component`s |
 | `serialize(Component component)` | Serializes a `Component` back to a MiniMessage string |
 | `serialize(List<Component> components)` | Serializes a list of `Component`s to MiniMessage strings |
+| `send(Audience audience, String message, TagResolver... tags)` | Parses a MiniMessage string and sends it to the audience |
+| `send(Audience audience, List<String> lines, TagResolver... tags)` | Sends each line as a separate message |
+| `sendActionBar(Audience audience, String message, TagResolver... tags)` | Parses a MiniMessage string and shows it in the action bar |

@@ -7,6 +7,7 @@
  */
 package me.denarydev.crystal.paper.utils;
 
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -64,5 +65,40 @@ public final class ComponentUtils {
         return components.stream()
             .map(c -> MiniMessage.miniMessage().serialize(c))
             .toList();
+    }
+
+    /**
+     * Sends a MiniMessage-formatted message to the given audience.
+     *
+     * @param audience the recipient, such as a player, console or command sender.
+     * @param message  the MiniMessage string.
+     * @param tags     additional tag resolvers.
+     */
+    public static void send(Audience audience, String message, TagResolver... tags) {
+        audience.sendMessage(deserialize(message, tags));
+    }
+
+    /**
+     * Sends each MiniMessage-formatted line to the given audience as a separate message.
+     *
+     * @param audience the recipient, such as a player, console or command sender.
+     * @param lines    the MiniMessage lines.
+     * @param tags     additional tag resolvers.
+     */
+    public static void send(Audience audience, List<String> lines, TagResolver... tags) {
+        for (String line : lines) {
+            send(audience, line, tags);
+        }
+    }
+
+    /**
+     * Sends a MiniMessage-formatted message to the given audience's action bar.
+     *
+     * @param audience the recipient.
+     * @param message  the MiniMessage string.
+     * @param tags     additional tag resolvers.
+     */
+    public static void sendActionBar(Audience audience, String message, TagResolver... tags) {
+        audience.sendActionBar(deserialize(message, tags));
     }
 }

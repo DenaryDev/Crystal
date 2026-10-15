@@ -13,6 +13,8 @@ dependencies {
 
     compileOnly(libs.velocity)
     annotationProcessor(libs.velocity)
+
+    testImplementation(libs.velocity)
 }
 
 buildConfig {
