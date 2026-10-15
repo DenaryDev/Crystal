@@ -107,6 +107,8 @@ Available on every query type.
 
 Multiple calls are joined with `AND`.
 
+> Column and table names passed to the builder are quoted for the pool's dialect: `` `name` `` on MySQL, MariaDB, SQLite and H2, `"name"` on PostgreSQL. Expressions you write yourself (`whereExpr`, `valueExpr`, `onDuplicateKeyUpdateExpr`, ...) are emitted verbatim, so quote identifiers in them with the dialect's character; `query.dialect().quote(name)` does it for you.
+
 > An empty collection passed to `whereIn` produces `1 = 0` (matches nothing) and to `whereNotIn` produces `1 = 1` (matches everything), instead of invalid SQL.
 
 ---
@@ -374,7 +376,7 @@ me.denarydev.crystal.database
 │   ├── AbstractQuery             — base query class (execute/query/update)
 │   ├── ConditionalQuery          — extension with WHERE support
 │   ├── BatchBuilder              — batch query execution
-│   ├── Dialect                   — SQL dialect enum (DEFAULT, H2, SQLITE, POSTGRES)
+│   ├── Dialect                   — SQL dialect enum (DEFAULT, H2, SQLITE, POSTGRES) with identifier quoting
 │   ├── Expression                — SQL expression with bound parameters
 │   ├── impl                      — concrete implementations (Select, Insert, Update, Delete, CreateTable, Raw)
 │   └── set

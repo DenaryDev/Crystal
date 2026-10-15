@@ -72,6 +72,13 @@ class SQLUtilTest {
         );
     }
 
+    @Test
+    void doubleQuoteInIdentifierThrows() {
+        assertThrows(IllegalArgumentException.class, () ->
+            SQLUtil.validateIdentifier("col\"name")
+        );
+    }
+
     // --- validatePlaceholderCount ---
 
     @Test

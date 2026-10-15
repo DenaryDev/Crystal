@@ -66,7 +66,7 @@ public final class Select extends ConditionalQuery<Select> {
      */
     public Select column(@NonNull String name) {
         SQLUtil.validateIdentifier(name);
-        return expression("`" + name + "`");
+        return expression(quote(name));
     }
 
     /**
@@ -122,7 +122,7 @@ public final class Select extends ConditionalQuery<Select> {
      */
     public Select orderBy(@NonNull String column) {
         SQLUtil.validateIdentifier(column);
-        return orderByExpr("`" + column + "`");
+        return orderByExpr(quote(column));
     }
 
     /**
@@ -222,10 +222,10 @@ public final class Select extends ConditionalQuery<Select> {
             builder.append("FROM ");
 
             if (this.database != null) {
-                builder.append("`").append(this.database).append("`.");
+                builder.append(quote(this.database)).append(".");
             }
 
-            builder.append("`").append(this.table).append("` ");
+            builder.append(quote(this.table)).append(" ");
         }
 
         appendConditions(builder);

@@ -240,13 +240,13 @@ class InsertQueryTest {
     @Test
     void postgresIgnoreWithoutKeys() {
         String sql = pg.insertInto("users").ignore().value("id", 1).getSQL();
-        assertEquals("INSERT INTO `users` (`id`) VALUES (?) ON CONFLICT DO NOTHING;", sql);
+        assertEquals("INSERT INTO \"users\" (\"id\") VALUES (?) ON CONFLICT DO NOTHING;", sql);
     }
 
     @Test
     void postgresIgnoreWithKeys() {
         String sql = pg.insertInto("users").ignore().keys("id").value("id", 1).getSQL();
-        assertEquals("INSERT INTO `users` (`id`) VALUES (?) ON CONFLICT (`id`) DO NOTHING;", sql);
+        assertEquals("INSERT INTO \"users\" (\"id\") VALUES (?) ON CONFLICT (\"id\") DO NOTHING;", sql);
     }
 
     @Test
@@ -257,7 +257,7 @@ class InsertQueryTest {
             .value("score", 100)
             .onDuplicateKeyUpdateExcept("id")
             .getSQL();
-        assertEquals("INSERT INTO `users` (`id`, `name`, `score`) VALUES (?, ?, ?) ON CONFLICT (`id`) DO UPDATE SET `name` = ?, `score` = ?;", sql);
+        assertEquals("INSERT INTO \"users\" (\"id\", \"name\", \"score\") VALUES (?, ?, ?) ON CONFLICT (\"id\") DO UPDATE SET \"name\" = ?, \"score\" = ?;", sql);
     }
 
     @Test
@@ -267,9 +267,9 @@ class InsertQueryTest {
             .value("stat", "kills")
             .value("count", 1)
             .keys("player", "stat")
-            .onDuplicateKeyUpdateExpr("count", "`count` + ?", 1)
+            .onDuplicateKeyUpdateExpr("count", "\"count\" + ?", 1)
             .getSQL();
-        assertEquals("INSERT INTO `stats` (`player`, `stat`, `count`) VALUES (?, ?, ?) ON CONFLICT (`player`, `stat`) DO UPDATE SET `count` = `count` + ?;", sql);
+        assertEquals("INSERT INTO \"stats\" (\"player\", \"stat\", \"count\") VALUES (?, ?, ?) ON CONFLICT (\"player\", \"stat\") DO UPDATE SET \"count\" = \"count\" + ?;", sql);
     }
 
     @Test

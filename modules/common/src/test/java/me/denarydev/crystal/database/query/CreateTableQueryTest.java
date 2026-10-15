@@ -156,7 +156,7 @@ class CreateTableQueryTest {
             .intKey("id")
             .varchar("name", 64)
             .getSQL();
-        assertEquals("CREATE TABLE `users` (`id` SERIAL PRIMARY KEY, `name` VARCHAR(64));", sql);
+        assertEquals("CREATE TABLE \"users\" (\"id\" SERIAL PRIMARY KEY, \"name\" VARCHAR(64));", sql);
     }
 
     @Test
@@ -165,6 +165,6 @@ class CreateTableQueryTest {
         String sql = pg.createTable("t")
             .bigint("id").autoIncrement().primaryKey()
             .getSQL();
-        assertEquals("CREATE TABLE `t` (`id` BIGSERIAL PRIMARY KEY);", sql);
+        assertEquals("CREATE TABLE \"t\" (\"id\" BIGSERIAL PRIMARY KEY);", sql);
     }
 }

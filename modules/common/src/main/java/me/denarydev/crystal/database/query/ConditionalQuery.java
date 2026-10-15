@@ -40,7 +40,7 @@ public abstract class ConditionalQuery<T extends ConditionalQuery<T>> extends Ab
      */
     public final T where(@NonNull String column, @NonNull Object value) {
         SQLUtil.validateIdentifier(column);
-        return whereExpr("`" + column + "` = ?", value);
+        return whereExpr(quote(column) + " = ?", value);
     }
 
     /**
@@ -66,7 +66,7 @@ public abstract class ConditionalQuery<T extends ConditionalQuery<T>> extends Ab
      * @return this object.
      */
     public final T whereNull(@NonNull String column) {
-        return whereExpr("`" + column + "` IS NULL");
+        return whereExpr(quote(column) + " IS NULL");
     }
 
     /**
@@ -142,7 +142,7 @@ public abstract class ConditionalQuery<T extends ConditionalQuery<T>> extends Ab
             return whereExpr(negate ? "1 = 1" : "1 = 0");
         }
 
-        final StringBuilder expr = new StringBuilder("`").append(column).append(negate ? "` NOT IN (" : "` IN (");
+        final StringBuilder expr = new StringBuilder(quote(column)).append(negate ? " NOT IN (" : " IN (");
         expr.repeat("?, ", values.size());
         expr.setLength(expr.length() - 2);
         expr.append(")");

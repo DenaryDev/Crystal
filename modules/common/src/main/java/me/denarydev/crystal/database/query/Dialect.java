@@ -31,5 +31,26 @@ public enum Dialect {
     /**
      * The SQL dialect for PostgreSQL.
      */
-    POSTGRES
+    POSTGRES;
+
+    /**
+     * Returns the identifier quoting character of this dialect:
+     * a double quote for PostgreSQL and a backtick for everything else.
+     *
+     * @return the quote character.
+     */
+    public char quoteChar() {
+        return this == POSTGRES ? '"' : '`';
+    }
+
+    /**
+     * Quotes a table or column name for this dialect, e.g. <code>`name`</code> or <code>"name"</code>.
+     *
+     * @param identifier the identifier to quote.
+     * @return the quoted identifier.
+     */
+    public String quote(String identifier) {
+        final char quote = quoteChar();
+        return quote + identifier + quote;
+    }
 }

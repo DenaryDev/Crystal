@@ -222,7 +222,7 @@ public final class CreateTable extends AbstractQuery {
 
     @Override
     public String getSQL() {
-        final Dialect dialect = pool.implementationType().dialect();
+        final Dialect dialect = dialect();
         final StringBuilder builder = new StringBuilder();
 
         builder.append("CREATE TABLE ");
@@ -231,12 +231,12 @@ public final class CreateTable extends AbstractQuery {
             builder.append("IF NOT EXISTS ");
         }
 
-        builder.append("`").append(this.table).append("` (");
+        builder.append(quote(this.table)).append(" (");
 
         final List<String> primaryKeys = new ArrayList<>();
 
         for (final Column col : this.columns) {
-            builder.append("`").append(col.name).append("` ").append(col.type(dialect));
+            builder.append(quote(col.name)).append(" ").append(col.type(dialect));
 
             if (col.notNull) {
                 if (dialect != Dialect.SQLITE || !col.autoIncrement) {
@@ -273,7 +273,7 @@ public final class CreateTable extends AbstractQuery {
             builder.append("PRIMARY KEY (");
 
             for (final String col : primaryKeys) {
-                builder.append("`").append(col).append("`, ");
+                builder.append(quote(col)).append(", ");
             }
 
             builder.setLength(builder.length() - 2);

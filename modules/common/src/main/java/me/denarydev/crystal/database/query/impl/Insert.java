@@ -204,7 +204,7 @@ public final class Insert extends AbstractQuery {
             throw new IllegalStateException("Can't use IGNORE with ON DUPLICATE KEY UPDATE");
         }
 
-        final Dialect dialect = pool.implementationType().dialect();
+        final Dialect dialect = dialect();
 
         if (dialect == Dialect.H2 && (this.ignore || !this.update.isEmpty())) {
             return mergeSQL();
@@ -221,7 +221,7 @@ public final class Insert extends AbstractQuery {
             }
         }
 
-        builder.append(" INTO `").append(this.table).append("` (");
+        builder.append(" INTO ").append(quote(this.table)).append(" (");
         appendColumns(builder, this.insert.keySet());
         builder.append(") VALUES (");
         this.insert.values().forEach(expression -> builder.append(expression.expr()).append(", "));
@@ -288,20 +288,20 @@ public final class Insert extends AbstractQuery {
             }
         }
 
-        final StringBuilder builder = new StringBuilder("MERGE INTO `").append(this.table).append("` USING (VALUES (");
+        final StringBuilder builder = new StringBuilder("MERGE INTO ").append(quote(this.table)).append(" USING (VALUES (");
         this.insert.values().forEach(expression -> builder.append(expression.expr()).append(", "));
         builder.setLength(builder.length() - 2);
-        builder.append(")) AS `").append(SOURCE_ALIAS).append("`(");
+        builder.append(")) AS ").append(quote(SOURCE_ALIAS)).append("(");
 
         for (int i = 0; i < columns.size(); i++) {
-            builder.append("`c").append(i).append("`, ");
+            builder.append(quote("c" + i)).append(", ");
         }
 
         builder.setLength(builder.length() - 2);
         builder.append(") ON ");
 
         for (String key : this.keys) {
-            builder.append("`").append(this.table).append("`.`").append(key).append("` = ")
+            builder.append(quote(this.table)).append(".").append(quote(key)).append(" = ")
                 .append(sourceColumn(columns.indexOf(key))).append(" AND ");
         }
 
@@ -326,8 +326,8 @@ public final class Insert extends AbstractQuery {
         return builder.toString();
     }
 
-    private static String sourceColumn(int index) {
-        return "`" + SOURCE_ALIAS + "`.`c" + index + "`";
+    private String sourceColumn(int index) {
+        return quote(SOURCE_ALIAS) + "." + quote("c" + index);
     }
 
     private void requireKeys(String message) {
@@ -347,13 +347,13 @@ public final class Insert extends AbstractQuery {
     }
 
     private void appendAssignments(StringBuilder builder) {
-        this.update.forEach((column, expression) -> builder.append("`").append(column).append("` = ").append(expression.expr()).append(", "));
+        this.update.forEach((column, expression) -> builder.append(quote(column)).append(" = ").append(expression.expr()).append(", "));
         builder.setLength(builder.length() - 2);
     }
 
-    private static void appendColumns(StringBuilder builder, Iterable<String> columns) {
+    private void appendColumns(StringBuilder builder, Iterable<String> columns) {
         for (String column : columns) {
-            builder.append("`").append(column).append("`, ");
+            builder.append(quote(column)).append(", ");
         }
 
         builder.setLength(builder.length() - 2);

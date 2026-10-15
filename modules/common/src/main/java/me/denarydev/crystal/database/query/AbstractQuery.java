@@ -33,6 +33,28 @@ public abstract class AbstractQuery {
     }
 
     /**
+     * Returns the SQL dialect of the pool this query runs on.
+     *
+     * @return the dialect.
+     */
+    @NonNull
+    public final Dialect dialect() {
+        return pool.implementationType().dialect();
+    }
+
+    /**
+     * Quotes a table or column name for the pool's dialect.
+     *
+     * @param identifier the identifier to quote.
+     * @return the quoted identifier.
+     * @see Dialect#quote(String)
+     */
+    @NonNull
+    protected final String quote(@NonNull String identifier) {
+        return dialect().quote(identifier);
+    }
+
+    /**
      * @return the SQL query string.
      */
     public abstract String getSQL();

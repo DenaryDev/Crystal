@@ -96,9 +96,9 @@ public final class Update extends ConditionalQuery<Update> {
 
         builder.append("UPDATE ");
 
-        builder.append("`").append(this.table).append("` SET ");
+        builder.append(quote(this.table)).append(" SET ");
 
-        this.expressions.forEach((k, v) -> builder.append("`").append(k).append("` = ").append(v.expr()).append(", "));
+        this.expressions.forEach((k, v) -> builder.append(quote(k)).append(" = ").append(v.expr()).append(", "));
 
         builder.setLength(builder.length() - 2);
         builder.append(" ");

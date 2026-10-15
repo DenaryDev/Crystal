@@ -42,7 +42,7 @@ public final class SQLUtil {
             throw new IllegalArgumentException("An empty string can't be an identifier");
         }
 
-        if (s.contains("`")) {
+        if (s.indexOf('`') >= 0 || s.indexOf('"') >= 0) {
             throw new IllegalArgumentException("Invalid identifier \"" + s + "\"");
         }
     }

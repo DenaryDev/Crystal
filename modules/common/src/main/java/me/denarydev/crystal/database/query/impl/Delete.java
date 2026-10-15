@@ -35,7 +35,7 @@ public final class Delete extends ConditionalQuery<Delete> {
 
         builder.append("DELETE FROM ");
 
-        builder.append("`").append(this.table).append("` ");
+        builder.append(quote(this.table)).append(" ");
 
         appendConditions(builder);
 
