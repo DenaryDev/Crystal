@@ -20,6 +20,7 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -64,7 +65,8 @@ public class PaperSchedulerTest {
         assertTrue(ran.get());
     }
 
-    @Test
+    @TestPaperSchedulerTest > runAsyncAtFixedRate_repeats() FAILED
+    org.opentest4j.AssertionFailedError at PaperSchedulerTest.java:148
     public void async_runsOffTheTickLoop() {
         final CompletableFuture<Thread> thread = new CompletableFuture<>();
 
@@ -93,7 +95,8 @@ public class PaperSchedulerTest {
 
         final CompletableFuture<Void> future = scheduler.asyncThenSync(() -> 5, received::add);
 
-        server.getScheduler().performOneTick();
+        server.getScheduler().performOneTick();PaperSchedulerTest > runAsyncAtFixedRate_repeats() FAILED
+    org.opentest4j.AssertionFailedError at PaperSchedulerTest.java:148
         server.getScheduler().waitAsyncTasksFinished();
         server.getScheduler().performOneTick();
 
@@ -138,25 +141,26 @@ public class PaperSchedulerTest {
     }
 
     @Test
-    public void runAsyncAtFixedRate_repeats() {
-        final AtomicInteger runs = new AtomicInteger();
+    public void runAsyncAtFixedRate_repeats() throws InterruptedException {
+        // MockBukkit resubmits the same task object every tick and its "submitted" flag is reset by the first run,
+        // so waitAsyncTasksFinished() may cancel the later submissions before the pool picks them up.
+        // Wait for the runs directly instead of relying on that method
+        final CountDownLatch runs = new CountDownLatch(2);
 
-        scheduler.runAsyncAtFixedRate(runs::incrementAndGet, 50, 50, TimeUnit.MILLISECONDS);
+        scheduler.runAsyncAtFixedRate(runs::countDown, 50, 50, TimeUnit.MILLISECONDS);
 
-        server.getScheduler().performTicks(3);
-        server.getScheduler().waitAsyncTasksFinished();
-        assertTrue(runs.get() >= 2);
+        server.getScheduler().performTicks(2);
+        assertTrue(runs.await(5, TimeUnit.SECONDS));
     }
 
     @Test
-    public void runAsyncDelayed_runsOffTheTickLoop() {
-        final AtomicBoolean ran = new AtomicBoolean();
+    public void runAsyncDelayed_runsOffTheTickLoop() throws InterruptedException {
+        final CountDownLatch ran = new CountDownLatch(1);
 
-        scheduler.runAsyncDelayed(() -> ran.set(true), 50, TimeUnit.MILLISECONDS);
+        scheduler.runAsyncDelayed(ran::countDown, 50, TimeUnit.MILLISECONDS);
 
-        server.getScheduler().performTicks(2);
-        server.getScheduler().waitAsyncTasksFinished();
-        assertTrue(ran.get());
+        server.getScheduler().performOneTick();
+        assertTrue(ran.await(5, TimeUnit.SECONDS));
     }
 
     @Test
