@@ -65,8 +65,7 @@ public class PaperSchedulerTest {
         assertTrue(ran.get());
     }
 
-    @TestPaperSchedulerTest > runAsyncAtFixedRate_repeats() FAILED
-    org.opentest4j.AssertionFailedError at PaperSchedulerTest.java:148
+    @Test
     public void async_runsOffTheTickLoop() {
         final CompletableFuture<Thread> thread = new CompletableFuture<>();
 
@@ -95,8 +94,7 @@ public class PaperSchedulerTest {
 
         final CompletableFuture<Void> future = scheduler.asyncThenSync(() -> 5, received::add);
 
-        server.getScheduler().performOneTick();PaperSchedulerTest > runAsyncAtFixedRate_repeats() FAILED
-    org.opentest4j.AssertionFailedError at PaperSchedulerTest.java:148
+        server.getScheduler().performOneTick();
         server.getScheduler().waitAsyncTasksFinished();
         server.getScheduler().performOneTick();
 
