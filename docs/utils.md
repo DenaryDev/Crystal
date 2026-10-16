@@ -64,6 +64,14 @@ T reward = NumberUtils.randomValue(Map.of(
 | `capitalizeAll(List<String>)` | Capitalizes each string in a list |
 | `capitalizeAll(String...)` | Capitalizes each string in an array |
 | `wrapText(String, int)` | Wraps text into lines of at most `maxLength` characters, breaking only at word boundaries |
+| `pluralForm(long, String, String, String)` | Picks the Russian plural form of a noun for a number: `one` (1, 21...), `few` (2-4, 22-24...), `many` (0, 5-20, 25...) |
+| `plural(long, String, String, String)` | The number, a space and the form picked by `pluralForm` |
+
+```java
+TextUtils.pluralForm(3, "очко", "очка", "очков"); // "очка"
+TextUtils.plural(11, "очко", "очка", "очков");    // "11 очков"
+TextUtils.plural(21, "очко", "очка", "очков");    // "21 очко"
+```
 
 ### Wildcards
 

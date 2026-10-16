@@ -91,4 +91,45 @@ public final class TextUtils {
 
         return result;
     }
+
+    /**
+     * Picks the Russian plural form of a noun for the given number:
+     * {@code one} for 1, 21, 31..., {@code few} for 2-4, 22-24..., {@code many} for 0, 5-20, 25-30...
+     * <pre>{@code
+     * TextUtils.pluralForm(3, "очко", "очка", "очков"); // "очка"
+     * }</pre>
+     *
+     * @param number the number the noun follows; the sign is ignored.
+     * @param one    the form for numbers ending in 1, except 11 ("очко").
+     * @param few    the form for numbers ending in 2-4, except 12-14 ("очка").
+     * @param many   the form for all other numbers ("очков").
+     * @return one of the given forms.
+     */
+    @NonNull
+    public static String pluralForm(long number, @NonNull final String one, @NonNull final String few, @NonNull final String many) {
+        final long abs = Math.abs(number % 100);
+        final long last = abs % 10;
+
+        if (abs >= 11 && abs <= 14) return many;
+        if (last == 1) return one;
+        if (last >= 2 && last <= 4) return few;
+        return many;
+    }
+
+    /**
+     * Returns the number followed by a space and the Russian plural form of a noun picked by {@link #pluralForm}.
+     * <pre>{@code
+     * TextUtils.plural(5, "очко", "очка", "очков"); // "5 очков"
+     * }</pre>
+     *
+     * @param number the number.
+     * @param one    the form for numbers ending in 1, except 11.
+     * @param few    the form for numbers ending in 2-4, except 12-14.
+     * @param many   the form for all other numbers.
+     * @return the number and the noun, e.g. {@code "21 очко"}.
+     */
+    @NonNull
+    public static String plural(long number, @NonNull final String one, @NonNull final String few, @NonNull final String many) {
+        return number + " " + pluralForm(number, one, few, many);
+    }
 }
