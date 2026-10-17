@@ -8,6 +8,7 @@
 package me.denarydev.crystal.paper;
 
 import me.denarydev.crystal.paper.listener.InventoryListener;
+import me.denarydev.crystal.paper.listener.ScoreboardListener;
 import me.denarydev.crystal.paper.skin.PaperSkinProvider;
 import me.denarydev.crystal.skin.SkinProvider;
 import me.denarydev.crystal.skin.provider.SkinsRestorerSkinProvider;
@@ -25,6 +26,7 @@ public final class PaperPlugin extends JavaPlugin {
 
         final PluginManager manager = getServer().getPluginManager();
         manager.registerEvents(new InventoryListener(), this);
+        manager.registerEvents(new ScoreboardListener(), this);
 
         if (manager.isPluginEnabled("SkinsRestorer")) {
             SkinProvider.use(new SkinsRestorerSkinProvider());

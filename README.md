@@ -7,7 +7,7 @@ A shared utility library for Minecraft plugins targeting **Paper** and **Velocit
 | Module | Description |
 |---|---|
 | `crystal-common` | Core utilities: config loading, database API, error reporting, skin provider |
-| `crystal-paper` | Paper extensions: inventory GUI, item builder, Configurate serializers, chat prompts |
+| `crystal-paper` | Paper extensions: inventory GUI, item builder, scoreboard sidebar, Configurate serializers, chat prompts |
 | `crystal-velocity` | Velocity extensions: skin provider, component utilities |
 
 ## Requirements
@@ -174,6 +174,10 @@ Inventory menus with slot-based and character-mask templates, click and close ac
 ### [Item Builder module](docs/item-builder.md) *(Paper only)*
 
 Fluent `ItemStack` builder covering display name/lore, flags, item model/custom model data, enchantments, potion effects, and persistent data.
+
+### [Scoreboard module](docs/scoreboard.md) *(Paper only)*
+
+Per-player sidebar on a Bukkit scoreboard: `Component` title and lines via `Score.customName`, hidden score numbers, editable from any thread.
 
 ### [Scheduler](docs/scheduler.md)
 
