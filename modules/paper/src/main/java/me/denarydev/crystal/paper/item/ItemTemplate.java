@@ -14,6 +14,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -41,7 +42,7 @@ import java.util.function.UnaryOperator;
  * {@code <player>} tags can be substituted on each build. The configuration format is the
  * same as for {@link ItemStack}: {@code material}, {@code amount}, {@code texture},
  * {@code name}, {@code lore}, {@code flags}, {@code enchants}, {@code unbreakable},
- * {@code damage}, {@code glow} and {@code custom-model-data}.
+ * {@code damage}, {@code glow}, {@code custom-model-data} and {@code item-model}.
  * <p>
  * Templates without placeholders ({@link #hasPlaceholders()} is {@code false}) can be built
  * once and the resulting item cloned.
@@ -63,6 +64,8 @@ public final class ItemTemplate {
     private final Boolean glow;
     @Nullable
     private final CustomModelData customModelData;
+    @Nullable
+    private final NamespacedKey itemModel;
 
     private ItemTemplate(Builder builder) {
         this.material = builder.material;
@@ -76,6 +79,7 @@ public final class ItemTemplate {
         this.damage = builder.damage;
         this.glow = builder.glow;
         this.customModelData = builder.customModelData;
+        this.itemModel = builder.itemModel;
     }
 
     //region Factory methods
@@ -140,6 +144,10 @@ public final class ItemTemplate {
         final CustomModelData data = CustomModelData.of(meta);
         if (data != null && !data.isEmpty()) {
             builder.customModelData(data);
+        }
+
+        if (meta.hasItemModel()) {
+            builder.itemModel(meta.getItemModel());
         }
 
         return builder.build();
@@ -243,6 +251,14 @@ public final class ItemTemplate {
     }
 
     /**
+     * Returns the item model override, or {@code null} for the material's own model.
+     */
+    @Nullable
+    public NamespacedKey itemModel() {
+        return itemModel;
+    }
+
+    /**
      * Returns whether the name or any lore line contains a {@code %} placeholder.
      * <p>
      * A template without placeholders produces the same item on every build unless
@@ -324,6 +340,10 @@ public final class ItemTemplate {
             builder.editMeta(customModelData::applyTo);
         }
 
+        if (itemModel != null) {
+            builder.itemModel(itemModel);
+        }
+
         return builder.build();
     }
 
@@ -343,7 +363,8 @@ public final class ItemTemplate {
             .unbreakable(unbreakable)
             .damage(damage)
             .glow(glow)
-            .customModelData(customModelData);
+            .customModelData(customModelData)
+            .itemModel(itemModel);
     }
 
     /**
@@ -366,6 +387,8 @@ public final class ItemTemplate {
         private Boolean glow;
         @Nullable
         private CustomModelData customModelData;
+        @Nullable
+        private NamespacedKey itemModel;
 
         private Builder(@NonNull Material material) {
             this.material = material;
@@ -475,6 +498,17 @@ public final class ItemTemplate {
          */
         public Builder customModelData(@Nullable CustomModelData customModelData) {
             this.customModelData = customModelData;
+            return this;
+        }
+
+        /**
+         * Sets the item model override, for example {@code minecraft:writable_book} to make a
+         * {@link Material#PAPER} button look like a book; {@code null} keeps the material's model.
+         *
+         * @see ItemBuilder#itemModel(NamespacedKey)
+         */
+        public Builder itemModel(@Nullable NamespacedKey itemModel) {
+            this.itemModel = itemModel;
             return this;
         }
 

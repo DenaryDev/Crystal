@@ -374,6 +374,13 @@ public final class ItemBuilder {
     }
 
     /**
+     * Removes the item model override, restoring the material's own model.
+     */
+    public ItemBuilder resetItemModel() {
+        return editMeta(meta -> meta.setItemModel(null));
+    }
+
+    /**
      * Sets the float list on the custom model data component.
      * <p>
      * Typically used in conjunction with a resource pack.

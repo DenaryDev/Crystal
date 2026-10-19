@@ -99,6 +99,14 @@ public final class ItemTemplateSerializer implements TypeSerializer<ItemTemplate
             builder.glow(node.node("glow").getBoolean(false));
         }
 
+        if (node.hasChild("item-model")) {
+            final String raw = node.node("item-model").getString();
+            final NamespacedKey key = raw == null ? null : NamespacedKey.fromString(raw);
+            if (key == null) throw new SerializationException(node.node("item-model"), NamespacedKey.class, "Invalid item model: " + raw);
+
+            builder.itemModel(key);
+        }
+
         if (node.hasChild("custom-model-data")) {
             final CustomModelData data = CustomModelDataSerializer.read(node.node("custom-model-data"));
             builder.customModelData(data.isEmpty() ? null : data);
@@ -147,6 +155,10 @@ public final class ItemTemplateSerializer implements TypeSerializer<ItemTemplate
 
         if (template.glow() != null) {
             node.node("glow").set(template.glow());
+        }
+
+        if (template.itemModel() != null) {
+            node.node("item-model").set(template.itemModel().asString());
         }
 
         if (template.customModelData() != null) {

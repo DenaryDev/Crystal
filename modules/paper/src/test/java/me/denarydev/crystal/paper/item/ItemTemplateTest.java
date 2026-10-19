@@ -16,6 +16,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -170,6 +171,27 @@ public class ItemTemplateTest {
         assertEquals(Boolean.TRUE, copy.glow());
         assertEquals(2, copy.damage());
         assertEquals("n", original.name());
+    }
+
+    @Test
+    public void itemModel_isAppliedCopiedAndSerialized() throws SerializationException {
+        final NamespacedKey model = NamespacedKey.minecraft("writable_book");
+        final ItemTemplate template = ItemTemplate.builder(Material.PAPER).itemModel(model).build();
+
+        final ItemStack item = template.build();
+        assertEquals(Material.PAPER, item.getType());
+        assertEquals(model, item.getItemMeta().getItemModel());
+        assertEquals(model, ItemTemplate.of(item).itemModel());
+        assertEquals(model, template.toBuilder().build().itemModel());
+
+        final ItemTemplateSerializer serializer = new ItemTemplateSerializer();
+        final ConfigurationNode node = BasicConfigurationNode.root();
+        serializer.serialize(ItemTemplate.class, template, node.node("item"));
+        assertEquals("minecraft:writable_book", node.node("item", "item-model").getString());
+        assertEquals(model, serializer.deserialize(ItemTemplate.class, node.node("item")).itemModel());
+
+        node.node("item", "item-model").set("not a key!");
+        assertThrows(SerializationException.class, () -> serializer.deserialize(ItemTemplate.class, node.node("item")));
     }
 
     @Test

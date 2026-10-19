@@ -250,6 +250,7 @@ reward-item:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
   glow: true # optional enchantment glint override, true or false
+  item-model: "minecraft:writable_book" # optional model override, keeps the material
   custom-model-data: # optional, all lists are optional too
     floats: [1.5]
     flags: [true]

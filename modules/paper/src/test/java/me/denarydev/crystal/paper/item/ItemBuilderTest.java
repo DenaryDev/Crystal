@@ -12,6 +12,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,6 +52,16 @@ public class ItemBuilderTest {
 
         assertEquals(Boolean.TRUE, glowing.getItemMeta().getEnchantmentGlintOverride());
         assertFalse(reset.getItemMeta().hasEnchantmentGlintOverride());
+    }
+
+    @Test
+    public void itemModel_setsAndResets() {
+        final NamespacedKey model = NamespacedKey.minecraft("writable_book");
+        final ItemStack withModel = ItemBuilder.fromMaterial(Material.PAPER).itemModel(model).build();
+        final ItemStack reset = ItemBuilder.fromItem(withModel).resetItemModel().build();
+
+        assertEquals(model, withModel.getItemMeta().getItemModel());
+        assertFalse(reset.getItemMeta().hasItemModel());
     }
 
     @Test

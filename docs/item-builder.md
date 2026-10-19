@@ -75,6 +75,7 @@ ItemStack sword = ItemBuilder.fromMaterial(Material.DIAMOND_SWORD)
 | Method | Description |
 |---|---|
 | `itemModel(NamespacedKey)` | Sets the item model key |
+| `resetItemModel()` | Removes the item model override |
 | `customModelDataFloats(List<Float>)` | Sets the float list on the custom model data component |
 | `customModelDataFlags(List<Boolean>)` | Sets the boolean flag list on the custom model data component |
 | `customModelDataStrings(List<String>)` | Sets the string list on the custom model data component |
@@ -156,7 +157,7 @@ if (!template.hasPlaceholders()) cached = template.build();
 
 | Method | Description |
 |---|---|
-| `builder(Material)` | Creates a builder; `material`, `amount`, `texture`, `name`, `lore`, `flags`, `enchants`, `unbreakable`, `damage`, `glow`, `customModelData` |
+| `builder(Material)` | Creates a builder; `material`, `amount`, `texture`, `name`, `lore`, `flags`, `enchants`, `unbreakable`, `damage`, `glow`, `customModelData`, `itemModel` |
 | `of(ItemStack)` | Builds a template from an existing item |
 | `toBuilder()` | Builder pre-filled with the template's values |
 | `build(TagResolver...)` | Builds the item, parsing name and lore with MiniMessage |
