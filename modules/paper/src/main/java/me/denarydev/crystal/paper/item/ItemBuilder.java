@@ -102,7 +102,10 @@ public final class ItemBuilder {
      * @param type the material type.
      */
     public ItemBuilder type(@NonNull Material type) {
-        this.itemStack = this.itemStack.withType(type);
+        // withType() copies the amount of this stack, and an empty stack (e.g. AIR from empty())
+        // has no handle on Paper: its amount is 0 and setAmount() is a no-op, so the result
+        // would be an invisible "x0" item. Start a fresh stack instead.
+        this.itemStack = this.itemStack.isEmpty() ? ItemStack.of(type) : this.itemStack.withType(type);
 
         return this;
     }

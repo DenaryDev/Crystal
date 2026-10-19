@@ -14,6 +14,7 @@ import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Dependency;
 import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.plugin.annotation.DataDirectory;
+import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import me.denarydev.crystal.skin.SkinProvider;
 import me.denarydev.crystal.skin.provider.SkinsRestorerSkinProvider;
@@ -56,7 +57,11 @@ public final class VelocityPlugin {
         crystal.enable();
 
         if (proxy.getPluginManager().isLoaded("skinsrestorer")) {
-            SkinProvider.use(new SkinsRestorerSkinProvider());
+            SkinProvider.use(new SkinsRestorerSkinProvider(
+                name -> proxy.getPlayer(name).map(Player::getUniqueId),
+                uuid -> proxy.getPlayer(uuid).map(Player::getUsername),
+                proxy.getConfiguration().isOnlineMode()
+            ));
         } else {
             SkinProvider.use(new VelocitySkinProvider(proxy));
         }

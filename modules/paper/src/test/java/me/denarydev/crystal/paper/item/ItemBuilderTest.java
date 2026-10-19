@@ -21,6 +21,7 @@ import org.mockbukkit.mockbukkit.MockBukkit;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -90,6 +91,27 @@ public class ItemBuilderTest {
         assertEquals(TextDecoration.State.NOT_SET, lore.get(0).decoration(TextDecoration.ITALIC));
         assertEquals(List.of("vanilla", "added"), plainLore(item));
         assertEquals(1, source.lore().size());
+    }
+
+    @Test
+    public void type_onEmptyBuilderProducesVisibleItem() {
+        final ItemStack item = ItemBuilder.empty()
+            .type(Material.PAPER)
+            .build();
+
+        assertEquals(Material.PAPER, item.getType());
+        assertEquals(1, item.getAmount());
+        assertFalse(item.isEmpty());
+    }
+
+    @Test
+    public void type_keepsAmountOfExistingItem() {
+        final ItemStack item = ItemBuilder.fromItem(ItemStack.of(Material.STONE, 5))
+            .type(Material.PAPER)
+            .build();
+
+        assertEquals(Material.PAPER, item.getType());
+        assertEquals(5, item.getAmount());
     }
 
     @Test

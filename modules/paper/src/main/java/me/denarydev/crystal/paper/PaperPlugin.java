@@ -12,9 +12,14 @@ import me.denarydev.crystal.paper.listener.ScoreboardListener;
 import me.denarydev.crystal.paper.skin.PaperSkinProvider;
 import me.denarydev.crystal.skin.SkinProvider;
 import me.denarydev.crystal.skin.provider.SkinsRestorerSkinProvider;
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.ApiStatus;
+
+import java.util.Optional;
 
 @ApiStatus.Internal
 public final class PaperPlugin extends JavaPlugin {
@@ -29,7 +34,19 @@ public final class PaperPlugin extends JavaPlugin {
         manager.registerEvents(new ScoreboardListener(), this);
 
         if (manager.isPluginEnabled("SkinsRestorer")) {
-            SkinProvider.use(new SkinsRestorerSkinProvider());
+            SkinProvider.use(new SkinsRestorerSkinProvider(
+                name -> {
+                    final Player online = Bukkit.getPlayerExact(name);
+                    if (online != null) return Optional.of(online.getUniqueId());
+                    return Optional.ofNullable(Bukkit.getOfflinePlayerIfCached(name)).map(OfflinePlayer::getUniqueId);
+                },
+                uuid -> {
+                    final Player online = Bukkit.getPlayer(uuid);
+                    if (online != null) return Optional.of(online.getName());
+                    return Optional.ofNullable(Bukkit.getOfflinePlayer(uuid).getName());
+                },
+                Bukkit.getOnlineMode()
+            ));
         } else {
             SkinProvider.use(new PaperSkinProvider());
         }
