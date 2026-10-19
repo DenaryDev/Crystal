@@ -190,6 +190,41 @@ CloseAction onClose = event -> {
 
 ---
 
+## Pagination
+
+`Pagination<T>` splits a list of entries across pages of an existing `Menu`. It owns only its content slots, the optional previous/next buttons and the optional empty-list placeholder; everything else in the menu (borders, static buttons) is untouched on re-render. Navigation buttons are hidden on the first and last page.
+
+```java
+Menu menu = Menu.builder(template).build();
+
+Pagination<Affix> pagination = Pagination.<Affix>builder(menu)
+    .slots(Slots.inner(54))                       // content slots, in display order
+    .renderer(affix -> affix.icon())              // entry -> ItemStack
+    .onClick((affix, event) -> select(affix))     // optional
+    .previous(previousArrow, 45)                  // hidden on the first page
+    .next(nextArrow, 53)                          // hidden on the last page
+    .empty(nothingHere, 22)                       // optional, shown when the list is empty
+    .items(affixes)
+    .build();                                     // draws the first page into the menu
+
+pagination.show(player);
+```
+
+```java
+pagination.page();            // current page, zero-based
+pagination.pages();           // page count, at least 1
+pagination.page(2);           // jump (clamped), redraws and calls menu.update()
+pagination.next();            // same as page(page() + 1)
+pagination.previous();
+pagination.items(newList);    // replace entries; keeps the page if it still exists, else the last one
+pagination.refresh();         // redraw the current page after an entry changed
+pagination.menu();            // the underlying Menu
+```
+
+> Build the pagination after the menu, and before `show(...)`: `build()` already draws the first page, and every later change goes through `menu.update()`, so the menu is never recreated.
+
+---
+
 ## Builder reference
 
 ### Menu.Builder (via `Menu.builder()` or `Menu.builder(template)`)
@@ -248,6 +283,7 @@ Inherits `Template.Builder` methods, plus:
 ```
 me.denarydev.crystal.paper.gui
 ├── Menu                       — menu instance and its Builder
+├── Pagination                 — pages of entries inside a Menu, with navigation buttons
 ├── Slots                      — slot index helpers (row/column, border, ranges)
 ├── Template                   — abstract base class for templates and its Builder
 ├── template

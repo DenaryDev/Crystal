@@ -249,12 +249,42 @@ reward-item:
   flags:
     - HIDE_ATTRIBUTES
     - HIDE_ENCHANTS
+  glow: true # optional enchantment glint override, true or false
+  custom-model-data: # optional, all lists are optional too
+    floats: [1.5]
+    flags: [true]
+    strings: ["variant"]
+    colors: ["#FF8800"] # hex strings or RGB integers
 custom-head:
   material: PLAYER_HEAD
   texture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNDU5ODRmY2JjZTA3MDAwYmI4Y2ZjZGRkNzQ2NTMyN2I0YmMxMzQzY2E3NTVmZDg3ZjkxY2M4NWU0M2VmMjZjZiJ9fX0="
 ```
 R
 For player heads, use `PLAYER_HEAD` as the material and provide a `texture` (the Base64 texture ID from `textures.minecraft.net/texture/<id>`).
+
+A plain number under `custom-model-data` is accepted as the legacy integer value and becomes a single float. Items are built through `ItemBuilder`, so the name and lore get the default non-italic decoration.
+
+#### `ItemTemplate`
+
+Same map as `ItemStack`, but `name` and `lore` stay MiniMessage strings until [`ItemTemplate.build(...)`](item-builder.md#itemtemplate) is called, so placeholders can be substituted per player. Use it wherever an item in the config depends on who is looking at it.
+
+```java
+@ConfigSerializable
+public final class MenuConfig {
+    private ItemTemplate profile = ItemTemplate.builder(Material.PLAYER_HEAD)
+        .name("<gold><player>")
+        .lore("<gray>Balance: <yellow>%vault_eco_balance%")
+        .build();
+}
+```
+
+```yaml
+profile:
+  material: PLAYER_HEAD
+  name: "<gold><player>"
+  lore:
+    - "<gray>Balance: <yellow>%vault_eco_balance%"
+```
 
 ---
 
@@ -304,7 +334,9 @@ me.denarydev.crystal.paper.configurate
 │   └── NameAndLore            — @ConfigSerializable name + lore helper
 └── serializers
     ├── ComponentSerializer    — Component ↔ MiniMessage string
-    ├── ItemStackSerializer    — ItemStack ↔ YAML map
+    ├── CustomModelDataSerializer — CustomModelData ↔ YAML map of floats/flags/strings/colors
+    ├── ItemStackSerializer    — ItemStack ↔ YAML map (ItemTemplate built with ItemBuilder)
+    ├── ItemTemplateSerializer — ItemTemplate ↔ YAML map (same keys, name/lore kept as strings)
     ├── LocationSerializer     — Location ↔ semicolon-separated string
     ├── MaterialSerializer     — Material ↔ material name string
     └── NamespacedKeySerializer — NamespacedKey ↔ namespace:key string

@@ -283,6 +283,30 @@ public class SerializersTest {
     }
 
     @Test
+    public void itemStackDeserializeGlow() throws SerializationException {
+        ItemStackSerializer serializer = new ItemStackSerializer();
+        ConfigurationNode node = BasicConfigurationNode.root();
+        node.node("item", "material").set("STONE");
+        node.node("item", "glow").set(true);
+
+        ItemStack item = serializer.deserialize(ItemStack.class, node.node("item"));
+
+        assertEquals(Boolean.TRUE, item.getItemMeta().getEnchantmentGlintOverride());
+    }
+
+    @Test
+    public void itemStackSerializeGlow() throws SerializationException {
+        ItemStackSerializer serializer = new ItemStackSerializer();
+        ConfigurationNode node = BasicConfigurationNode.root();
+        ItemStack item = ItemStack.of(Material.STONE);
+        item.editMeta(meta -> meta.setEnchantmentGlintOverride(false));
+
+        serializer.serialize(ItemStack.class, item, node.node("item"));
+
+        assertFalse(node.node("item", "glow").getBoolean(true));
+    }
+
+    @Test
     public void itemStackDeserializeLore() throws SerializationException {
         ItemStackSerializer serializer = new ItemStackSerializer();
         ConfigurationNode node = BasicConfigurationNode.root();

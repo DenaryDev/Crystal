@@ -45,6 +45,15 @@ public class ItemBuilderTest {
     }
 
     @Test
+    public void glow_setsAndResetsGlintOverride() {
+        final ItemStack glowing = ItemBuilder.fromMaterial(Material.STONE).glow(true).build();
+        final ItemStack reset = ItemBuilder.fromItem(glowing).resetGlow().build();
+
+        assertEquals(Boolean.TRUE, glowing.getItemMeta().getEnchantmentGlintOverride());
+        assertFalse(reset.getItemMeta().hasEnchantmentGlintOverride());
+    }
+
+    @Test
     public void appendLore_toEmptyItemBecomesLore() {
         final ItemStack item = ItemBuilder.fromMaterial(Material.STONE)
             .appendLore(Component.text("a"))

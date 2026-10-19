@@ -169,11 +169,11 @@ Connection pools (file-based and HikariCP), a fluent query builder (SELECT / INS
 
 ### [GUI module](docs/gui.md) *(Paper only)*
 
-Inventory menus with slot-based and character-mask templates, click and close action callbacks, and live menu updates.
+Inventory menus with slot-based and character-mask templates, click and close action callbacks, live menu updates, and paginated entry lists.
 
 ### [Item Builder module](docs/item-builder.md) *(Paper only)*
 
-Fluent `ItemStack` builder covering display name/lore, flags, item model/custom model data, enchantments, potion effects, and persistent data.
+Fluent `ItemStack` builder covering display name/lore, flags, glint override, item model/custom model data, enchantments, potion effects, and persistent data, plus `ItemTemplate` for config items with per-player placeholders.
 
 ### [Scoreboard module](docs/scoreboard.md) *(Paper only)*
 

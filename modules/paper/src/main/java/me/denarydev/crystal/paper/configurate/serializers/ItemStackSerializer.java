@@ -7,167 +7,36 @@
  */
 package me.denarydev.crystal.paper.configurate.serializers;
 
-import com.destroystokyo.paper.profile.PlayerProfile;
-import io.papermc.paper.registry.RegistryAccess;
-import io.papermc.paper.registry.RegistryKey;
 import io.sapphiremc.lib.configurate.ConfigurationNode;
 import io.sapphiremc.lib.configurate.serialize.SerializationException;
 import io.sapphiremc.lib.configurate.serialize.TypeSerializer;
-import me.denarydev.crystal.paper.utils.HeadUtils;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Registry;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
+import me.denarydev.crystal.paper.item.ItemBuilder;
+import me.denarydev.crystal.paper.item.ItemTemplate;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
+/**
+ * Serializer for {@link ItemStack}.
+ * <p>
+ * The format is that of {@link ItemTemplateSerializer}; the item is built from the template
+ * through {@link ItemBuilder} on read and turned back into one with
+ * {@link ItemTemplate#of(ItemStack)} on write.
+ */
+@NullMarked
 public final class ItemStackSerializer implements TypeSerializer<ItemStack> {
 
+    private final ItemTemplateSerializer templates = new ItemTemplateSerializer();
+
     @Override
-    public ItemStack deserialize(@NonNull Type type, ConfigurationNode node) throws SerializationException {
-        final Material material = node.node("material").get(Material.class);
-        if (material == null) throw new SerializationException("Invalid ItemStack material");
-
-        final int amount = node.node("amount").getInt(1);
-        if (amount < 1 || amount > 64) throw new SerializationException("Invalid ItemStack amount");
-
-        final ItemStack item = node.hasChild("texture") ?
-            HeadUtils.createHead(node.node("texture").getString(), amount)
-            : new ItemStack(material, amount);
-
-        final ItemMeta meta = item.getItemMeta();
-
-        if (node.hasChild("name")) {
-            final String name = node.node("name").getString();
-            if (name != null) {
-                meta.displayName(MiniMessage.miniMessage().deserialize(name));
-            }
-        }
-
-        if (node.hasChild("lore")) {
-            final List<String> lore = node.node("lore").getList(String.class);
-            if (lore != null) {
-                meta.lore(lore.stream().map(MiniMessage.miniMessage()::deserialize).toList());
-            }
-        }
-
-        if (node.hasChild("unbreakable")) {
-            meta.setUnbreakable(node.node("unbreakable").getBoolean(false));
-        }
-
-        if (node.hasChild("flags")) {
-            node.node("flags").getList(String.class, Collections.emptyList()).stream()
-                .map(s -> {
-                    try {
-                        return ItemFlag.valueOf(s);
-                    } catch (IllegalArgumentException ex) {
-                        return null;
-                    }
-                })
-                .filter(Objects::nonNull)
-                .forEach(meta::addItemFlags);
-        }
-
-        //TODO: Update this to 1.21.5+ component api
-        //if (node.hasChild("custom-model-data")) {
-        //    meta.setCustomModelData(node.node("custom-model-data").getInt(0));
-        //}
-
-        if (meta instanceof Damageable damageable) {
-            damageable.setDamage(node.node("damage").getInt(0));
-        }
-
-        if (node.hasChild("enchants")) {
-            node.node("enchants").childrenMap().forEach(((key, value) -> {
-                final Registry<@NonNull Enchantment> registry = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT);
-                final Enchantment ench = registry.get(NamespacedKey.minecraft(key.toString().toLowerCase()));
-                if (ench == null) return;
-
-                final int level = value.getInt();
-                meta.addEnchant(ench, level, true);
-            }));
-        }
-
-        item.setItemMeta(meta);
-
-        return item;
+    public ItemStack deserialize(Type type, ConfigurationNode node) throws SerializationException {
+        return templates.deserialize(ItemTemplate.class, node).build();
     }
 
     @Override
-    public void serialize(@NonNull Type type, @Nullable ItemStack item, @NonNull ConfigurationNode node) throws SerializationException {
-        if (item != null) {
-            node.node("material").set(item.getType());
-            if (item.getAmount() > 1) node.node("amount").set(item.getAmount());
-
-            final ItemMeta meta = item.getItemMeta();
-
-            if (meta instanceof SkullMeta head) {
-                final PlayerProfile profile = head.getPlayerProfile();
-                if (profile != null) {
-                    final URL skin = profile.getTextures().getSkin();
-                    if (skin != null) {
-                        node.node("texture").set(skin.toExternalForm().substring(39));
-                    }
-                }
-            }
-
-            if (item.hasItemMeta()) {
-                if (meta.hasDisplayName()) {
-                    final Component name = meta.displayName();
-                    if (name != null) {
-                        node.node("name").set(String.class, MiniMessage.miniMessage().serialize(name));
-                    }
-                }
-
-                if (meta.hasLore()) {
-                    final List<Component> lore = meta.lore();
-                    if (lore != null) {
-                        node.node("lore").setList(String.class, lore.stream().map(MiniMessage.miniMessage()::serialize).toList());
-                    }
-                }
-
-                if (meta.isUnbreakable()) {
-                    node.node("unbreakable").set(true);
-                }
-
-                //TODO: Update this to 1.21.5+ component api
-                //if (meta.hasCustomModelData()) node.node("custom-model-data").set(meta.getCustomModelData());
-
-                final List<ItemFlag> flags = new ArrayList<>(meta.getItemFlags());
-                if (!flags.isEmpty()) {
-                    node.node("flags").setList(ItemFlag.class, flags);
-                }
-
-                if (meta.hasEnchants()) {
-                    final Map<Enchantment, Integer> enchants = meta.getEnchants();
-                    for (Map.Entry<Enchantment, Integer> entry : enchants.entrySet()) {
-                        node.node("enchants", entry.getKey().getKey().getKey().toLowerCase()).set(entry.getValue());
-                    }
-                }
-
-                if (meta instanceof Damageable damageable) {
-                    if (damageable.hasDamage()) {
-                        node.node("damage").set(damageable.getDamage());
-                    }
-                }
-            }
-        } else {
-            node.set(null);
-        }
+    public void serialize(Type type, @Nullable ItemStack item, ConfigurationNode node) throws SerializationException {
+        templates.serialize(ItemTemplate.class, item == null ? null : ItemTemplate.of(item), node);
     }
 }

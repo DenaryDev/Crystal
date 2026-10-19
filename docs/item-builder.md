@@ -67,6 +67,8 @@ ItemStack sword = ItemBuilder.fromMaterial(Material.DIAMOND_SWORD)
 | `removeFlags(ItemFlag...)` | Removes the given item flags |
 | `unbreakable()` / `unbreakable(boolean)` | Sets whether the item can take durability damage |
 | `damage(int)` | Sets the item's damage value (items with durability only) |
+| `glow(boolean)` | Overrides the enchantment glint: `true` glows without enchantments, `false` hides it even with them |
+| `resetGlow()` | Removes the glint override |
 
 ### Item model and custom model data
 
@@ -121,3 +123,44 @@ ItemStack sword = ItemBuilder.fromMaterial(Material.DIAMOND_SWORD)
 | `duplicate()` | Returns a copy of this builder |
 
 > Methods that only apply to specific item types (potions, enchanted books, player heads, damageable items) are no-ops when the current item type doesn't match — they check the meta type internally rather than throwing.
+
+---
+
+## ItemTemplate
+
+`ItemTemplate` is an immutable description of an item whose name and lore are kept as **MiniMessage strings** instead of parsed `Component`s. It is turned into an `ItemStack` on every `build(...)`, so per-player text (PlaceholderAPI placeholders, `<player>` tags) can be substituted each time. It is also a Configurate type, see [`ItemTemplate` in the Configurate docs](configurate.md#itemtemplate).
+
+```java
+ItemTemplate template = ItemTemplate.builder(Material.PLAYER_HEAD)
+    .texture(texture)
+    .name("<gold><player>")
+    .lore("<gray>Balance: <yellow>%vault_eco_balance%")
+    .glow(true)
+    .build();
+
+// Plain MiniMessage build with extra resolvers
+ItemStack item = template.build(Placeholder.unparsed("player", player.getName()));
+
+// Strings pass through the preprocessor first, then MiniMessage; Crystal does not depend on PlaceholderAPI
+ItemStack item = template.build(
+    text -> PlaceholderAPI.setPlaceholders(player, text),
+    Placeholder.unparsed("player", player.getName())
+);
+
+// Copy an existing item (name and lore are serialized back to MiniMessage)
+ItemTemplate copy = ItemTemplate.of(existingStack);
+
+// Templates without '%' placeholders can be built once and cloned
+if (!template.hasPlaceholders()) cached = template.build();
+```
+
+| Method | Description |
+|---|---|
+| `builder(Material)` | Creates a builder; `material`, `amount`, `texture`, `name`, `lore`, `flags`, `enchants`, `unbreakable`, `damage`, `glow`, `customModelData` |
+| `of(ItemStack)` | Builds a template from an existing item |
+| `toBuilder()` | Builder pre-filled with the template's values |
+| `build(TagResolver...)` | Builds the item, parsing name and lore with MiniMessage |
+| `build(UnaryOperator<String>, TagResolver...)` | Same, but every string goes through the operator first |
+| `hasPlaceholders()` | Whether the name or any lore line contains `%` |
+
+> `build(...)` goes through `ItemBuilder`, so the name and lore get the default non-italic decoration. `of(...)` strips it again, so a build/of round trip keeps the original strings.

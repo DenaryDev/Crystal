@@ -340,6 +340,26 @@ public final class ItemBuilder {
         });
     }
 
+    /**
+     * Overrides the enchantment glint.
+     * <p>
+     * {@code true} shows the glint even without enchantments, {@code false} hides it even
+     * with them.
+     *
+     * @param glow whether the item should glow.
+     * @see ItemMeta#setEnchantmentGlintOverride(Boolean)
+     */
+    public ItemBuilder glow(boolean glow) {
+        return editMeta(meta -> meta.setEnchantmentGlintOverride(glow));
+    }
+
+    /**
+     * Removes the enchantment glint override, restoring the default behaviour.
+     */
+    public ItemBuilder resetGlow() {
+        return editMeta(meta -> meta.setEnchantmentGlintOverride(null));
+    }
+
     //endregion
 
     //region Item model and custom data
