@@ -68,4 +68,54 @@ public abstract class SkinProvider {
      * @return an Optional containing the skin property, or an empty Optional if not found.
      */
     public abstract Optional<SkinProperty> playerSkin(@NonNull String name);
+
+    /**
+     * Returns whether this provider can change player skins.
+     * When {@code false}, {@link #skinId(UUID)} is always empty and
+     * {@link #setSkin(UUID, String)} and {@link #resetSkin(UUID)} throw.
+     *
+     * @return {@code true} if skins can be changed through this provider.
+     */
+    public boolean supportsSkinChange() {
+        return false;
+    }
+
+    /**
+     * Returns the skin explicitly set for the player, in the form accepted by {@link #setSkin(UUID, String)}:
+     * the UUID of the player whose skin it is, or the skin name or URL.
+     * <p>
+     * <b>Blocking, must not be called on the main thread.</b>
+     *
+     * @param uuid the player's unique ID.
+     * @return an Optional containing the skin id, or an empty Optional if the player has no skin set.
+     */
+    public Optional<String> skinId(@NonNull UUID uuid) {
+        return Optional.empty();
+    }
+
+    /**
+     * Sets the player's skin and applies it if the player is online.
+     * <p>
+     * <b>Blocking, must not be called on the main thread.</b>
+     *
+     * @param uuid the player's unique ID.
+     * @param skin the UUID of the player whose skin to use, a player name, a skin name or a URL.
+     * @return {@code true} if the skin was found and set; {@code false} otherwise.
+     * @throws UnsupportedOperationException if {@link #supportsSkinChange()} is {@code false}.
+     */
+    public boolean setSkin(@NonNull UUID uuid, @NonNull String skin) {
+        throw new UnsupportedOperationException(getClass().getSimpleName() + " cannot change skins");
+    }
+
+    /**
+     * Removes the skin set for the player, returning the default one, and applies it if the player is online.
+     * <p>
+     * <b>Blocking, must not be called on the main thread.</b>
+     *
+     * @param uuid the player's unique ID.
+     * @throws UnsupportedOperationException if {@link #supportsSkinChange()} is {@code false}.
+     */
+    public void resetSkin(@NonNull UUID uuid) {
+        throw new UnsupportedOperationException(getClass().getSimpleName() + " cannot change skins");
+    }
 }

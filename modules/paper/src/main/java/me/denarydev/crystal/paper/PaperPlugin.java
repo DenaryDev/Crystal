@@ -45,7 +45,9 @@ public final class PaperPlugin extends JavaPlugin {
                     if (online != null) return Optional.of(online.getName());
                     return Optional.ofNullable(Bukkit.getOfflinePlayer(uuid).getName());
                 },
-                Bukkit.getOnlineMode()
+                Bukkit.getOnlineMode(),
+                Player.class,
+                uuid -> Optional.ofNullable(Bukkit.getPlayer(uuid))
             ));
         } else {
             SkinProvider.use(new PaperSkinProvider());

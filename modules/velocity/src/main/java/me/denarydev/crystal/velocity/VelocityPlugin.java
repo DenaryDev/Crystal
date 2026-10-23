@@ -60,7 +60,9 @@ public final class VelocityPlugin {
             SkinProvider.use(new SkinsRestorerSkinProvider(
                 name -> proxy.getPlayer(name).map(Player::getUniqueId),
                 uuid -> proxy.getPlayer(uuid).map(Player::getUsername),
-                proxy.getConfiguration().isOnlineMode()
+                proxy.getConfiguration().isOnlineMode(),
+                Player.class,
+                proxy::getPlayer
             ));
         } else {
             SkinProvider.use(new VelocitySkinProvider(proxy));
