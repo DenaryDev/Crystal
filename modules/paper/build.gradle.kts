@@ -34,6 +34,12 @@ paper {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = false
         }
+        // Только порядок загрузки: миры Multiverse должны существовать до включения плагинов на Crystal
+        register("Multiverse-Core") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = false
+            joinClasspath = false
+        }
     }
 }
 
